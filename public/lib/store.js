@@ -24,8 +24,27 @@ export async function loadAll() {
   S.sets = list.sets;
   const loaded = await Promise.all(list.sets.map(s => getJson(`/api/data/${s.set}`).catch(() => null)));
   for (const d of loaded) if (d) S.data[d.set] = d;
+  synthWorkstreams();
   try { S.role = localStorage.getItem('sol.role') || 'founder'; } catch (e) {}
   return S;
+}
+
+// Every open Ops Board row becomes a workstream body orbiting the division on its row, so the galaxy can show it
+// as a planet. They live only in the store (never in the registry), so they stay as fresh as the ops data set.
+const WS_STATUS = { 'Needs human': 'attention', Blocked: 'blocked', 'In progress': 'progress', Done: 'done' };
+function synthWorkstreams() {
+  for (const r of (S.data.ops || {}).rows || []) {
+    if (r.status === 'Done') continue;
+    const home = body(r.body);
+    const parent = home && (home.kind === 'division' ? home : division(home));
+    if (!parent) continue;
+    const id = 'ws-' + String(r.id).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    if (S.byId.has(id)) continue;
+    const b = { id, kind: 'workstream', name: r.title, short: r.id, orbits: parent.id, status: WS_STATUS[r.status] || 'planned', tier: String(r.tier || 'open').toLowerCase(), role: r.who || '', row: r, derived: true };
+    S.byId.set(id, b);
+    if (!S.kids.has(parent.id)) S.kids.set(parent.id, []);
+    S.kids.get(parent.id).push(b);
+  }
 }
 
 export const body = id => S.byId.get(id) || null;

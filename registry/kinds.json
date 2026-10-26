@@ -55,6 +55,13 @@
       "glyph": "ring",
       "ring": 2,
       "about": "An outside system the company runs on. Shown in the Toolbelt, not in orbit, unless it sets orbits."
+    },
+    "workstream": {
+      "label": "Workstream",
+      "plural": "Workstreams",
+      "glyph": "status",
+      "ring": 1,
+      "about": "One Ops Board row. Derived from the ops data set at load, never written in the registry: it orbits the division named on the row."
     }
   },
   "rings": {
@@ -66,7 +73,8 @@
       "workflow": 2,
       "product": 2,
       "project": 3,
-      "tool": 3
+      "tool": 3,
+      "workstream": 2
     },
     "other": {
       "human": 0,
@@ -75,7 +83,8 @@
       "project": 1,
       "product": 2,
       "tool": 2,
-      "division": 2
+      "division": 2,
+      "workstream": 1
     }
   },
   "statuses": {
@@ -114,6 +123,18 @@
     "retired": {
       "label": "Retired",
       "tone": "muted"
+    },
+    "attention": {
+      "label": "Needs human",
+      "tone": "warn"
+    },
+    "progress": {
+      "label": "In progress",
+      "tone": "muted"
+    },
+    "done": {
+      "label": "Done",
+      "tone": "good"
     }
   },
   "tiers": {
