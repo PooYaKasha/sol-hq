@@ -12,3 +12,8 @@ externalPort = 80
 [deployment]
 run = ["sh", "-c", "NODE_ENV=production node server.js"]
 deploymentTarget = "cloudrun"
+
+[userenv]
+
+[userenv.shared]
+HQ_PASSWORD = "InTheBeginningThereWasLight2027!"
