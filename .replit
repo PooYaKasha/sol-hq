@@ -1,9 +1,9 @@
 run = "npm start"
-modules = ["nodejs-20"]
+modules = ["web"]
 entrypoint = "server.js"
 
 [nix]
-channel = "stable-24_05"
+channel = "stable-25_05"
 
 [[ports]]
 localPort = 3000
