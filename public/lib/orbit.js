@@ -14,7 +14,7 @@ const el = (n, a = {}) => { const e = document.createElementNS(NS, n); for (cons
 const clover = () => { const p = el('path', { d: S.cloverPath || '', fill: '#fff' }); return p; };
 
 export function mountOrbit(svg, opts) {
-  const state = { focus: opts.focus || sun().id, items: [], t0: performance.now(), paused: false, trace: [], raf: 0 };
+  const state = { focus: opts.focus || sun().id, items: [], t0: performance.now(), paused: false, trace: [], raf: 0, order: [] };
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = '';
   const gStars = el('g', { class: 'stars' }), gRings = el('g', { class: 'rings' }), gTrace = el('g', { class: 'trace' }), gBodies = el('g', { class: 'bodies' }), gCenter = el('g', { class: 'center' });
@@ -37,7 +37,7 @@ export function mountOrbit(svg, opts) {
         const a0 = (b.angle ?? (360 / list.length) * j + (i * 37)) * Math.PI / 180;
         const g = glyph(b, f);
         gBodies.append(g.node);
-        state.items.push({ b, rx, ry, a0, speed: (reduce ? 0 : (1 / (160 + i * 110))) * (i % 2 ? -1 : 1), node: g.node, label: g.label });
+        state.items.push({ b, rx, ry, a0, speed: (reduce ? 0 : 0.07 / (1 + i * 0.55)) * (i % 2 ? -1 : 1), node: g.node, label: g.label });
       });
     });
     center(f);
@@ -103,18 +103,21 @@ export function mountOrbit(svg, opts) {
     return { node: g, label };
   }
 
+  // speed is radians per second: the inner ring takes about 90 s per lap, outer rings are slower.
+  // Draw order is only touched when it actually changes; moving a node under the pointer eats its click.
   function step(now, force) {
-    const dt = state.paused && !force ? 0 : (now - state.t0);
+    const dt = state.paused && !force ? 0 : Math.min(now - state.t0, 100);
     state.t0 = now;
     for (const it of state.items) {
-      if (!state.paused || force) it.a0 += it.speed * dt / 16.7 * 0.01;
+      it.a0 += it.speed * dt / 1000;
       const x = CX + Math.cos(it.a0) * it.rx, y = CY + Math.sin(it.a0) * it.ry;
       it.x = x; it.y = y;
       it.node.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
-      it.node.style.zIndex = Math.round(y);
     }
-    // bodies in front draw last
-    [...state.items].sort((a, b) => a.y - b.y).forEach(it => gBodies.append(it.node));
+    if (!state.paused || force) {
+      const order = [...state.items].sort((a, b) => a.y - b.y);
+      if (force || order.some((it, i) => it !== state.order[i])) { order.forEach(it => gBodies.append(it.node)); state.order = order; }
+    }
     if (state.trace.length) drawTrace();
     state.raf = requestAnimationFrame(step);
   }
