@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Sol HQ</title>
+<link rel="icon" type="image/svg+xml" href="/assets/app-icon.svg">
+<link rel="apple-touch-icon" href="/assets/app-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#/hq"><span class="bmark" aria-hidden="true"></span><span><h1>Sol HQ</h1><small>MatchNice, PBC · the nervous system, at a glance</small></span></a>
+    <nav id="tabs" class="tabs" role="tablist" aria-label="Views"></nav>
+    <span class="spacer"></span>
+    <label class="ctl">Viewing as <select id="role" aria-label="Viewing as"></select></label>
+    <button id="s-open" class="ghost" type="button" title="Search (Cmd-K or /)">Search <kbd>/</kbd></button>
+  </header>
+
+  <form id="ask" class="askbar" autocomplete="off">
+    <span class="mark" aria-hidden="true"></span>
+    <span id="scope" class="scope" hidden><b></b><button type="button" aria-label="Ask everywhere instead">✕</button></span>
+    <input id="q" type="text" name="q" placeholder="Ask Sol anything, or find a deal, agent, project, file or folder" aria-label="Ask Sol">
+    <button class="cta" type="submit">Ask Sol ↵</button>
+  </form>
+
+  <div class="main">
+    <main id="view" class="view" aria-live="polite"></main>
+    <aside id="panel" class="panel" hidden><div id="panel-body"></div></aside>
+  </div>
+
+  <footer class="foot">
+    <span id="fresh"></span>
+    <span id="bodies"></span>
+    <span id="version"></span>
+    <span>Private. Nothing here moves money or sends anything.</span>
+  </footer>
+</div>
+
+<dialog id="search" class="sdlg" aria-label="Search">
+  <input id="s-q" type="search" placeholder="Search bodies, deals, accounts, rows, files, folders" aria-label="Search">
+  <div id="s-res" class="sres" role="listbox"></div>
+</dialog>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>
