@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+# Real company data lives only on the server. Samples (fictional) are committed; snapshots never are.
+data/snapshots/
+!data/snapshots/README.md
