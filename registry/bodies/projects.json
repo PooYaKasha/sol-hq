@@ -1,0 +1,26 @@
+[
+  { "id": "proj-sol-hq", "kind": "project", "name": "Sol HQ app", "orbits": "sol", "lead": "pooya", "owner": "ib", "status": "building",
+    "since": "2026-10-26", "due": "2026-11-30", "tier": "open",
+    "mission": "Publish Sol HQ as a real app on Replit and GitHub, with a registry any new body can join and numbers that stay true on their own.",
+    "links": [ { "label": "Repo", "url": "https://github.com/PooYaKasha/sol-hq" } ] },
+
+  { "id": "proj-seed-2027", "kind": "project", "name": "Seed raise, January 2027", "orbits": "sol", "lead": "pooya", "status": "planned",
+    "since": "2027-01-05", "due": "2027-03-31", "tier": "restricted", "tags": ["investor"],
+    "mission": "A proper seed round that funds 12 to 18 months. Needs profitability in sight, the investor desk and the data room." },
+
+  { "id": "proj-match-money", "kind": "project", "name": "Match money by Nov 20", "orbits": "sales", "lead": "dickson", "status": "live",
+    "since": "2026-10-25", "due": "2026-11-20", "tier": "open",
+    "mission": "$30K to $60K of match funds committed by Nov 20 so blocked deals can launch. The one constraint on revenue." },
+
+  { "id": "proj-eoy-pilot", "kind": "project", "name": "Year-end match pilot", "orbits": "sales", "lead": "dickson", "status": "pilot",
+    "since": "2026-10-20", "due": "2027-01-01", "tier": "open",
+    "mission": "$750 pilot credited toward the $5K plan, with the 5% relative-lift guarantee. No percentage fees." },
+
+  { "id": "proj-power-2026", "kind": "project", "name": "Nonprofit POWER 2026", "orbits": "sol", "lead": "pooya", "status": "building",
+    "due": "2026-12-15", "tier": "open",
+    "mission": "The conference: P2P matching demo and the TNL recording table." },
+
+  { "id": "proj-freeze", "kind": "project", "name": "Revenue-only freeze to Jan 31", "orbits": "sol", "lead": "pooya", "status": "live",
+    "since": "2026-10-25", "due": "2027-01-31", "tier": "open",
+    "mission": "Only revenue work until Jan 31. Lifted for Sol HQ only on Oct 26 by Pooya." }
+]

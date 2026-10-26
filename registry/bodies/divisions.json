@@ -1,0 +1,49 @@
+[
+  { "id": "sales", "kind": "division", "name": "Sales & Partnerships", "short": "Sales", "orbits": "sol", "ring": 1, "angle": 200,
+    "color": "#3987e5", "icon": "M2 12l4-4 3 3 5-6M10 5h4v4", "lead": "dickson", "approver": ["dickson"], "tier": "open", "status": "live",
+    "mission": "Close open money, the year-end promo and the POWER pipeline.",
+    "drive": { "folder": "54_Sales_and_Partnerships", "id": "1RJMXZi1teSDcfbQS8FXjwJshXOwGDRFm" },
+    "metrics": [ { "label": "Pipeline, weighted", "source": "pulse.pipe" }, { "label": "Waiting on a matcher", "source": "deals.waiting_on_matcher" }, { "label": "Legacy 5% deals", "source": "deals.legacy" } ] },
+
+  { "id": "fin", "kind": "division", "name": "Finance & Legal", "short": "Finance", "orbits": "sol", "ring": 1, "angle": 290,
+    "color": "#c98500", "icon": "M2 6l6-3.5L14 6M3.5 7.5v5M6.5 7.5v5M9.5 7.5v5M12.5 7.5v5M2 14h12", "lead": "pooya", "approver": ["pooya", "dickson", "ib"], "tier": "restricted", "status": "live",
+    "mission": "Funding-ready and revenue-solid. Nothing here moves money.",
+    "drive": { "folder": "52_Finance_and_Legal", "id": "1GbquV35dR1jHbgeulhjq8Hu4qmn0nfaK" },
+    "metrics": [ { "label": "Runway", "source": "pulse.runway" }, { "label": "Cash collected", "source": "pulse.cash" } ] },
+
+  { "id": "cs", "kind": "division", "name": "Customer Success", "short": "Success", "orbits": "sol", "ring": 1, "angle": 20,
+    "color": "#199e70", "icon": "M5.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM1.5 14c0-2.5 1.8-4 4-4s4 1.5 4 4M9.5 13c.3-1.7 1.3-2.8 2.8-2.8 1.2 0 2.2.8 2.5 2.3", "lead": "dickson", "approver": ["dickson"], "tier": "open", "status": "live",
+    "mission": "Every customer to a live match; the four key logos kept and grown.",
+    "drive": { "folder": "55_Customer_Success", "id": "177qByVfYctNrpy4kEx8sB90B49iq1VLP" },
+    "metrics": [ { "label": "Activated orgs, 90 d", "source": "pulse.act" }, { "label": "No next activity booked", "source": "accounts.no_next" } ] },
+
+  { "id": "prod", "kind": "division", "name": "Product & Engineering", "short": "Product", "orbits": "sol", "ring": 1, "angle": 110,
+    "color": "#9085e9", "icon": "M6 4L2 8l4 4M10 4l4 4-4 4", "lead": "ib", "approver": ["ib"], "tier": "open", "status": "live",
+    "mission": "P2P matching for Nonprofit POWER; one data layer.",
+    "drive": { "folder": "53_Product_and_Eng", "id": "1bC_5E9YGepvQZk97LAbxD3KVseW7QHyc" },
+    "metrics": [ { "label": "Campaigns live", "source": "pulse.camp" }, { "label": "Tracker items open", "source": "tracker.open" } ] },
+
+  { "id": "ceo", "kind": "division", "name": "CEO & Strategy", "short": "Strategy", "orbits": "sol", "ring": 2, "angle": 250,
+    "color": "#d55181", "icon": "M8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zM10.5 5.5 9 9l-3.5 1.5L7 7z", "lead": "pooya", "approver": ["pooya"], "tier": "open", "status": "live",
+    "mission": "Protect the CEO's time and hold the company picture.",
+    "drive": { "folder": "51_CEO_and_Strategy", "id": "10X8t0aNTeAZQ2-yEW7UMG54abfrxruKY" },
+    "metrics": [ { "label": "Open decisions", "source": "ops.needs_human" }, { "label": "Oldest decision", "source": "ops.oldest_days" } ] },
+
+  { "id": "mkt", "kind": "division", "name": "Marketing & Brand", "short": "Marketing", "orbits": "sol", "ring": 2, "angle": 340,
+    "color": "#d95926", "icon": "M2 6v4h3l5 3V3L5 6zM12 5.5a3.5 3.5 0 0 1 0 5", "lead": "pooya", "approver": ["pooya"], "tier": "open", "status": "live",
+    "mission": "Webinars, GivingTuesday and case studies that feed the pipeline.",
+    "drive": { "folder": "56_Marketing_and_Brand", "id": "1UKI1uh1JvJP883tSvDxiKvjK4D3iCxr_" },
+    "metrics": [ { "label": "Webinar sign-ups", "source": "pulse.webinar" }, { "label": "Case studies live", "source": "pulse.cases" } ] },
+
+  { "id": "tnl", "kind": "division", "name": "TheNonprofitLab", "short": "TNL", "orbits": "sol", "ring": 2, "angle": 70,
+    "color": "#2f9e3f", "icon": "M8 2a2.5 2.5 0 0 0-2.5 2.5v4a2.5 2.5 0 0 0 5 0v-4A2.5 2.5 0 0 0 8 2zM3.5 8a4.5 4.5 0 0 0 9 0M8 12.5V15M5.5 15h5", "lead": "pooya", "approver": ["pooya"], "tier": "open", "status": "live",
+    "mission": "Discovery, community and the nonprofit data engine.",
+    "drive": { "folder": "57_TheNonprofitLab", "id": "1grGFwiR5jTduZ54lANcpRRQ1QgUSnjze" },
+    "metrics": [ { "label": "TNL reach", "source": "pulse.tnl" }, { "label": "Episodes shipped", "source": "pulse.eps" } ] },
+
+  { "id": "ops", "kind": "division", "name": "Ops, Systems & People", "short": "Ops", "orbits": "sol", "ring": 2, "angle": 160,
+    "color": "#e66767", "icon": "M2 4h12M2 8h12M2 12h12M5 2.5v3M11 6.5v3M7 10.5v3", "lead": "pooya", "approver": ["pooya"], "tier": "open", "status": "live",
+    "mission": "Repeatable, improving work; the Brain and the Ops Board stay true.",
+    "drive": { "folder": "58_Ops_Systems_and_People", "id": "1lADlGVMlZV2XRmvGhLb0i8VGLsx1eVbS" },
+    "metrics": [ { "label": "SOPs signed off", "source": "pulse.sops" }, { "label": "Stale Ops rows", "source": "ops.stale" } ] }
+]

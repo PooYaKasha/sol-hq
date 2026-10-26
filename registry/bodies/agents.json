@@ -1,0 +1,16 @@
+[
+  { "id": "pip",    "kind": "agent", "name": "Pip",    "orbits": "sales", "role": "Pipeline and next steps",            "wave": 1, "status": "live",    "approver": ["dickson"], "tier": "open" },
+  { "id": "penny",  "kind": "agent", "name": "Penny",  "orbits": "fin",   "role": "AI CPA / CFO, read-only books",      "wave": 1, "status": "live",    "approver": ["pooya", "vibe"], "tier": "restricted" },
+  { "id": "lex",    "kind": "agent", "name": "Lex",    "orbits": "fin",   "role": "Legal coordinator",                  "wave": 1, "status": "live",    "approver": ["pooya", "ernie"], "tier": "restricted" },
+  { "id": "kay",    "kind": "agent", "name": "Kay",    "orbits": "cs",    "role": "Key accounts",                       "wave": 2, "status": "planned", "approver": ["dickson"], "tier": "open" },
+  { "id": "bo",     "kind": "agent", "name": "Bo",     "orbits": "cs",    "role": "Onboarding to first campaign",       "wave": 2, "status": "planned", "approver": ["dickson"], "tier": "open" },
+  { "id": "rhoda",  "kind": "agent", "name": "Rhoda",  "orbits": "prod",  "role": "Roadmap, PRDs, sprints",             "wave": 2, "status": "planned", "approver": ["ib"], "tier": "open" },
+  { "id": "parker", "kind": "agent", "name": "Parker", "orbits": "prod",  "role": "Partner integrations",               "wave": 2, "status": "planned", "approver": ["ib"], "tier": "open" },
+  { "id": "logan",  "kind": "agent", "name": "Logan",  "orbits": "ceo",   "role": "Chief of staff, decisions log",      "wave": 1, "status": "live",    "approver": ["pooya"], "tier": "open" },
+  { "id": "cal",    "kind": "agent", "name": "Cal",    "orbits": "ceo",   "role": "Executive assistant",                "wave": 1, "status": "live",    "approver": ["pooya"], "tier": "open" },
+  { "id": "minnie", "kind": "agent", "name": "Minnie", "orbits": "ceo",   "role": "Meeting scribe",                     "wave": 1, "status": "live",    "approver": ["pooya", "dickson"], "tier": "open" },
+  { "id": "marcie", "kind": "agent", "name": "Marcie", "orbits": "mkt",   "role": "Marketing",                          "wave": 2, "status": "planned", "approver": ["pooya"], "tier": "open" },
+  { "id": "mike",   "kind": "agent", "name": "Mike",   "orbits": "tnl",   "role": "TNL producer",                       "wave": 2, "status": "planned", "approver": ["pooya"], "tier": "open" },
+  { "id": "indy",   "kind": "agent", "name": "Indy",   "orbits": "tnl",   "role": "Insights, TNL.ai memos",             "wave": 2, "status": "planned", "approver": ["pooya"], "tier": "open" },
+  { "id": "soph",   "kind": "agent", "name": "Soph",   "orbits": "ops",   "role": "Industrial and systems engineer",    "wave": 1, "status": "live",    "approver": ["pooya"], "tier": "open" }
+]

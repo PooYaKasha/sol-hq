@@ -1,0 +1,155 @@
+{
+  "_about": "Every thing that orbits Sol is a body of one of these kinds. Add a kind here and a new body file in registry/bodies/, and the orbit, list, search and detail views pick it up with no view code.",
+  "kinds": {
+    "sun": {
+      "label": "Sol",
+      "plural": "Sol",
+      "glyph": "sun",
+      "ring": 0
+    },
+    "human": {
+      "label": "Person",
+      "plural": "People",
+      "glyph": "person",
+      "ring": 0,
+      "about": "A founder, a hire, a contractor or an outside advisor. Orbits Sol or the division they work in."
+    },
+    "division": {
+      "label": "Division",
+      "plural": "Divisions",
+      "glyph": "planet",
+      "ring": 1,
+      "about": "A department with a lead, a mission and its own moons."
+    },
+    "project": {
+      "label": "Project",
+      "plural": "Projects",
+      "glyph": "hex",
+      "ring": 2,
+      "about": "Time-boxed work with a goal and a date. Orbits Sol when it crosses divisions, else its division."
+    },
+    "agent": {
+      "label": "Agent",
+      "plural": "Agents",
+      "glyph": "moon",
+      "ring": 0,
+      "about": "An AI seat with an approver. Orbits its division."
+    },
+    "workflow": {
+      "label": "Workflow",
+      "plural": "Workflows",
+      "glyph": "square",
+      "ring": 1,
+      "about": "A repeatable routine a division runs."
+    },
+    "product": {
+      "label": "Product",
+      "plural": "Products",
+      "glyph": "diamond",
+      "ring": 2,
+      "about": "Something customers or the team use."
+    },
+    "tool": {
+      "label": "Tool",
+      "plural": "Tools",
+      "glyph": "ring",
+      "ring": 2,
+      "about": "An outside system the company runs on. Shown in the Toolbelt, not in orbit, unless it sets orbits."
+    }
+  },
+  "rings": {
+    "_about": "Default ring by kind when a body orbits Sol vs. anything else. A body can set its own ring.",
+    "sol": {
+      "human": 0,
+      "division": 1,
+      "agent": 1,
+      "workflow": 2,
+      "product": 2,
+      "project": 3,
+      "tool": 3
+    },
+    "other": {
+      "human": 0,
+      "agent": 0,
+      "workflow": 1,
+      "project": 1,
+      "product": 2,
+      "tool": 2,
+      "division": 2
+    }
+  },
+  "statuses": {
+    "live": {
+      "label": "Live",
+      "tone": "good"
+    },
+    "pilot": {
+      "label": "Pilot",
+      "tone": "good"
+    },
+    "service": {
+      "label": "Service",
+      "tone": "good"
+    },
+    "building": {
+      "label": "Building",
+      "tone": "warn"
+    },
+    "planned": {
+      "label": "Planned",
+      "tone": "muted"
+    },
+    "proposed": {
+      "label": "Proposed",
+      "tone": "muted"
+    },
+    "blocked": {
+      "label": "Blocked",
+      "tone": "crit"
+    },
+    "parked": {
+      "label": "Parked",
+      "tone": "muted"
+    },
+    "retired": {
+      "label": "Retired",
+      "tone": "muted"
+    }
+  },
+  "tiers": {
+    "_about": "Who may see a body and the data rows attached to it. Roles: founder sees all; lead sees open and studio; staff sees open; investor sees only bodies tagged investor.",
+    "open": 0,
+    "studio": 1,
+    "restricted": 2
+  },
+  "roles": {
+    "founder": {
+      "label": "Founder",
+      "tiers": [
+        "open",
+        "studio",
+        "restricted"
+      ]
+    },
+    "lead": {
+      "label": "Lead",
+      "tiers": [
+        "open",
+        "studio"
+      ]
+    },
+    "staff": {
+      "label": "Staff",
+      "tiers": [
+        "open"
+      ]
+    },
+    "investor": {
+      "label": "Investor",
+      "tiers": [
+        "open"
+      ],
+      "tag": "investor"
+    }
+  }
+}

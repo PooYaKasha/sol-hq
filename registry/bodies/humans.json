@@ -1,0 +1,14 @@
+[
+  { "id": "pooya",   "kind": "human", "name": "Pooya",   "short": "Pooya", "role": "CEO", "orbits": "sol", "status": "live", "tier": "open", "initials": "P",
+    "mission": "Leads the company, strategy, finance, marketing, TNL and ops." },
+  { "id": "dickson", "kind": "human", "name": "Dickson", "short": "Dickson", "role": "CRO / CGO", "orbits": "sol", "status": "live", "tier": "open", "initials": "D",
+    "mission": "Owns revenue, partnerships and customer success." },
+  { "id": "ib",      "kind": "human", "name": "ib",      "short": "ib", "role": "CTO", "orbits": "sol", "status": "live", "tier": "open", "initials": "ib",
+    "mission": "Owns product, engineering and the data layer." },
+  { "id": "malek",   "kind": "human", "name": "Malek",   "short": "Malek", "role": "Campaign generator", "orbits": "mkt", "status": "live", "tier": "open", "initials": "M" },
+  { "id": "dylan",   "kind": "human", "name": "Dylan",   "short": "Dylan", "role": "HubSpot data, sales support", "orbits": "sales", "status": "live", "tier": "open", "initials": "Dy" },
+  { "id": "ernie",   "kind": "human", "name": "Ernie",   "short": "Ernie", "role": "Outside counsel", "orbits": "fin", "status": "live", "tier": "studio", "initials": "E", "external": true,
+    "mission": "Reviews every contract, offer and policy before it goes out." },
+  { "id": "vibe",    "kind": "human", "name": "Vibe Financials", "short": "Vibe", "role": "Outside accountants", "orbits": "fin", "status": "live", "tier": "studio", "initials": "V", "external": true,
+    "mission": "Approves what Penny prepares; moves money when a founder says so." }
+]
