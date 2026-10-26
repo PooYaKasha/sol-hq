@@ -131,7 +131,7 @@ ul.lib,ul.recent,ul.links,ul.checks,ul.srcs,ul.rules,.rows ul{margin:0;padding-l
 /* the orbit */
 .stage{position:relative}
 .stage:has(.orbit){background:radial-gradient(ellipse at 50% 50%,#0a0f22 0,#000 70%);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;min-height:420px}
-.orbit{display:block;width:100%;height:auto;aspect-ratio:1200/640}
+.orbit{display:block;width:100%;height:auto;aspect-ratio:1200/700}
 .hint{margin:0;font-size:12px;color:var(--ink-3)}
 .crumbs{position:absolute;left:12px;top:10px;display:flex;align-items:center;gap:6px;font-size:13px;background:rgba(0,0,0,.45);border-radius:8px;padding:4px 8px}
 .crumbs .sep{color:var(--ink-3)}
@@ -158,8 +158,54 @@ ul.lib,ul.recent,ul.links,ul.checks,ul.srcs,ul.rules,.rows ul{margin:0;padding-l
 .ringdot{fill:none;stroke-width:2}
 .has-kids{fill:none;stroke:rgba(255,255,255,.35);stroke-width:1;stroke-dasharray:3 4}
 .badge circle{fill:var(--sun)} .badge text{fill:var(--sun-ink);font-size:11px;font-weight:700}
-.label{fill:#fff;font-size:13px;font-weight:600;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
+.label{fill:#fff;font-size:14px;font-weight:600;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
 .k-agent .label,.k-workflow .label,.k-product .label,.k-human .label,.k-tool .label{font-size:11px;font-weight:500;fill:var(--ink-2)}
-.sublabel{fill:var(--ink-3);font-size:11px;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
+.sublabel{fill:var(--ink-3);font-size:12px;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
 .trace-line{stroke:var(--sun);stroke-width:1.5;stroke-dasharray:4 4;opacity:.8}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* galaxy: black hole, stars, planets, moons */
+.orbit{animation:enter .45s ease-out}
+@keyframes enter{from{opacity:0;transform:scale(1.03)}}
+.diskline{animation:dash 30s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-124}}
+@media (prefers-reduced-motion:reduce){.orbit,.diskline{animation:none}}
+.corona{pointer-events:none}
+.spike{fill:none;stroke:#fff;stroke-opacity:.28;stroke-width:1.2;pointer-events:none}
+.sun-name,.sun-sub{paint-order:stroke;stroke:#000;stroke-width:4px;stroke-linejoin:round}
+.wf{fill:none;stroke:#c9d2f5;stroke-width:1.6;stroke-dasharray:3 2}
+.agentdot{stroke-width:2} .agentdot.planned{stroke-dasharray:4 3}
+.prodring{stroke:#c9d2f5;stroke-width:1.2}
+.tinymoon{fill:#cfe0ff;fill-opacity:.85;pointer-events:none}
+.mm .mlab{fill:var(--ink-2);font-weight:600;letter-spacing:.04em;paint-order:stroke;stroke:#000;stroke-width:3px}
+.mm .mval{fill:var(--ink);paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
+.mm.act{cursor:pointer} .mm.act:hover .mb,.mm.act:focus-visible .mb{filter:brightness(1.5);stroke-width:3.5}
+.mm .mb{transition:stroke-width .15s}
+.k-workstream .label,.k-project .label{font-size:11px;font-weight:500;fill:var(--ink-2)}
+.lg .g-status{border-radius:50%;background:transparent;border:2px solid var(--warn)}
+.has-bar .crumbs{top:62px}
+.askbar.in-stage{position:absolute;z-index:3;top:10px;left:50%;transform:translateX(-50%);width:min(560px,calc(100% - 40px));box-shadow:0 0 0 1px rgba(60,196,107,.25),0 0 28px rgba(23,179,176,.25),0 8px 30px rgba(0,0,0,.6)}
+
+/* context rails: what to know, what to ask */
+.rail{display:none;flex-direction:column;gap:8px;padding:104px 12px 48px;align-self:stretch;position:relative;z-index:2}
+.rail h5{margin:0 0 2px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.rail h5 span{color:var(--ink-3);text-transform:none;letter-spacing:0}
+.kc,.qc{display:flex;flex-direction:column;gap:3px;text-align:left;width:100%;background:rgba(15,22,49,.85);border:1px solid var(--line);border-left:3px solid var(--kc,var(--line-2));border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--ink)}
+.kc:hover,.qc:hover{border-color:var(--line-2);background:var(--panel-2)}
+.qc{border-left-color:var(--line-2)}
+.kc small,.qc small{font-size:11px;color:var(--ink-3)} .kc .go{font-size:11px;color:#8fc0ff}
+div.kc{cursor:default}
+@media (min-width:1300px){
+  .stage.has-rails{display:grid;grid-template-columns:230px minmax(0,1fr) 230px}
+  .stage.has-rails .rail{display:flex}
+  .stage.has-rails .askbar.in-stage{width:min(560px,calc(100% - 540px))}
+}
+body.panel-open .stage.has-rails{display:block}
+body.panel-open .stage.has-rails .rail{display:none}
+body.panel-open .stage.has-rails .askbar.in-stage{width:min(560px,calc(100% - 40px))}
+@media (max-width:700px){
+  .stage:has(.orbit){display:flex;flex-direction:column}
+  .stage .crumbs{position:static;order:-1;margin:8px;flex-wrap:wrap}
+  .stage .legend{position:static;margin:6px 8px}
+  .stage{min-height:0}
+}
