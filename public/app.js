@@ -34,7 +34,7 @@ function render() {
   app.cleanups = []; app.orbit = null;
   root.innerHTML = '';
   $$('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.view === view.id));
-  const ctx = { params: r.params, go, openBody, closePanel, ask: q => openAsk(q), onCleanup: fn => app.cleanups.push(fn), get orbit() { return app.orbit; }, set orbit(o) { app.orbit = o; } };
+  const ctx = { params: r.params, go, openBody, closePanel, rerender: render, focusBody: id => { location.hash = `#/hq/${id}?body=${id}`; }, ask: q => openAsk(q), onCleanup: fn => app.cleanups.push(fn), get orbit() { return app.orbit; }, set orbit(o) { app.orbit = o; } };
   try { view.render(root, ctx); } catch (e) { root.append(h('p.err', `This view hit an error: ${e.message}`)); console.error(e); }
   app.scope = view.id === 'hq' && r.params.focus && r.params.focus !== sun().id ? r.params.focus : null;
   paintScope();
@@ -107,6 +107,10 @@ function setupSearch() {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); open(); }
     else if (e.key === '/' && !typing) { e.preventDefault(); open(); }
     else if (e.key === 'Escape' && !dlg.open && !$('#panel').hidden) { delete $('#panel').dataset.answer; closePanel(); }
+    else if (e.key === 'Escape' && !dlg.open && !typing) {
+      const cur = parse(), b = cur.view === 'hq' && cur.params.focus && body(cur.params.focus);
+      if (b) go(b.orbits && b.orbits !== sun().id ? `hq/${b.orbits}` : 'hq');
+    }
   });
   dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 }

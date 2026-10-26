@@ -25,6 +25,7 @@ export function renderBody(root, id, ctx) {
   add('Lead', b.lead ? who(b.lead) : null);
   add('Owner', b.owner ? who(b.owner) : null);
   add('Approver', (b.approver || []).length ? h('span', ...(b.approver || []).flatMap((a, i) => [i ? ', ' : null, who(a)])) : null);
+  if (b.row) { add('Row', b.row.id); add('Owner → approver', b.row.who); add('Updated', fmtDate(b.row.updated)); add('Waiting since', b.row.since ? fmtDate(b.row.since) : null); }
   add('Wave', b.wave ? `Wave ${b.wave}` : null);
   add('Dates', [b.since && `since ${b.since}`, b.due && `due ${b.due}`].filter(Boolean).join(' · ') || null);
   add('Tier', b.tier && b.tier !== 'open' ? pill(b.tier, b.tier === 'restricted' ? 'crit' : 'warn') : null);
