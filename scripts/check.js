@@ -19,7 +19,9 @@ try {
 } catch (e) { fail('registry: ' + e.message); }
 
 // 2. data files parse and carry the contract
-const walk = d => fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true }).flatMap(e => e.name === 'node_modules' || e.name === '.git' ? [] : e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]) : [];
+// Plain files only: no symlinks (Replit adds some), no dot-folders (.git, .local, .cache, .agents) and no node_modules.
+const skip = e => e.name === 'node_modules' || e.isSymbolicLink() || (e.isDirectory() && e.name.startsWith('.'));
+const walk = d => fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true }).flatMap(e => skip(e) ? [] : e.isDirectory() ? walk(path.join(d, e.name)) : e.isFile() ? [path.join(d, e.name)] : []) : [];
 for (const f of walk(path.join(root, 'data'))) {
   if (!f.endsWith('.json')) continue;
   try {
@@ -54,7 +56,7 @@ for (const f of walk(root)) {
 }
 try {
   const ignored = fs.readFileSync(path.join(root, '.gitignore'), 'utf8');
-  if (!/^data\/snapshots\/$/m.test(ignored)) fail('.gitignore must ignore data/snapshots/');
+  if (!/^data\/snapshots\/\*?$/m.test(ignored)) fail('.gitignore must ignore data/snapshots/');
 } catch (e) { fail('.gitignore missing'); }
 ok('no secrets, snapshots ignored');
 
