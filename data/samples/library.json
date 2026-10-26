@@ -1,0 +1,18 @@
+{
+  "set": "library",
+  "as_of": "2026-10-26",
+  "sample": true,
+  "source": "sample rows; the real library lists every page the teams shipped",
+  "rows": [
+    { "title": "Pipeline report",            "url": "", "body": "sales", "kind": "Report",   "who": "Pip → Dickson", "time": "Oct 26", "tier": "open" },
+    { "title": "Match money outreach kit",   "url": "", "body": "sales", "kind": "Kit",      "who": "Pip → Dickson", "time": "Oct 25", "tier": "open" },
+    { "title": "Runway one-pager",           "url": "", "body": "fin",   "kind": "Memo",     "who": "Penny",          "time": "Oct 25", "tier": "restricted" },
+    { "title": "Break-even ledger",          "url": "", "body": "fin",   "kind": "Model",    "who": "Penny",          "time": "Oct 25", "tier": "restricted" },
+    { "title": "Pathway prescreener v5",     "url": "", "body": "cs",    "kind": "Prototype","who": "Bo",             "time": "Oct 25", "tier": "open" },
+    { "title": "Product backlog, dev to live","url": "", "body": "prod", "kind": "Page",     "who": "Rhoda → ib",     "time": "Oct 26", "tier": "open" },
+    { "title": "Week of Oct 26 priorities",  "url": "", "body": "ceo",   "kind": "Page",     "who": "Logan",          "time": "Oct 26", "tier": "open" },
+    { "title": "Brand kit v1",               "url": "", "body": "mkt",   "kind": "Kit",      "who": "Marcie",         "time": "Oct 26", "tier": "open" },
+    { "title": "Ask the Lab memo",           "url": "", "body": "tnl",   "kind": "Memo",     "who": "Indy",           "time": "Oct 25", "tier": "open" },
+    { "title": "Wave 1 SOPs",                "url": "", "body": "ops",   "kind": "Playbook", "who": "Soph",           "time": "Oct 25", "tier": "open" }
+  ]
+}

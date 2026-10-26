@@ -1,0 +1,20 @@
+{
+  "set": "pulse",
+  "as_of": "2026-10-26",
+  "sample": true,
+  "source": "sample tiles; the sync fills cash, runway, pipeline and match money",
+  "rows": [
+    { "k": "cash",    "label": "Cash collected · month", "value": "$6.2K",  "sub": "41% of the $15K target", "tone": "crit", "source": "Stripe", "hero": true, "tier": "restricted" },
+    { "k": "runway",  "label": "Runway",                 "value": "3.4 mo", "sub": "zero-cash date in the one-pager", "tone": "warn", "source": "QuickBooks + Penny", "tier": "restricted" },
+    { "k": "match",   "label": "Match money committed",  "value": "$0",     "sub": "goal $30K to $60K by Nov 20", "tone": "crit", "source": "Deals + sponsors" },
+    { "k": "pipe",    "label": "Pipeline, weighted",     "value": "$22K",   "sub": "14 open", "tone": "warn", "source": "HubSpot" },
+    { "k": "camp",    "label": "Campaigns live",         "value": "7",      "sub": "this quarter", "tone": "good", "source": "Platform" },
+    { "k": "act",     "label": "Activated orgs · 90 d",  "value": "11",     "sub": "median 23 d to first campaign", "tone": "warn", "source": "Platform" },
+    { "k": "tnl",     "label": "TNL reach",              "value": "2.1K",   "sub": "downloads a month", "tone": "good", "source": "Podcast host" },
+    { "k": "need",    "label": "Needs a human",          "value": "5",      "sub": "oldest 4 days", "tone": "warn", "source": "Ops Board" },
+    { "k": "webinar", "label": "Webinar sign-ups",       "value": "—",      "sub": "no source yet", "source": "none" },
+    { "k": "cases",   "label": "Case studies live",      "value": "2",      "sub": "", "source": "Site" },
+    { "k": "eps",     "label": "Episodes shipped",       "value": "—",      "sub": "no source yet", "source": "none" },
+    { "k": "sops",    "label": "SOPs signed off",        "value": "—",      "sub": "packet with Pooya", "source": "none" }
+  ]
+}

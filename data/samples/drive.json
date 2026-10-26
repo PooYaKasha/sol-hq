@@ -1,0 +1,17 @@
+{
+  "set": "drive",
+  "as_of": "2026-10-26",
+  "sample": true,
+  "source": "folder names and ids are real; counts are from the Oct 26 walk until the Drive sync runs",
+  "meta": { "root": "https://drive.google.com/drive/folders/10lYoswS5VGaToMdKPrFx4wkQAisT4lj9", "teams": "https://drive.google.com/drive/folders/1WJ_FXS5S7VdihmEbUSOsz4KOFS-IlqFC" },
+  "rows": [
+    { "folder": "51_CEO_and_Strategy",       "id": "10X8t0aNTeAZQ2-yEW7UMG54abfrxruKY", "url": "https://drive.google.com/drive/folders/10X8t0aNTeAZQ2-yEW7UMG54abfrxruKY", "body": "ceo",   "files": 7,  "subfolders": { "01_Deliverables": 2, "02_Drafts": 1, "03_Reports": 4, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26", "recent": [ { "name": "Executive brief v1", "when": "2026-10-26" }, { "name": "Sol roll-up v1", "when": "2026-10-26" } ] },
+    { "folder": "52_Finance_and_Legal",      "id": "1GbquV35dR1jHbgeulhjq8Hu4qmn0nfaK", "url": "https://drive.google.com/drive/folders/1GbquV35dR1jHbgeulhjq8Hu4qmn0nfaK", "body": "fin",   "files": 17, "subfolders": { "01_Deliverables": 6, "02_Drafts": 4, "03_Reports": 7, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26", "notes": "Two duplicates (runway one-pager v2.8, Q1-2027 tax checklist); nothing removed yet." },
+    { "folder": "53_Product_and_Eng",        "id": "1bC_5E9YGepvQZk97LAbxD3KVseW7QHyc", "url": "https://drive.google.com/drive/folders/1bC_5E9YGepvQZk97LAbxD3KVseW7QHyc", "body": "prod",  "files": 2,  "subfolders": { "01_Deliverables": 2, "02_Drafts": 0, "03_Reports": 0, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26" },
+    { "folder": "54_Sales_and_Partnerships", "id": "1RJMXZi1teSDcfbQS8FXjwJshXOwGDRFm", "url": "https://drive.google.com/drive/folders/1RJMXZi1teSDcfbQS8FXjwJshXOwGDRFm", "body": "sales", "files": 3,  "subfolders": { "01_Deliverables": 1, "02_Drafts": 0, "03_Reports": 2, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26" },
+    { "folder": "55_Customer_Success",       "id": "177qByVfYctNrpy4kEx8sB90B49iq1VLP", "url": "https://drive.google.com/drive/folders/177qByVfYctNrpy4kEx8sB90B49iq1VLP", "body": "cs",    "files": 0,  "subfolders": { "01_Deliverables": 0, "02_Drafts": 0, "03_Reports": 0, "04_Assets": 0, "05_Archive": 0 }, "last_filed": null, "notes": "Empty: Kay and Bo are Wave 2." },
+    { "folder": "56_Marketing_and_Brand",    "id": "1UKI1uh1JvJP883tSvDxiKvjK4D3iCxr_", "url": "https://drive.google.com/drive/folders/1UKI1uh1JvJP883tSvDxiKvjK4D3iCxr_", "body": "mkt",   "files": 4,  "subfolders": { "01_Deliverables": 3, "02_Drafts": 1, "03_Reports": 0, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26" },
+    { "folder": "57_TheNonprofitLab",        "id": "1grGFwiR5jTduZ54lANcpRRQ1QgUSnjze", "url": "https://drive.google.com/drive/folders/1grGFwiR5jTduZ54lANcpRRQ1QgUSnjze", "body": "tnl",   "files": 4,  "subfolders": { "01_Deliverables": 2, "02_Drafts": 2, "03_Reports": 0, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26" },
+    { "folder": "58_Ops_Systems_and_People", "id": "1lADlGVMlZV2XRmvGhLb0i8VGLsx1eVbS", "url": "https://drive.google.com/drive/folders/1lADlGVMlZV2XRmvGhLb0i8VGLsx1eVbS", "body": "ops",   "files": 5,  "subfolders": { "01_Deliverables": 3, "02_Drafts": 0, "03_Reports": 2, "04_Assets": 0, "05_Archive": 0 }, "last_filed": "2026-10-26" }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "set": "ops",
+  "as_of": "2026-10-26",
+  "sample": true,
+  "source": "sample rows; the sync reads the Ops Board sheet",
+  "rows": [
+    { "id": "WS-001", "title": "One-year contract proposal for a pilot customer", "status": "Needs human", "who": "Pip → Dickson", "body": "sales", "agent": "pip",   "tier": "studio", "since": "2026-10-22", "updated": "2026-10-25" },
+    { "id": "WS-002", "title": "Matcher shortlist for blocked deals",             "status": "Needs human", "who": "Pip → Dickson", "body": "sales", "agent": "pip",   "tier": "studio", "since": "2026-10-24", "updated": "2026-10-26" },
+    { "id": "WS-003", "title": "Pipeline export to HQ",                           "status": "In progress", "who": "Pip",           "body": "sales", "agent": "pip",   "tier": "studio", "updated": "2026-10-26" },
+    { "id": "WS-004", "title": "Pilot overcharge refund",                         "status": "In progress", "who": "Vibe → Dickson","body": "fin",   "agent": "penny", "tier": "restricted", "updated": "2026-10-26" },
+    { "id": "WS-005", "title": "Forward runway, next version",                    "status": "In progress", "who": "Penny",         "body": "fin",   "agent": "penny", "tier": "restricted", "updated": "2026-10-25" },
+    { "id": "WS-006", "title": "Pulse strip: in or out of the freeze",            "status": "Needs human", "who": "Sol → ib",      "body": "prod",  "tier": "studio", "since": "2026-10-25", "updated": "2026-10-25" },
+    { "id": "WS-007", "title": "POWER: two tables (TNL recording + P2P demo)",    "status": "Blocked",     "who": "Parker → ib",   "body": "prod",  "agent": "parker","tier": "studio", "updated": "2026-10-20" },
+    { "id": "WS-008", "title": "Monday roll-up",                                  "status": "In progress", "who": "Logan",         "body": "ceo",   "agent": "logan", "tier": "open", "updated": "2026-10-26" },
+    { "id": "WS-009", "title": "Return-actions sheet: 29 cards",                  "status": "Needs human", "who": "Logan → Pooya", "body": "ceo",   "agent": "logan", "tier": "open", "since": "2026-10-25", "updated": "2026-10-25" },
+    { "id": "WS-010", "title": "Ask the Lab: free manual pilot",                  "status": "Needs human", "who": "Indy → Pooya",  "body": "tnl",   "agent": "indy",  "tier": "open", "since": "2026-10-25", "updated": "2026-10-25" },
+    { "id": "WS-011", "title": "Prescreener screen copy",                         "status": "Not started", "who": "Bo → Dickson",  "body": "cs",    "agent": "bo",    "tier": "studio", "updated": "2026-10-24" },
+    { "id": "WS-012", "title": "Nov 12 webinar run sheet",                        "status": "In progress", "who": "Marcie → Pooya","body": "mkt",   "agent": "marcie","tier": "open", "updated": "2026-10-26" },
+    { "id": "WS-013", "title": "SOP-03 rework fix",                               "status": "In progress", "who": "Soph",          "body": "ops",   "agent": "soph",  "tier": "open", "updated": "2026-10-18" },
+    { "id": "WS-014", "title": "Sol HQ app: publish on Replit",                   "status": "In progress", "who": "Sol → Pooya",   "body": "prod",  "tier": "open", "updated": "2026-10-26" }
+  ]
+}

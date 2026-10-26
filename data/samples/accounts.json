@@ -1,0 +1,12 @@
+{
+  "set": "accounts",
+  "as_of": "2026-10-26",
+  "sample": true,
+  "source": "fictional organizations; the sync replaces this with HubSpot activity",
+  "rows": [
+    { "org": "Lakeside Library Friends", "stage": "Renew and expand",   "last_contact": "2026-10-20", "stage_entered": "2026-10-16", "days_in_stage": 10,  "next_activity": "2026-10-30", "relationship": "Annual platform agreement", "next": "Lunch Oct 30", "owner": "Dickson", "body": "cs" },
+    { "org": "Prairie Land Trust",       "stage": "Onboarding",         "last_contact": "2026-10-16", "stage_entered": "2026-07-09", "days_in_stage": 109, "next_activity": null,         "relationship": "Pilot, legacy 5% terms", "next": "Confirm platform fit", "owner": "Dickson", "body": "cs" },
+    { "org": "Northside Clinic",         "stage": "Onboarding",         "last_contact": "2026-10-18", "stage_entered": "2026-10-07", "days_in_stage": 19,  "next_activity": null,         "relationship": "Self-serve sign-up", "next": "Offer a setup call", "owner": "Dickson", "body": "cs" },
+    { "org": "Cedar Shelter",            "stage": "Conclude and settle","last_contact": "2026-10-10", "stage_entered": "2026-09-01", "days_in_stage": 55,  "next_activity": "2026-11-03", "relationship": "Confirmed Q4 customer", "next": "Match-fund call Nov 3", "owner": "Dickson", "body": "cs" }
+  ]
+}

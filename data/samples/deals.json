@@ -1,0 +1,23 @@
+{
+  "set": "deals",
+  "as_of": "2026-10-26",
+  "sample": true,
+  "source": "fictional organizations; the sync replaces this with HubSpot + Stripe",
+  "meta": {
+    "stages": [
+      { "k": "new",     "name": "New and discovery",    "about": "First conversations, self-serve sign-ups" },
+      { "k": "qual",    "name": "Qualified",            "about": "Fit confirmed, scoping" },
+      { "k": "prop",    "name": "Proposal",             "about": "Terms in discussion" },
+      { "k": "matcher", "name": "Waiting on a matcher", "about": "Wants to commit; no match funds yet", "choke": true },
+      { "k": "won",     "name": "Closed won",           "about": "Signed or paid this quarter", "won": true }
+    ]
+  },
+  "rows": [
+    { "org": "Riverbend Youth Arts",  "stage": "new",     "owner": "Dickson", "terms": null,     "amount_hubspot": 0,    "amount_verified": null, "next": "Self-serve sign-up; offer a setup call", "body": "sales" },
+    { "org": "Harbor Food Bank",      "stage": "qual",    "owner": "Pooya",   "terms": null,     "amount_hubspot": 0,    "amount_verified": null, "next": "P2P matching; needs a platform integration", "body": "sales" },
+    { "org": "Northside Clinic",      "stage": "prop",    "owner": "Dickson", "terms": "plan",   "terms_quoted": "$750 pilot credited toward the $5K plan", "amount_hubspot": 750, "amount_verified": null, "next": "Send the pilot order form", "body": "sales" },
+    { "org": "Prairie Land Trust",    "stage": "matcher", "owner": "Dickson", "terms": "legacy", "terms_quoted": "5%, $1K cap", "amount_hubspot": 1000, "amount_verified": "up to $1,000", "next": "Find a matcher", "blocked": true, "body": "sales" },
+    { "org": "Cedar Shelter",         "stage": "matcher", "owner": "Dickson", "terms": null,     "amount_hubspot": 500,  "amount_verified": null, "next": "Find a matcher", "blocked": true, "body": "sales" },
+    { "org": "Lakeside Library Friends", "stage": "won",  "owner": "Dickson", "terms": "plan",   "terms_quoted": "Annual agreement, net 90", "amount_hubspot": 10000, "amount_verified": 10000, "next": "Invoice sent; due in January", "body": "sales" }
+  ]
+}
