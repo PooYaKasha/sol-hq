@@ -2066,7 +2066,7 @@ function tracksHtml(p){
   const list=(t,a)=>a.length?`<div class="tk-l"><span>${t}</span>${a.map(x=>`<b>${esc(x)}</b>`).join('')}</div>`:'';
   return `<div class="card"><div class="eyebrow">Two tracks in ${esc(p.name)} · proposed split, tell Sol if anything belongs on the other side</div>
     <div class="tracks">${TNL_TRACKS.map(t=>`<section class="track"><div class="tk-h"><h3>${esc(t.n)}</h3>${pill(t.s)}</div><p>${esc(t.why)}</p>${list('Agents',t.ag)}${list('Workflows',t.wf)}${list('Products',t.pr)}</section>`).join('')}</div>
-    <div class="note">The grouping is my reading of the TNL planet: the podcast on one side, the data engine on the other. The Supabase API project is added as a product on the planet so it shows in the solar system too.</div></div>`;
+    <div class="note">The grouping is my reading of the TNL star: the podcast on one side, the data engine on the other. The Supabase API project is added as a product in the TNL star system so it shows in the galaxy too.</div></div>`;
 }
 const RD_SEEDS=[
  {id:'MN-IDEA-001',t:'Intelligent benchmarking for users',who:'Dickson',at:'Sep 2, 2026',what:'Logged by Dickson in the Tracker’s Idea Log. The row has the detail.',src:'MatchNice Tracker, Idea Log'},
@@ -2160,7 +2160,7 @@ Pooya
     ├── Soph (AI) · GM Systems & People ....... approver Pooya + leads
     │   └── Minnie (AI)
     └── Indy (AI) · GM R&D (draft until POWER) ... approvers Pooya, ib`;
-const GM_DEC=['Every planet has a GM: approved','Nine GMs approved: Sol, Penny, Rhoda, Pip, Kay, Marcie, Mike, Soph, Indy','R&D is a new star with Indy as GM; Indy moves off TNL; Rhoda stays GM of Product & Eng','Rhoda, Kay, Marcie, Mike and Indy are GM (draft until POWER), resting on the D5a amendment, which still needs all three founders','Max and Billie: live as drafts only after “Go for all” (02:57Z); specs org/specs/max.md, billie.md','Ira (Dec 1), Dax (ib’s yes), Reggie (Ernie’s answer), Vera (weekly posting): parked with those triggers','Designer and contract dev hours: held to after Nov 20','Dylan and Malek seats: Pooya’s call this week'];
+const GM_DEC=['Every star has a GM: approved','Nine GMs approved: Sol, Penny, Rhoda, Pip, Kay, Marcie, Mike, Soph, Indy','R&D is a new star with Indy as GM; Indy moves off TNL; Rhoda stays GM of Product & Eng','Rhoda, Kay, Marcie, Mike and Indy are GM (draft until POWER), resting on the D5a amendment, which still needs all three founders','Max and Billie: live as drafts only after “Go for all” (02:57Z); specs org/specs/max.md, billie.md','Ira (Dec 1), Dax (ib’s yes), Reggie (Ernie’s answer), Vera (weekly posting): parked with those triggers','Designer and contract dev hours: held to after Nov 20','Dylan and Malek seats: Pooya’s call this week'];
 const avHtml=n=>n==='Sol'?'<span class="oc-av mark" aria-hidden="true"></span>':`<span class="oc-av" aria-hidden="true">${PEOPLE[n]&&PEOPLE[n].photo?`<img src="${esc(PEOPLE[n].photo)}" alt="">`:esc(apvInit(n))}</span>`;
 const ORG={founders:[['Pooya','CEO · decides'],['ib','CTO · decides · Malek reports to ib'],['Dickson','CRO · decides · Dylan reports to Dickson']],ext:[['Vibe','Finance, external'],['Ernie','Legal, external']],
   sol:[['Logan','Ops reporting'],['Cal','Executive assistant'],['Ira','Parked to Dec 1','parked']],
@@ -2292,7 +2292,7 @@ function renderPlanet(p){
     <h3 data-src="dept-${p.id}"><span class="dot" style="background:${c}"></span>${esc(p.name)}</h3>
     <div class="meta">Lead ${esc(p.lead)} · approver ${esc(p.appr)}<br>${esc(p.mission)}</div>
     <div class="minipulse">${p.mini.map(([k,v])=>`<div><span>${esc(k)}</span><b>${restricted?'—':esc(v)}</b></div>`).join('')}</div>
-    ${restricted?`<div class="lock">${ICON.lock}Values on this planet are Restricted for your role</div>`:''}
+    ${restricted?`<div class="lock">${ICON.lock}Values in this star system are Restricted for your role</div>`:''}
     <h4><span>Planets · agents</span><span>${p.agents.length}</span></h4>
     <div class="rows">${p.agents.map(a=>`<button type="button" class="row" data-ag="${esc(a.n)}"><span class="moon${a.w===2?' w2':''}" style="background:${a.human?'#9AA8B8':c}">${a.n[0]}</span><span class="main"><b>${esc(a.n)}</b><small>${esc(a.seat)}${a.appr?` · approver ${esc(a.appr)}`:''}</small></span>${a.w===2?'<span class="pill">Wave 2</span>':a.human?'<span class="pill">Human</span>':'<span class="pill live">Running</span>'}</button>`).join('')}</div>
     <h4><span>Workflows</span><span>${p.flows.length}</span></h4>
@@ -2401,7 +2401,7 @@ function ask(text){
   const r=hits[0], p=byId[r.p];
   if(scoped){ focusPlanet(r.p); } else { if(focus) focusPlanet(null); setTrace(r); P.forEach(q=>q._g.classList.toggle('on',q.id===r.p||(r.x||[]).some(z=>z[0]===q.id))); }
   renderCrumbs(r.ag); markSel(r.ag);
-  const conf = scoped ? `Scoped to ${p.name} because you asked from that planet. Clear the chip in the ask bar to route across the whole company.` : hits.length>1 && hits[1].p!==r.p ? 'Rules matched two planets; Claude would break the tie in the live build.' : 'Matched by the rules table.';
+  const conf = scoped ? `Scoped to ${p.name} because you asked from that star. Clear the chip in the ask bar to route across the whole company.` : hits.length>1 && hits[1].p!==r.p ? 'Rules matched two stars; Claude would break the tie in the live build.' : 'Matched by the rules table.';
   const appr=p.agents.find(a=>a.n===r.ag)?.appr||p.appr;
   const cites=(r.c&&r.c.length?r.c:ART.filter(a=>a.p===r.p).slice(0,2).map(a=>a.n)).map(k=>{ if(SYS[k]) return {...SYS[k],sys:1}; const a=ART.find(x=>x.n===k); return a&&artSee(a)?{n:a.n,u:a.u,f:a.f,live:1,who:a.who}:null; }).filter(Boolean);
   if(!(p.id==='fin'&&role!=='founder')) ctxFor(r.p).slice(0,3).forEach(c=>cites.push({n:'Context added: '+c.t,u:c.u||'',live:1,who:(c.kind==='file'?'file':c.kind)+' · '+fmtCtxD(c.at),ctx:1}));
@@ -2779,7 +2779,7 @@ function renderPlaybook(){
   $('#pb-need').innerHTML=goLinkHtml(); wireGoLink($('#pb-need'));
   const show=ids.filter(id=>pbDept==='all'||id===pbDept);
   $('#pb-depts').innerHTML=show.map(id=>{ const p=byId[id], d=PB[id], lock=p.tier==='Restricted'&&role!=='founder';
-    return `<section class="card pbd" style="--dc:${col(p)}"><div class="pbh"><h3>${dIc(id)}${esc(p.name)}</h3><span>${p.agents.map(a=>a.n).join(', ')} · lead ${esc(p.lead)}</span><button type="button" class="btn" data-pbz="${id}">Zoom in on the planet</button></div>
+    return `<section class="card pbd" style="--dc:${col(p)}"><div class="pbh"><h3>${dIc(id)}${esc(p.name)}</h3><span>${p.agents.map(a=>a.n).join(', ')} · lead ${esc(p.lead)}</span><button type="button" class="btn" data-pbz="${id}">Zoom in on the star</button></div>
       ${lock?`<div class="lock">${ICON.lock}Restricted: priorities show to founders only</div>`:`<div class="pbg"><ol class="pbl">${d.t.map(([w,o,due])=>`<li><b>${esc(w)}</b><small>${esc(o)} · ${esc(due)}</small></li>`).join('')}</ol>
       <aside class="pbr"><div class="eyebrow">Needs Pooya · about ${d.m} min</div><ul>${d.n.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></aside></div>`}</section>`; }).join('');
   $('#pb-depts').querySelectorAll('[data-pbz]').forEach(b=>b.onclick=()=>focusPlanet(b.dataset.pbz));
@@ -2980,11 +2980,11 @@ const SET_SUGG=[
   ['Supabase (planned)','Real sign-in, per-person logins and the live database for the app.','Arrives with ib; not a Claude connector.']];
 const SET_PEOPLE=[['Pooya','founder',0],['Dickson','lead',1],['ib','eng',3],['Dylan','staff',2],['Malek','staff',2]];
 const SET_PERMS=[
-  ['See Open-tier planets and rows','y','y','y','y','y'],
+  ['See Open-tier stars and rows','y','y','y','y','y'],
   ['See Studio-tier rows','y','y','—','y','—'],
   ['See Restricted rows (finance, legal)','y','—','—','—','—'],
   ['Ask Sol','y','y','y','y','—'],
-  ['Add context, notes or files to a planet','y','y','y','y','—'],
+  ['Add context, notes or files to a star','y','y','y','y','—'],
   ['Flag or fix a source','y','y','y','y','—'],
   ['Edit tracker fields','y','y','—','y','—'],
   ['Change the status of a tracker item','—','—','—','y','—'],
@@ -3012,13 +3012,13 @@ function logRows(){ const gq=id=>(GO_LIST.find(x=>x[1]===id)||[0,0,id])[2];
 const permRow=(p,i)=>{ const def=SET_PERMS[i][1+roleIx(p)]==='y'; const o=ST.perms[p]; return o&&o.p&&i in o.p?!!o.p[i]:def; };
 
 const ARCH_HTML=`<div class="card"><div class="eyebrow">Proposal · Pooya asked Oct 27 · artifact only, nothing built</div><h3>Sol HQ as the company’s one workspace</h3>
-  <p class="note" style="margin:0 0 10px">Yes, it can work. Sol HQ already has the shape: stars are projects, planets are the work, and Sol sits at the center. What it lacks is people who log in, saved conversations, and Sol answering with a model instead of rules. The design below keeps Claude’s own pattern (a project holds a chat and threads; the coordinator routes) and adds what a company needs on top: tiers, approvers and a record.</p>
+  <p class="note" style="margin:0 0 10px">Yes, it can work. Sol HQ already has the shape: Sol sits at the center, departments are stars, people and agents are planets, and their tasks are moons. What it lacks is people who log in, saved conversations, and Sol answering with a model instead of rules. The design below keeps Claude’s own pattern (a project holds a chat and threads; the coordinator routes) and adds what a company needs on top: tiers, approvers and a record.</p>
   <svg viewBox="0 0 760 250" role="img" aria-label="People talk to Sol, Sol routes to projects and threads, agents and tools do the work, a data layer holds everything" style="width:100%;max-width:760px;height:auto;display:block;margin:6px auto">
     <g font-family="Inter,system-ui,sans-serif" font-size="13" fill="#E8EEF2" text-anchor="middle">
       <rect x="10" y="20" width="130" height="64" rx="12" fill="#15223A" stroke="#2C3E5C"/><text x="75" y="48" font-weight="600">People</text><text x="75" y="68" font-size="11" fill="#9AA8B8">founders to investors</text>
       <rect x="170" y="20" width="150" height="64" rx="12" fill="#10353a" stroke="#06A3CC"/><text x="245" y="48" font-weight="600">Sol (coordinator)</text><text x="245" y="68" font-size="11" fill="#9AA8B8">answers and routes</text>
       <rect x="350" y="20" width="170" height="64" rx="12" fill="#15223A" stroke="#2C3E5C"/><text x="435" y="48" font-weight="600">Projects (stars)</text><text x="435" y="68" font-size="11" fill="#9AA8B8">9 stars + custom projects</text>
-      <rect x="550" y="20" width="200" height="64" rx="12" fill="#15223A" stroke="#2C3E5C"/><text x="650" y="48" font-weight="600">Threads (planets)</text><text x="650" y="68" font-size="11" fill="#9AA8B8">one piece of work each</text>
+      <rect x="550" y="20" width="200" height="64" rx="12" fill="#15223A" stroke="#2C3E5C"/><text x="650" y="48" font-weight="600">Threads (moons)</text><text x="650" y="68" font-size="11" fill="#9AA8B8">one piece of work each</text>
       <rect x="170" y="120" width="150" height="56" rx="12" fill="#1e1a3a" stroke="#8f7ae6"/><text x="245" y="144" font-weight="600">Agents</text><text x="245" y="162" font-size="11" fill="#9AA8B8">draft only, approver signs</text>
       <rect x="350" y="120" width="170" height="56" rx="12" fill="#1e1a3a" stroke="#8f7ae6"/><text x="435" y="144" font-weight="600">Connectors</text><text x="435" y="162" font-size="11" fill="#9AA8B8">Gmail, Drive, Stripe, HubSpot…</text>
       <rect x="550" y="120" width="200" height="56" rx="12" fill="#2a2412" stroke="#F2B655"/><text x="650" y="144" font-weight="600">Approvals and decision trail</text><text x="650" y="162" font-size="11" fill="#9AA8B8">who said yes, and why</text>
@@ -3448,7 +3448,7 @@ function runSearchNow(){ sT=0;
   const askHit={t:sp?`Ask ${sp.short}: “${raw}”`:`Ask Sol: “${raw}”`, k:sp?`Stays in ${sp.name}`:'Sol routes it', g:'ask', go:()=>askOpen(raw)};
   const inbox=/repl|email|inbox|mail/.test(q)?inboxHits().map(x=>({...x,g:'inbox'})):[];
   const ext=[{t:`Search Google Drive for “${raw}”`, k:'Files', g:'ext', go:()=>window.open(drive(raw),'_blank','noopener')},{t:`Search Gmail for “${raw}”`, k:'Email', g:'ext', go:()=>window.open(gmail(raw),'_blank','noopener')}];
-  const wide=sp&&others?[{t:`${others} more match${others>1?'es':''} outside ${sp.short}: search everywhere`, k:'Clears the planet scope', g:'ext', go:()=>{ setScope(null); const i=$('#q'); i.value=raw; i.focus(); SR={i:'#q',r:'#sres'}; runSearchNow(); }}]:[];
+  const wide=sp&&others?[{t:`${others} more match${others>1?'es':''} outside ${sp.short}: search everywhere`, k:'Clears the star scope', g:'ext', go:()=>{ setScope(null); const i=$('#q'); i.value=raw; i.focus(); SR={i:'#q',r:'#sres'}; runSearchNow(); }}]:[];
   sHits=[askHit,...inbox,...local,...wide,...ext];
   sOn=(looksQ||!local.length)?0:sHits.indexOf(local[0]);
   paintHits(q);
@@ -3713,7 +3713,7 @@ function renderSrc(){ const box=$('#sx'), k=SX.key, o=siFor(k); if(!box||!o) ret
     ${pid?ctxListHtml(pid,0,true):''}
     <div class="sx-add"><div class="seg" role="group" aria-label="What to add">${['note','link','file'].map(x=>`<button type="button" data-addk="${x}" aria-pressed="${SX.addKind===x}">${x==='note'?'Note':x==='link'?'Link':'File'}</button>`).join('')}</div>
       <form class="sx-form" data-addform>${SX.addKind==='file'?(SX.assets?`<label class="w">File (PDF, image, CSV, text, up to 20 MB)<input name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.md,.txt,.json"></label><label class="w">What is it?<input name="t" maxlength="120" placeholder="e.g. BGCA signed one-pager"></label>`:'<div class="sx-empty w" style="grid-column:1/-1">File upload works for editors on the published page. Add a link to the file in Drive meanwhile.</div>'):`<label class="w">Title<input name="t" maxlength="120" required placeholder="${SX.addKind==='link'?'e.g. Kyle’s match pool email':'e.g. What Dickson heard on the BGCA call'}"></label>${SX.addKind==='link'?'<label class="w">Link<input name="u" type="url" inputmode="url" required placeholder="https://"></label>':''}<label class="w">${SX.addKind==='link'?'Why it matters (optional)':'Note'}<textarea name="text" maxlength="2000"${SX.addKind==='note'?' required':''} placeholder="Facts Sol should know when it answers here. Say where each came from."></textarea></label>`}
-        ${SX.addKind==='file'&&!SX.assets?'':`<div class="bt"><button type="submit" class="btn pri">Add to ${esc(p?p.short:'planet')}</button></div>`}</form></div>`}
+        ${SX.addKind==='file'&&!SX.assets?'':`<div class="bt"><button type="submit" class="btn pri">Add to ${esc(p?p.short:'star')}</button></div>`}</form></div>`}
     <div class="sx-msg ${SX.msgK}" aria-live="polite">${esc(SX.msg)}</div>
     <div class="note">${SX.mode==='shared'?'Saved to this page’s shared store. Sol and your team read it from here, and Claude can read it when you ask.':'Saved in this browser only. On the published page, changes save to its shared store.'} Fixes never change HubSpot, Stripe or the Ops Board themselves: they flag the source so its owner updates the record.</div>
   </div>`;
@@ -3727,7 +3727,7 @@ function renderSrc(){ const box=$('#sx'), k=SX.key, o=siFor(k); if(!box||!o) ret
   const sp=box.querySelector('[data-sxp]'); if(sp) sp.onchange=()=>{ SX.pid=sp.value; renderSrc(); };
   box.querySelectorAll('[data-addk]').forEach(b=>b.onclick=()=>{ SX.addKind=b.dataset.addk; SX.msg=''; renderSrc(); const t=box.querySelector('.sx-add input, .sx-add textarea'); t&&t.focus(); });
   box.querySelectorAll('[data-delctx]').forEach(b=>b.onclick=async()=>{ const c=SX.ctx.find(x=>x.id===b.dataset.delctx); if(!c) return;
-    if(!confirm(`Remove “${c.t}” from ${byId[c.p]?byId[c.p].short:'this planet'}?${c.asset?' The uploaded file is deleted too.':''}`)) return;
+    if(!confirm(`Remove “${c.t}” from ${byId[c.p]?byId[c.p].short:'this star'}?${c.asset?' The uploaded file is deleted too.':''}`)) return;
     if(c.asset&&SX.assets){ try{ await SX.assets.delete(c.asset); }catch(e){} }
     if(await delCtx(c)){ SX.msg='Removed.'; SX.msgK='ok'; renderSrc(); } });
   const af=box.querySelector('[data-addform]');
