@@ -347,6 +347,11 @@ a.tool:hover{border-color:var(--line-2)}
 .ans .acts{margin-top:8px}
 .ans details{margin-top:8px;font-size:12px;color:var(--ink-3)}.ans details summary{cursor:pointer}
 .ans details ol{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.ans .af{margin:8px 0 2px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.af-s{font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.ans details.more{margin-top:10px;color:var(--ink-2)}.ans details.more>summary{font-size:12.5px;font-weight:600;color:var(--ink-2)}.ans details.more ol.tks{padding-left:0}
+.ans.old{opacity:.82;border-color:var(--line-2);background:none}.msg.me.old{opacity:.75}
+.chat-sep{align-self:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:6px 0}
 #links path{fill:none;stroke:#6FE3C1;stroke-width:2;stroke-dasharray:4 6;opacity:.9;animation:dash 1.4s linear infinite}
 #links .apv text{font-size:10px;font-weight:700;fill:#fff;stroke:none}
 #links text{font-size:13px;fill:#cdf6f1;paint-order:stroke;stroke:#020611;stroke-width:4px;stroke-linejoin:round;text-anchor:middle}
@@ -360,6 +365,7 @@ a.tool:hover{border-color:var(--line-2)}
 .route .next{padding:9px 10px;font-size:13px;background:var(--bg-2)}
 .route .acts{display:flex;gap:6px;padding:8px 10px;flex-wrap:wrap;background:var(--bg-2);border-top:1px solid var(--line)}
 .btn{background:var(--panel-2);border:1px solid var(--line-2);border-radius:7px;padding:5px 10px;font-size:12.5px}
+.btn.sm{padding:2px 8px;font-size:11.5px}
 .btn.pri{background:var(--sun);border-color:var(--sun);color:var(--sun-ink);font-weight:600}
 .btn:hover{filter:brightness(1.12)}
 .toast{font-size:12px;color:var(--ink-2);padding:6px 10px;border-top:1px dashed var(--line-2);background:var(--bg-2)}
@@ -2313,10 +2319,10 @@ function openAgent(pid,name){
     ${p.gm===a.n?`<div class="lock" style="color:var(--sun)">${ICON.lock}General Manager of ${esc(p.name)} · ${esc(GM_PENDING)}</div>`:''}${REPORTS[a.n]?`<div class="note" style="margin:4px 0">Reports to ${esc(REPORTS[a.n])}. Approval goes to ${esc(a.appr||p.appr)}, never to another agent.</div>`:''}
     ${a.hire?`<div class="lock">${ICON.lock}Proposed hire, a draft: ${esc(a.st)}. Nothing is created until Pooya approves.</div>`:a.w===2?`<div class="lock">${ICON.lock}Wave 2 seat: draft-only until Nonprofit POWER</div>`:''}
     <h4><span>Their Ops Board rows</span><span>${rows.length}</span></h4>${rows.length?opsRows(rows):'<div class="note">No open rows.</div>'}${agentTasksHtml(name)}
-    <div class="chips"><button type="button" class="btn pri" data-act="thread">Open ${esc(a.n)}’s thread</button><button type="button" class="btn" data-back>Back to ${esc(p.short)}</button></div>
+    <div class="chips"><button type="button" class="btn pri" data-act="ask">What is ${esc(a.n)} working on?</button><button type="button" class="btn" data-back>Back to ${esc(p.short)}</button></div>
     <div class="note" id="agnote"></div>`;
   $('#detail [data-back]').onclick=()=>focusPlanet(pid);
-  $('#detail [data-act]').onclick=()=>handoff(a.n,'',$('#agnote'));
+  $('#detail [data-act]').onclick=()=>{ setPM('thread'); ask(`What is ${a.n} working on?`); };
 }
 function openProduct(pid,name){
   const p=byId[pid], x=p.prods.find(y=>y.n===name);
@@ -2370,12 +2376,17 @@ function say(html, who='sol'){
 const SUGG=['Check runway','Offer matcher sourcing to blocked deals','What did we quote these deals?','Join my Monday call','Onboard a new nonprofit','Follow up on open deals','Plan the Nov 12 webinar','Prep my meetings tomorrow','What should I decide this week?'];
 function chips(list){ return `<div class="chips">${list.map(s=>`<button type="button" data-say="${esc(s)}">${esc(s)}</button>`).join('')}</div>`; }
 function wireChips(node){ node.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>ask(b.dataset.say)); }
+// One running chat per person: earlier asks and Sol's answers come back when the thread opens.
+function chatHistory(pid){ return (ST.asklog||[]).filter(x=>x.who===ME()&&x.k==='ask'&&x.a&&(!pid||x.p===pid)).sort((a,b)=>a.t-b.t).slice(-8); }
 function greet(pid){
   log.innerHTML='';
-  const p=pid&&byId[pid], d=ctxData(pid||null), facts=d.know.slice(0,2).map(k=>k.t).join('; ');
-  wireChips(say(`${p?`You’re in ${esc(p.name)}. `:'Morning, Pooya. '}${facts?esc(facts)+'. ':''}<b>What do you want to do${p?' here':''}?</b>${chips(d.ask.map(x=>x[0]))}`));
-  const mine=(ST.asklog||[]).filter(x=>x.who===ME()&&x.k==='ask').sort((a,b)=>b.t-a.t).slice(0,3);
-  if(mine.length) wireChips(say(`<small>Your recent asks</small>${chips([...new Set(mine.map(x=>x.q))])}`));
+  const p=pid&&byId[pid], d=ctxData(pid||null), facts=d.know.slice(0,2).map(k=>k.t).join('; '), past=chatHistory(pid);
+  if(past.length){ const h=document.createElement('div'); h.className='chat-sep'; h.textContent=`Your chat${p?' in '+p.short:''} · ${past.length} earlier question${past.length>1?'s':''}`; log.appendChild(h);
+    past.forEach(x=>{ say(esc(x.q),'me').classList.add('old'); const [l,...rest]=String(x.a).split('\n');
+      say(`<div class="ans old"><div class="at">${esc(l)}</div>${rest.length?`<ol class="af">${rest.map(t=>`<li>${esc(t.replace(/^\d+\.\s*/,''))}</li>`).join('')}</ol>`:''}<small class="af-s">${esc(fmtTs(x.t))}${x.s&&x.s.length?' · sources: '+esc(x.s.join('; ')):''}</small> <button type="button" class="btn sm" data-say="${esc(x.q)}">Ask again</button></div>`).querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>ask(b.dataset.say)); });
+    const s2=document.createElement('div'); s2.className='chat-sep'; s2.textContent='Now'; log.appendChild(s2); }
+  wireChips(say(`${p?`You’re in ${esc(p.name)}. `:`${past.length?'Welcome back':'Morning'}, ${esc(ME())}. `}${facts?esc(facts)+'. ':''}<b>Ask me anything${p?' here':''}. I answer from everything in the galaxy, with sources.</b>${chips(d.ask.map(x=>x[0]))}`));
+  { const rb=$('#rp-body'); if(rb) rb.scrollTop=rb.scrollHeight; }
 }
 /* one thread per level: the galaxy has Sol's, each star its own */
 var THR={}, thrKey='all';
@@ -2386,72 +2397,104 @@ function swapThread(id){ const k=id||'all'; if(k===thrKey) return;
 var PM='thread';
 function setPM(m){ PM=m; $('.hq').dataset.pm=m; ['thread','info'].forEach(k=>{ const b=$('#pm-'+k); b.setAttribute('aria-selected',String(k===m)); b.tabIndex=k===m?0:-1; }); paintPanelTitle(); }
 function paintPanelTitle(){ const p=scopeP&&byId[scopeP]; const t=$('#rp-ttl'); if(t) t.textContent=p?p.name:'Sol · whole company'; const x=$('#thr-scope'); if(x) x.textContent=p?' · '+p.short:' · whole company'; }
-// A question that names a person or agent ("Dickson's top 3 tasks") answers from their open work: Ops Board rows, then customer next steps.
-function personHit(text){
+/* Ask Sol answers first: every fact in today's snapshot is searchable, each with its star and its source. Routing to an owner comes after the answer. */
+const SRCX={pb:{n:'Playbook · Logan’s week of Oct 26 report',live:1},money:{n:'Money this week · Penny’s runway v2.9 and Stripe',live:1},golist:{n:'Go list · decisions on record',live:1}};
+function srcCite(k){ if(SYS[k]) return {...SYS[k],sys:1}; if(SRCX[k]) return SRCX[k]; if(k.startsWith('art:')){ const a=ART.find(x=>x.n===k.slice(4)); return a&&artSee(a)?{n:a.n,u:a.u,f:a.f,live:1,who:a.who}:null; } return null; }
+const ASK_STOP=new Set('a an the and or of to in on for with is are was were be been what whats who whom which how when where why do does did our we us you your i me my mine it its this that these those there their them they top give show tell list right now today week please can could should would will any all about from by at as than then just get got have has need needs much many working work things items status update latest open'.split(' '));
+const askToks=s=>[...new Set((s.toLowerCase().match(/[a-z0-9$%][a-z0-9$%.&-]*/g)||[]).map(w=>w.replace(/[.'’-]+$/,'').replace(/['’]s$/,'')).filter(w=>w.length>1&&!ASK_STOP.has(w)))];
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const askTopN=(text,d)=>{ const m=text.match(/\btop\s*(\d{1,2})\b|\b(\d{1,2})\s+(?:things|priorit|tasks|items|deals|facts)/i); return Math.min(10,Math.max(1,m?+(m[1]||m[2]):d)); };
+function galaxyFacts(){ const F=[], add=(t,p,src,tags)=>{ if(t&&byId[p]) F.push({t,p,src,h:(t+' '+(tags||'')+' '+byId[p].name).toLowerCase()}); };
+  const sales=role==='founder'||role==='lead';
+  OPS.filter(r=>r.id&&canSee(r)).forEach(r=>{ const x=OPSX[r.id]||[]; add(`${r.t} (${r.id}, ${r.st.toLowerCase()}, ${r.who})${x[3]?`. Next: ${x[3]}`:''}`,r.p,'ops',r.who+' ops board task'); });
+  P.forEach(q=>{ const d=PB[q.id]; if(!d||(q.tier==='Restricted'&&role!=='founder')) return; d.t.forEach(([w,o,due])=>add(`${w} (owner ${o}; due ${due})`,q.id,'pb','priority playbook '+o)); });
+  if(sales){ DEALS.forEach(d=>add(`${d.o}: ${d.next}${d.tq?` (terms quoted: ${d.tq})`:''}`,'sales','hubspot',`deal pipeline ${d.who} ${d.st}`));
+    CUSTOMERS.forEach(c=>add(`${c.o}: ${c.stage}. ${c.next}`,'cs','hubspot',`customer account ${c.who} ${c.rel} ${c.bill}`));
+    INBOX.forEach(i=>add(`${i.t}: waiting on ${i.who} for ${i.age}`,'sales','gmail',`inbox email reply ${i.who}`));
+    SALES_NOTES.forEach(([,h])=>add(String(h).replace(/<[^>]+>/g,''),'sales','hubspot','sales note')); }
+  if(role==='founder'){ (MONEY.ar||[]).forEach(([o,amt,s,nx,who])=>add(`${o}: ${amt}. ${s}. Next: ${nx} (${who})`,'fin','stripe','invoice owed receivable money billing refund '+who));
+    (MONEY.sponsors||[]).forEach(([o,amt,s,who])=>add(`${o}: ${amt}. ${s} (${who})`,'fin','money','match money sponsor matcher pool '+who));
+    PBSUM.forEach(s=>add(s,'ceo','pb','summary runway pricing')); GO_LIST.forEach(([area,,q,d])=>add(`${q} On record: ${d}`,P.find(x=>x.short===area||x.name===area)?.id||'ceo','golist','decision '+area)); }
+  ART.filter(artSee).forEach(a=>add(`${a.n} (${a.k||'file'}, ${a.who||'team'})`,a.p,'art:'+a.n,'file report doc link'));
+  return F; }
+function searchAnswer(text){ const tk=askToks(text); if(!tk.length) return null;
+  const sc=GF().map(f=>{ let s=0; tk.forEach(w=>{ const st=w.length>5?w.slice(0,w.length-2):w; if(new RegExp('(^|[^a-z0-9])'+reEsc(st)).test(f.h)) s+=w.length>=6?2:1; }); return {...f,s}; }).filter(f=>f.s>0).sort((a,b)=>b.s-a.s);
+  if(!sc.length) return null; const best=sc[0].s, keep=sc.filter(f=>f.s>=Math.max(1,best-1)), n=askTopN(text,5), items=keep.slice(0,n);
+  const stars=[...new Set(items.map(i=>i.p))];
+  return {lead:`Here’s what today’s snapshot holds on that: ${items.length} fact${items.length>1?'s':''}${stars.length>1?` across ${stars.length} stars`:` from ${byId[stars[0]].name}`}${keep.length>n?` (${keep.length-n} more match)`:''}.`,items,home:items[0].p}; }
+let GF_=null, GF_K=''; function GF(){ const k=role; if(GF_K!==k){ GF_=galaxyFacts(); GF_K=k; } return GF_; }
+// A question that names a person or agent, or says "my", answers from their open work: Ops Board, Playbook, inbox, customer next steps.
+function personAnswer(text){
   const names=new Map(); P.forEach(q=>{ q.agents.forEach(a=>names.set(a.n,q.id)); if(q.lead&&!names.has(q.lead)) names.set(q.lead,q.id); });
   ['Pooya','Dickson','ib'].forEach(n=>{ if(!names.has(n)) names.set(n,(P.find(q=>q.lead===n)||P[0]).id); });
-  const said=/\bibraheem\b/i.test(text)?'ib':[...names.keys()].find(n=>new RegExp(`\\b${n}(’s|'s)?\\b`,'i').test(text));
+  const said=/\bibraheem\b/i.test(text)?'ib':[...names.keys()].find(n=>new RegExp(`\\b${n}(’s|'s)?\\b`,'i').test(text))||(/\b(my|me|mine|i)\b/i.test(text)?ME():null);
   if(!said) return null;
-  const mine=w=>new RegExp(`(^|[ →·])${said}($|[ →·])`).test(w||'');
+  const mine=w=>new RegExp(`(^|[^A-Za-z])${said}($|[^A-Za-z])`).test(w||'');
   const rank={'Needs human':0,'Blocked':1,'In progress':2,'Not started':3};
   const ops=OPS.filter(r=>r.id&&r.st!=='Done'&&mine(r.who)&&canSee(r)).sort((a,b)=>(rank[a.st]??4)-(rank[b.st]??4));
-  const cust=(role==='founder'||role==='lead')?CUSTOMERS.filter(c=>c.who===said&&c.next):[];
-  const items=[...ops.filter(r=>r.st==='Needs human').map(r=>({t:`${r.t} (${r.id}, waiting on ${(r.who.split('→')[1]||said).trim()})`,p:r.p,src:'ops'})),
-    ...cust.map(c=>({t:`${c.o}: ${c.next}`,p:(P.find(q=>q.id==='cs')||{}).id||names.get(said),src:'hubspot'})),
-    ...ops.filter(r=>r.st!=='Needs human').map(r=>({t:`${r.t} (${r.id}, ${r.st.toLowerCase()})`,p:r.p,src:'ops'}))];
-  const home=names.get(said), top=items.slice(0,3);
-  if(!top.length) return {p:home, ag:said, wf:'Their open work', next:`Nothing open for ${said} on the Ops Board or in customer next steps right now.`, c:['ops']};
-  const stars=[...new Set(top.map(i=>i.p).filter(id=>id&&id!==home&&byId[id]))];
-  return {p:home, ag:said, wf:'Their open work', next:`${said}’s top ${top.length} right now: ${top.map((i,n)=>`${n+1}) ${i.t}`).join(' ')}${items.length>3?` Plus ${items.length-3} more open.`:''}`,
-    x:stars.map(id=>[id,'holds one of these']), c:[...new Set(top.map(i=>i.src))]};
-}
+  const sales=role==='founder'||role==='lead';
+  const pb=[]; P.forEach(q=>{ const d=PB[q.id]; if(!d||(q.tier==='Restricted'&&role!=='founder')) return; d.t.forEach(([w,o,due])=>{ if(mine(o)) pb.push({t:`${w} (due ${due})`,p:q.id,src:'pb'}); }); });
+  const inbox=sales?INBOX.filter(i=>i.who===said).map(i=>({t:`Reply owed: ${i.t} (${i.age} old)`,p:'sales',src:'gmail'})):[];
+  const cust=sales?CUSTOMERS.filter(c=>c.who===said&&c.next).map(c=>({t:`${c.o}: ${c.next}`,p:'cs',src:'hubspot'})):[];
+  const need=ops.filter(r=>r.st==='Needs human').map(r=>({t:`${r.t} (${r.id}, waiting on ${(r.who.split('→')[1]||said).trim()})${(OPSX[r.id]||[])[3]?`. Next: ${OPSX[r.id][3]}`:''}`,p:r.p,src:'ops'}));
+  const rest=ops.filter(r=>r.st!=='Needs human').map(r=>({t:`${r.t} (${r.id}, ${r.st.toLowerCase()})`,p:r.p,src:'ops'}));
+  const items=(/priorit|focus|should/i.test(text)?[...pb,...need,...inbox,...cust,...rest]:[...need,...pb,...inbox,...cust,...rest]);
+  const home=names.get(said)||(byId.ceo?'ceo':P[0].id), n=askTopN(text,3), top=items.slice(0,n), who=said===ME()&&/\b(my|me|mine|i)\b/i.test(text)?'Your':`${said}’s`;
+  if(!top.length) return {lead:`Nothing open for ${said} on the Ops Board, the Playbook or customer next steps right now.`,items:[],home,ag:said};
+  return {lead:`${who} top ${top.length} right now${items.length>n?`, out of ${items.length} open`:''}:`,items:top,home,ag:said}; }
+function moneyAnswer(text){ if(!/runway|burn|cash|bridge|break.?even|zero.?cash|how long .*last|money left/i.test(text)) return null;
+  if(role!=='founder') return {lead:'Cash and runway show to founders only. Ask Pooya, or Penny drafts a summary for him to share.',items:[],home:'fin'};
+  const m=MONEY, it=[['Runway',m.runway],['Bridge',m.bridge],['Revenue',m.rev],['Match money',m.match]].filter(([,x])=>x).map(([l,x])=>({t:`${l}: ${x.v}${x.u?' '+x.u:''}. ${x.sub} (${x.src})`,p:'fin',src:'money'}));
+  return {lead:`Cash runs out ${m.runway.v.replace('≈','around')}. ${m.bridge.v.replace('≈','About')} reaches Jan 31.`,items:it,home:'fin'}; }
 function ask(text){
-  text=text.trim(); if(!text) return; logAsk(text,'ask');
+  text=text.trim(); if(!text) return;
   say(esc(text),'me');
-  let hits=RULES.filter(r=>r.re.test(text)); const sp=scopeP&&byId[scopeP]; let scoped=false;
-  if(sp){ const inP=hits.filter(r=>r.p===sp.id); scoped=true;
-    if(inP.length) hits=inP;
-    else { const ag=(sp.agents.find(a=>!a.human)||sp.agents[0]).n;
-      hits=[{p:sp.id, ag, wf:sp.flows[0]||'General request', next:`Sol keeps this inside ${sp.name}: ${ag} picks it up and drafts the next step for ${sp.appr.split(' · ')[0]} to approve.`}]; } }
-  { const ph=personHit(text); if(ph && (!hits.length || /task|to.?do|working on|doing|plate|priorit|top \d|focus|waiting|owe/i.test(text))) { hits=[ph]; scoped=false; } }
-  if(!hits.length){
-    const node=say(`I’m not sure where that goes yet. Which is closest?${chips(['Money: runway, invoices','Revenue: deals and matchers','A nonprofit getting started','Product or a bug','Marketing or the podcast'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
-    wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); return;
+  let hits=RULES.filter(r=>r.re.test(text)); const sp=scopeP&&byId[scopeP];
+  const pa=personAnswer(text), personQ=pa&&(!hits.length||/task|to.?do|working on|doing|plate|priorit|top \d|focus|waiting|owe|should/i.test(text));
+  let A=(personQ&&pa)||moneyAnswer(text)||searchAnswer(text);
+  if(A&&sp&&!personQ){ const inP=A.items.filter(i=>i.p===sp.id); if(inP.length) A={...A,items:inP,home:sp.id,lead:`In ${sp.name}: ${inP.length} fact${inP.length>1?'s':''} on that.`}; }
+  if(!A&&!hits.length){
+    const node=say(`I couldn’t find that in today’s snapshot, and no agent’s seat clearly owns it. Try naming a person, an organization or a topic, or pick one:${chips(['What is blocked?','Check runway','What are my top 5 priorities?','Where is BGCA?','Charity Navigator'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
+    setTrace(null); wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); logAsk(text,'ask',{a:'Not found in today’s snapshot.',p:sp?sp.id:''}); return;
   }
-  const r=hits[0], p=byId[r.p];
-  if(scoped){ focusPlanet(r.p); } else { if(focus) focusPlanet(null); setTrace(r); P.forEach(q=>q._g.classList.toggle('on',q.id===r.p||(r.x||[]).some(z=>z[0]===q.id))); }
+  const h0=hits.find(h=>sp?h.p===sp.id:A?h.p===A.home:true)||hits[0];
+  let r;
+  if(A&&personQ){ const q=byId[A.home]; r={p:A.home,ag:A.ag,wf:'Their open work',next:''}; }
+  else if(h0&&(!A||h0.p===A.home||!A.items.length)) r=h0;
+  else { const q=byId[A.home]; r={p:A.home,ag:(q.agents.find(a=>!a.human&&a.w!==2)||q.agents[0]).n,wf:'Answer from the snapshot',next:''}; }
+  const p=byId[r.p], items=A?A.items:[];
+  const stars=[...new Set(items.map(i=>i.p))].filter(id=>id!==r.p&&byId[id]);
+  r={...r,x:[...(r.x||[]).filter(([id])=>!stars.includes(id)),...stars.map(id=>[id,'holds part of the answer'])]};
+  if(focus) focusPlanet(null); setTrace(r);
   renderCrumbs(r.ag); markSel(r.ag);
-  const conf = scoped ? `Scoped to ${p.name} because you asked from that star. Clear the chip in the ask bar to route across the whole company.` : hits.length>1 && hits[1].p!==r.p ? 'Rules matched two stars; Claude would break the tie in the live build.' : 'Matched by the rules table.';
   const appr=p.agents.find(a=>a.n===r.ag)?.appr||p.appr;
-  const cites=(r.c&&r.c.length?r.c:ART.filter(a=>a.p===r.p).slice(0,2).map(a=>a.n)).map(k=>{ if(SYS[k]) return {...SYS[k],sys:1}; const a=ART.find(x=>x.n===k); return a&&artSee(a)?{n:a.n,u:a.u,f:a.f,live:1,who:a.who}:null; }).filter(Boolean);
-  if(!(p.id==='fin'&&role!=='founder')) ctxFor(r.p).slice(0,3).forEach(c=>cites.push({n:'Context added: '+c.t,u:c.u||'',live:1,who:(c.kind==='file'?'file':c.kind)+' · '+fmtCtxD(c.at),ctx:1}));
+  const keys=[...new Set(items.map(i=>i.src))], cites=keys.map(srcCite).filter(Boolean);
+  if(!cites.length&&!A) (r.c&&r.c.length?r.c:[]).forEach(k=>{ const c=srcCite(k); if(c) cites.push(c); });
+  if(!(p.id==='fin'&&role!=='founder')) ctxFor(r.p).slice(0,2).forEach(c=>cites.push({n:'Context added: '+c.t,u:c.u||'',live:1,who:(c.kind==='file'?'file':c.kind)+' · '+fmtCtxD(c.at),ctx:1}));
+  const cn=k=>{ const c=srcCite(k); return c?cites.findIndex(x=>x.n===c.n)+1:0; };
   const ansKey=siReg('ans-'+(++ANSN),{t:'Answer: '+text,p:r.p,s:[],cites});
-  const gaps=cites.filter(c=>!c.live);
-  const xs=(r.x||[]).filter(([id])=>byId[id]&&id!==r.p);
-  const confHtml=gaps.length?`<span class="conf part">Partly verified</span>`:`<span class="conf ok">Checked against ${cites.length} source${cites.length>1?'s':''}</span>`;
+  const gaps=cites.filter(c=>!c.live), xs=r.x.filter(([id])=>byId[id]&&id!==r.p);
+  const lead=A?A.lead:`I don’t have a stored answer for that yet. ${r.next}`;
+  const built=(window.SOL_DATA&&SOL_DATA.meta&&SOL_DATA.meta.built)?` built ${fmtCtxD(SOL_DATA.meta.built)}`:'';
+  const confHtml=!items.length?`<span class="conf part">No stored answer</span>`:gaps.length?`<span class="conf part">Partly verified</span>`:`<span class="conf ok">${cites.length} source${cites.length>1?'s':''}</span>`;
   const node=say(`<div class="ans" role="region" aria-label="Sol's answer">
     <div class="ah" data-src="${ansKey}">Answer ${confHtml}</div>
-    <div class="at">${esc(r.next)}</div>
-    <h4>Checks and balances</h4>
-    <ul class="ck">${xs.map(([id,l])=>`<li><i>✓</i><span><b>${esc(byId[id].short)}</b> · ${esc(l)}</span></li>`).join('')}
-      <li><i>✓</i><span><b>Human gate</b> · ${esc(appr)} approves before anything goes out</span></li>
-      ${gaps.map(c=>`<li class="gap"><i>!</i><span><b>Not verified</b> · ${esc(c.n)}: ${esc(c.why||'not connected')}</span></li>`).join('')}</ul>
+    <div class="at">${esc(lead)}</div>
+    ${items.length?`<ol class="af">${items.map(i=>`<li><span>${esc(i.t)}</span> <small class="af-s"><b style="color:${col(byId[i.p])}">${esc(byId[i.p].short)}</b>${cn(i.src)?` · [${cn(i.src)}]`:''}</small></li>`).join('')}</ol>`:''}
     <h4>Sources</h4>
-    <ol class="src" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px">${cites.map((c,i)=>`<li><em>[${i+1}]</em><span>${c.u?`<a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.n)} ↗</a>`:esc(c.n)}${c.f?` <small style="color:var(--ink-3)">project file ${esc(c.f)}</small>`:''}${c.who?` <small style="color:var(--ink-3)">· ${esc(c.who)}</small>`:''}${c.live?'':' <span class="off">· not connected</span>'}</span></li>`).join('')}</ol>
-    <div class="rt">Route: <b>${esc(p.name)}</b> › ${esc(r.wf)}${r.prod?` › ${esc(r.prod)}`:''} › ${esc(r.ag)} · approver ${esc(appr)}${xs.length?` · cross-checked with ${xs.map(([id])=>esc(byId[id].short)).join(', ')}`:''}</div>
-    <div class="acts">${r.flow?'<button type="button" class="btn pri" data-a="flow">Open the prescreener</button>':`<button type="button" class="btn pri" data-a="thread">Open ${esc(r.ag)}’s thread</button>`}<button type="button" class="btn" data-a="row">Draft an Ops Board row</button>${scoped?'':`<button type="button" class="btn" data-a="zoom">Zoom into ${esc(p.short)}</button>`}</div>
+    <ol class="src" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px">${cites.map((c,i)=>`<li><em>[${i+1}]</em><span>${c.u?`<a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.n)} ↗</a>`:esc(c.n)}${c.f?` <small style="color:var(--ink-3)">project file ${esc(c.f)}</small>`:''}${c.who?` <small style="color:var(--ink-3)">· ${esc(c.who)}</small>`:''}${c.live?'':' <span class="off">· not connected</span>'}</span></li>`).join('')||'<li>No source holds this yet.</li>'}</ol>
+    <div class="rt">Owner: <b>${esc(p.name)}</b> › ${esc(r.wf)} › ${esc(r.ag)} · approver ${esc(appr)}${xs.length?` · also lit: ${xs.map(([id])=>esc(byId[id].short)).join(', ')}`:''}${gaps.length?` · not verified: ${gaps.map(c=>esc(c.n)).join(', ')}`:''}</div>
+    <div class="acts">${r.flow?'<button type="button" class="btn pri" data-a="flow">Open the prescreener</button>':''}<button type="button" class="btn" data-a="zoom">Zoom into ${esc(p.short)}</button></div>
+    <details class="more"><summary>Ask agents to dig deeper</summary></details>
     <details><summary>How Sol answers</summary><ol>${SOL_RULES.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></details>
-    </div><div class="note" style="margin-top:6px">${conf} Prototype: answers come from decisions already on record; the live build writes them from these sources.</div>`);
+    </div><div class="note" style="margin-top:6px">Answered from today’s snapshot (data file${built}). The live build reads each system directly.</div>`);
   { const rb=$('#rp-body'); rb.scrollTop=Math.max(0,node.offsetTop-6); }
-  node.querySelector('.acts').insertAdjacentElement('beforebegin',planCard(text,r,p,appr,xs,cites));
+  node.querySelector('details.more').appendChild(planCard(text,{...r,next:r.next||`Answer “${text}” in more depth and check the facts above`},p,appr,xs,cites));
   setPM('thread');
   node.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
     if(b.dataset.a==='flow') return openFlow();
-    if(b.dataset.a==='zoom'){ setTrace(null); focusPlanet(r.p,true); renderCrumbs(r.ag); markSel(r.ag); return; }
-    const t=document.createElement('div'); t.className='toast'; (b.closest('.ans')||b.closest('.route')).appendChild(t);
-    if(b.dataset.a!=='row') return handoff(r.ag,text,t);
-    t.textContent=`Drafted a Parked row on ${p.short}: “${text}”, owner ${r.ag}, moves the constraint: Unsure. Nothing is saved in the prototype.`; b.disabled=true;
-  });
+    setTrace(null); focusPlanet(r.p,true); renderCrumbs(r.ag); markSel(r.ag); });
+  logAsk(text,'ask',{a:[lead,...items.map((i,n)=>`${n+1}. ${i.t}`)].join('\n').slice(0,1800),s:cites.map(c=>c.n).slice(0,6),p:r.p});
 }
 function openSolDlg(){ const d=$('#sol-dlg'); if(d.open) return;
   const plays=(typeof ctxData==='function'?ctxData(scopeP).ask.map(x=>x[0]):SUGG);
@@ -3583,7 +3626,7 @@ function sourcesFor(k){ const o=siFor(k); if(!o) return []; const L=[];
 /* ---------- who is viewing, shared collections, section tabs, parked pages ---------- */
 
 /* ---------- item thread, decision trail, message center, ask log ---------- */
-function logAsk(q,k){ try{ stPut('asklog',null,{who:ME(),q:String(q).slice(0,300),k:k||'ask',t:Date.now()}); }catch(e){} }
+function logAsk(q,k,x){ try{ stPut('asklog',null,{who:ME(),q:String(q).slice(0,300),k:k||'ask',t:Date.now(),...(x||{})}); }catch(e){} }
 function itemGaps(r){ const x=OPSX[r.id]||[], g=[];
   if(!x[3]) g.push({q:'What is the very next step on "'+r.t+'"?',o:['Draft it for me to review','Someone needs to decide first','It is waiting on an outside person','Nothing: park it']});
   if(x[2]==null||x[2]>14||x[2]<0) g.push({q:'When does this need to be done?',o:['This week','Before Nov 20','By Jan 31','No date, it can wait']});
@@ -3626,6 +3669,7 @@ async function stPut(k,id,obj){ id=id||stId();
 async function stDel(k,id){ try{ if(SX.db) await SX.db.collection(k).doc(id).delete(); else { if(ST_ARR.includes(k)) ST[k]=ST[k].filter(x=>x.id!==id); else delete ST[k][id]; stSaveLocal(); stChanged(k); } return true; }catch(e){ return false; } }
 let stQ={};
 function stChanged(k){ cancelAnimationFrame(stQ[k]||0); stQ[k]=requestAnimationFrame(()=>{
+  if(k==='asklog'&&!log.querySelector('.msg.me:not(.old)')){ THR={}; greet(scopeP); }
   if(k==='ideas'||k==='ideaout') document.querySelectorAll('[data-ideas]').forEach(el=>{ if(!el.contains(document.activeElement)||!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) el.innerHTML=ideasHtml(); wireIdeas(el); });
   if(k==='ideas'||k==='ideaout'||k==='sprint') document.querySelectorAll('[data-rdtiles]').forEach(el=>{ el.outerHTML=rdTiles(); });
   if(k==='sprint'||k==='ideas'||k==='ideaout') document.querySelectorAll('[data-sprint]').forEach(el=>{ if(!el.contains(document.activeElement)||!/INPUT|SELECT/.test(document.activeElement.tagName)) el.innerHTML=sprintHtml(); });
