@@ -1372,7 +1372,7 @@ body.dragging .stage{pointer-events:none}
 
   <footer>
     <span>Design spec: <a href="https://claude.ai/artifact/7Xy3ttwhaJREApzQZPJkVo" style="color:var(--ink-2)">Sol HQ product brief and build spec</a>.</span>
-    <span>Anything marked <span class="sample" style="font-size:10px;padding:1px 6px">Sample</span> or in red is made up for the design. The investor view and the funnel charts are samples; money, deals and the Ops Board are dated snapshots with their source.</span>
+    <span id="smp-legend">Anything marked <span class="sample" style="font-size:10px;padding:1px 6px">Sample</span> or in red is made up for the design. The investor view and the funnel charts are samples; money, deals and the Ops Board are dated snapshots with their source.</span>
     <span>The freeze is lifted (Oct 27). Sol HQ now runs as a real app on Replit; this page is its design source.</span>
   </footer>
 </div>
@@ -1395,7 +1395,7 @@ const P = [
    agents:[{n:'Pip', seat:'Pipeline & next steps', w:1, appr:'Dickson'},{n:'Dylan', seat:'HubSpot data, sales support (human)', w:0, human:true, appr:'Dickson'},{n:'Max', seat:'Matcher prospect researcher (draft hire)', w:2, hire:true, st:'Live: drafts only (Pooya’s go 02:57Z)', appr:'Dickson'}],
    flows:['Next-step drafts','Matcher sprint','Pipeline hygiene'],
    prods:[{n:'Matcher finding package', s:'service'},{n:'EOY match guarantee', s:'pilot'},{n:'Pilot → one plan pricing', s:'pilot'}],
-   mini:[['Pipeline, weighted','$22K'],['Waiting on a matcher','6 deals'],['Legacy 5% deals','5 · honor']], need:3},
+   mini:[['Pipeline, weighted','$22K'],['Waiting on a matcher','6 deals','Customer journey'],['Legacy 5% deals','5 · honor','Terms quoted']], need:3},
   {id:'fin', gm:'Penny', name:'Finance & Legal', short:'Finance', color:'--c4', ring:0, a:290, lead:'Pooya', appr:'Pooya, Dickson or ib (Round 2 lanes) · Vibe Financials · Ernie',
    mission:'Funding-ready and revenue-solid. Nothing here moves money.', tier:'Restricted',
    agents:[{n:'Penny', seat:'AI CPA / CFO, read-only books', w:1, appr:'Pooya, Vibe Financials'},{n:'Lex', seat:'Legal coordinator', w:1, appr:'Pooya, Ernie reviews'},{n:'Billie', seat:'Billing and reconciliation analyst (draft hire)', w:2, hire:true, st:'Live: drafts only (Pooya’s go 02:57Z)', appr:'Pooya'},{n:'Reggie', seat:'Compliance and registration clerk (draft hire)', w:2, hire:true, st:'Parked · trigger: Ernie’s answer', appr:'Pooya'}],
@@ -1425,7 +1425,7 @@ const P = [
    agents:[{n:'Marcie', seat:'Marketing', w:2, appr:'Pooya'},{n:'Vera', seat:'Claims verifier (draft hire)', w:2, hire:true, st:'Parked · trigger: weekly posting starts', appr:'Pooya'}],
    flows:['Webinar run','GivingTuesday push','Case study'],
    prods:[{n:'Communications builder', s:'building'},{n:'Audience finder', s:'building'},{n:'Webinars', s:'live'},{n:'Case studies', s:'live'}],
-   mini:[['Webinar sign-ups','sample'],['Case studies live','2']], need:0},
+   mini:[['Webinar sign-ups','sample'],['Case studies live','2','Case studies']], need:0},
   {id:'tnl', gm:'Mike', name:'The Nonprofit Lab', short:'TNL', color:'--c6', ring:1, a:65, lead:'Pooya', appr:'Pooya',
    mission:'Discovery, community and the nonprofit data engine.',
    agents:[{n:'Mike', seat:'TNL producer', w:2, appr:'Pooya'}],
@@ -2219,7 +2219,7 @@ function gaCard(){ return `<div class="card"><div class="eyebrow">Awareness · t
     <ul class="rules"><li>This is the new top of the funnel: visits, then the prescreener, then a signed account, then a launched campaign.</li><li>Visitors are tracked by Google’s anonymous visitor ID. Google Analytics 4 does not hand over raw IP addresses, and Sol will not store them, so “unique IPs” becomes unique visitors.</li><li>Needs from you: the Google Analytics 4 property for matchnice.org, and a Google account that can add the connector.</li></ul>
     <div class="chips"><a class="btn pri" href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">Connect Google Analytics ↗</a></div>
     <div class="note">Sol has asked for this in the project chat. Connectors are added in Claude; a thread only sees one that was connected before it started.</div></div>`; }
-function capCard(){ return `<div class="card"><div class="eyebrow">Investors and cap table · founders only</div><h3>One dashboard per investor, tied to the cap table</h3>
+function capCard(){ if(LIVE) return `<div class="card"><div class="eyebrow">Investors and cap table · founders only</div><h3>${NC}</h3><div class="note">The investor list and SAFE totals come from the cap table once its file is connected. Sol does not invent holders.</div></div>`; return `<div class="card"><div class="eyebrow">Investors and cap table · founders only</div><h3>One dashboard per investor, tied to the cap table</h3>
     <div class="dk" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:8px 0"><div class="mt"><div class="lbl">Cap table source</div><div class="val sm" style="font-size:15px">Not connected</div><div class="foot"><span class="src">add the Drive file link</span></div></div><div class="mt"><div class="lbl">SAFE total in the scenarios</div><div class="val sm" style="font-size:15px">$400K</div><div class="foot"><span class="src">sample · Investor view inputs</span></div></div><div class="mt"><div class="lbl">Raise in the scenarios</div><div class="val sm" style="font-size:15px">$1.5M</div><div class="foot"><span class="src">sample · Investor view inputs</span></div></div></div>
     <div class="tw"><table class="deals"><thead><tr><th>Investor</th><th>Holding</th><th>Their view</th></tr></thead><tbody><tr><td><b>Jordan Rivera</b><br><small style="color:var(--ink-3)">sample SAFE holder</small></td><td>Sample, $50K SAFE</td><td><button type="button" class="btn" data-invview>Open this investor’s view</button></td></tr></tbody></table></div>
     <div class="note">The rows come from the cap table once its file is connected; Sol does not invent holders. Opening a view switches “Viewing as” to Investor so you see exactly what they see, with no cash, pipeline names, contract values, Ops Board or agents. Switch back with “Viewing as”.</div></div>`; }
@@ -2229,7 +2229,7 @@ function renderDept(){
   const tasks=ITEMS.filter(r=>r.p===p.id&&r.type==='Task').filter(canSee);
   const needs=tasks.filter(r=>r.st==='Needs human'), late=tasks.filter(r=>r.due<TODAYISO);
   const lock=p.tier==='Restricted'&&role!=='founder';
-  const kt=[...p.mini.map(([k,v])=>[k,lock?'—':v,'sample']),['Open tasks',tasks.filter(r=>r.st!=='Done').length,'Ops Board'],['Needs a human',needs.length,'Ops Board'],['Overdue',late.length,'Ops Board'],['Oldest decision',needs.length?Math.max(...needs.map(r=>ageD(r.a)))+' d':'—','Ops Board']].filter((x,i,a)=>x[2]==='sample'||!a.some(y=>y[2]==='sample'&&y[0]===x[0]));
+  const kt=[...p.mini.map(([k,v,src])=>[k,lock?'—':v,src||'sample']),['Open tasks',tasks.filter(r=>r.st!=='Done').length,'Ops Board'],['Needs a human',needs.length,'Ops Board'],['Overdue',late.length,'Ops Board'],['Oldest decision',needs.length?Math.max(...needs.map(r=>ageD(r.a)))+' d':'—','Ops Board']].filter((x,i,a)=>x[2]==='sample'||!a.some(y=>y[2]==='sample'&&y[0]===x[0]));
   const rel=(REL[p.id]||[]).map(([l,u])=>u.startsWith('http')||u==='hs'?`<a class="btn" href="${u==='hs'?hsBoard:u}" target="_blank" rel="noopener">${esc(l)} ↗</a>`:`<button type="button" class="btn" data-rel="${u}">${esc(l)}</button>`).join('');
   const extra=p.id==='sales'?'deals, ':p.id==='cs'?'customers, ':'';
   const ctxOk=p.id!=='fin'||role==='founder';
@@ -3017,6 +3017,7 @@ function renderE2E(){
     return `${i?`<div class="cv${leak?' leak':''}">↓ ${conv}%${leak?' · the rest wait on a matcher (matcher finding package)':''}</div>`:''}<div class="fr"><span>${n}</span><span><i style="width:${Math.max(Math.sqrt(v/F[0][1])*100,2)}%"></i></span><em>${v.toLocaleString()}</em></div>`; }).join('')
     +`<div class="note">Bars use a square-root scale so the small stages stay visible; read the numbers. The live build counts HubSpot contacts, onboarding sessions, deals and campaigns.</div>`;
   $('#ret').innerHTML=RET.map(mtile).join('');
+  if(LIVE) $('#fun').innerHTML=`<div class="note">${NC}. These counts come from HubSpot contacts, prescreener sessions, deals and campaigns once the sync runs.</div>`;
 }
 
 /* ---------- investor view (placeholder model shared with the Investor Desk) ---------- */
@@ -3238,6 +3239,7 @@ function renderSettings(){
       const gb=e.target.closest&&e.target.closest('[data-go]'); if(gb&&isSuper()){ const [id,v]=gb.dataset.go.split(':'); if(v) stPut('golist',id,{s:v,by:ME(),t:Date.now()}); else stDel('golist',id); return; } const b=e.target.closest&&e.target.closest('[data-connreq]'); if(b&&isSuper()) stPut('connreq',null,{app:b.dataset.connreq,by:ME(),t:Date.now()}); }); }
 }
 function renderInvestor(){
+  if(LIVE){ const t=$('#tab-inv'); if(!t.querySelector('.nc-card')){ [...t.children].forEach(c=>{ if(c.id!=='inv-admin') c.hidden=true; }); t.insertAdjacentHTML('afterbegin',`<div class="card nc-card"><div class="eyebrow">Investor view</div><h3>${NC}</h3><p class="note">Each investor sees the approved monthly update, word for word, and their own holding from the cap table. Nothing shows here until Penny publishes an approved update and the cap table is connected. The prototype shows the design with made-up values.</p></div>`); } return; }
   const fd=10e6, safeTotal=400e3, raise=1.5e6, amt=50e3, disc=.2;
   const scn=[['Conservative',6e6],['Base',9e6],['Upside',14e6]];
   $('#inv-scn').innerHTML=scn.map(([n,pre])=>{const price=pre/fd, mine=amt/(price*(1-disc)), post=fd+safeTotal/(price*(1-disc))+raise/price; return `<div><span>${n} · $${pre/1e6}M pre</span><b>${(mine/post*100).toFixed(2)}%</b></div>`;}).join('');
@@ -3372,7 +3374,16 @@ const LEAN=[
   {l:'Agent send-ready rate', v:'—', d:'Drafts sent as is or lightly edited; target 70% by Nov 15', st:'warn', w:'Not measured', src:'SOP-08 Friday review'},
   {l:'Oldest open decision', v:'4 d', d:'Age of the oldest needs-a-human row; target under 7 days', st:'good', w:'On track', src:'Ops Board · 3 min'},
 ];
-function mtile(m){ return `<div class="mt"><div class="lbl">${esc(m.l)}</div><div class="val">${esc(m.v)}</div><div class="def">${esc(m.d)}</div><div class="foot"><span class="chip ${m.st}">${ICON[m.st]}${esc(m.w)}</span><span class="src">${esc(m.src)}</span></div></div>`; }
+/* In the app (it loads /config.js) placeholder numbers never show: each becomes "Not connected yet". The prototype keeps them so the design reads. */
+const LIVE=!!window.SOL_CONFIG, NC='Not connected yet';
+[IMPACT,CONV,RET].forEach(a=>a.forEach(m=>{ m.smp=1; })); LEAN[1].smp=LEAN[3].smp=1;
+if(LIVE){ document.documentElement.classList.add('live-app');
+  const relabel=root=>{ (root.querySelectorAll?root:document).querySelectorAll('.sample,.smp,.src.is-sample').forEach(el=>{ if(/^\s*(sample|includes samples)\s*$/i.test(el.textContent)) el.textContent=NC; });
+    (root.querySelectorAll?root:document).querySelectorAll('.is-sample').forEach(el=>{ if(!el.classList.contains('src')&&/^\S/.test(el.textContent)&&!/not connected/i.test(el.textContent)) { el.textContent='—'; el.classList.remove('is-sample'); } }); };
+  let q=0; new MutationObserver(()=>{ if(!q) q=requestAnimationFrame(()=>{ q=0; relabel(document); }); }).observe(document.documentElement,{childList:true,subtree:true});
+  addEventListener('DOMContentLoaded',()=>{ const lg=document.getElementById('smp-legend'); if(lg) lg.textContent='Anything marked “Not connected yet” has no live source yet and shows no number. Money, deals and the Ops Board are dated snapshots with their source.'; relabel(document); }); }
+function mtile(m){ if(LIVE&&m.smp) m={...m,v:'—',st:'warn',w:NC};
+  return `<div class="mt"><div class="lbl">${esc(m.l)}</div><div class="val">${esc(m.v)}</div><div class="def">${esc(m.d)}</div><div class="foot"><span class="chip ${m.st}">${ICON[m.st]}${esc(m.w)}</span><span class="src">${esc(m.src)}</span></div></div>`; }
 
 /* ---------- metrics sub-tabs and exec summary ---------- */
 let metSub='sg';
@@ -3435,7 +3446,7 @@ function renderCaseAvg(){ const box=$('#cavg'); if(!box) return;
     const smp=vals.some(r=>!r.real);
     return `<div class="cav"><div class="lbl">${esc(m.n)}</div><div class="val">${cavFmt(v,m.u)}</div><small>${agg==='med'?'Median':agg==='tot'?'Total':CAV.agg==='tot'?'Average (lifts don’t add up)':'Average'} of ${xs.length} of ${rows.length} campaign${rows.length===1?'':'s'}${xs.length>1?` · range ${cavFmt(Math.min(...xs),m.u)} to ${cavFmt(Math.max(...xs),m.u)}`:` · ${esc(vals[0].c)}`}${smp?' · <span class="smp">includes samples</span>':''}</small><small>${esc(m.why)}</small></div>`; }).join('');
   box.innerHTML=`<div class="eyebrow" data-src="case-avg">Across campaigns · recalculates as each campaign concludes</div>
-    <div class="cav-ctl"><div class="seg" role="group" aria-label="Which results">${[['real','Real results only'],['smp','Include samples']].map(([k,l])=>`<button type="button" data-cs="${k}" aria-pressed="${(k==='smp')===CAV.smp}">${l}</button>`).join('')}</div>
+    <div class="cav-ctl"><div class="seg" role="group" aria-label="Which results">${[['real','Real results only'],...(LIVE?[]:[['smp','Include samples']])].map(([k,l])=>`<button type="button" data-cs="${k}" aria-pressed="${(k==='smp')===CAV.smp}">${l}</button>`).join('')}</div>
       <div class="seg" role="group" aria-label="Which campaigns">${[['all','All campaigns'],['eoy','Year-end promo'],['pilot','Pilots and past']].map(([k,l])=>`<button type="button" data-cset="${k}" aria-pressed="${CAV.set===k}">${l}</button>`).join('')}</div>
       <div class="seg" role="group" aria-label="Calculate">${[['avg','Average'],['med','Median'],['tot','Total']].map(([k,l])=>`<button type="button" data-cagg="${k}" aria-pressed="${CAV.agg===k}">${l}</button>`).join('')}</div></div>
     <div class="cav-grid">${tiles}</div>
@@ -3450,7 +3461,7 @@ function renderCases(){
   renderCaseAvg();
   $('#ccards').innerHTML=CASES.map(c=>`<div class="cc"><div class="meta2">${esc(c.type)}</div><h3>${esc(c.o)}</h3><div class="big">${esc(c.big)}</div><p>${esc(c.what)}</p><div class="meta2">${esc(c.meta)}</div></div>`).join('');
   const yn=(v,l)=>`<span class="pill ${v?'live':'blocked'}">${v?'✓':'✗'} ${l}</span>`;
-  $('#lift').innerHTML=`<thead><tr><th>Campaign</th><th>Covered if</th><th>Conversion: benchmark → actual</th><th>Lift</th><th>Donor acquisition: benchmark → actual</th><th>Lift</th><th>Verdict</th><th>Next</th><th></th></tr></thead><tbody>${LIFT.map((r,i)=>`<tr>
+  $('#lift').innerHTML=`<thead><tr><th>Campaign</th><th>Covered if</th><th>Conversion: benchmark → actual</th><th>Lift</th><th>Donor acquisition: benchmark → actual</th><th>Lift</th><th>Verdict</th><th>Next</th><th></th></tr></thead><tbody>${LIFT.filter(r=>!(LIVE&&/\(sample\)/.test(r.c))).map((r,i)=>`<tr>
     <td><b${/\(sample\)/.test(r.c)?' class="is-sample"':''}>${esc(r.c)}</b></td><td>${r.pre?'<span class="pill">Pilot, before the promo</span>':`<div style="display:flex;flex-direction:column;gap:3px;align-items:flex-start">${yn(r.integ,'Integration')}${yn(r.agree,'Benchmark agreed')}</div>`}</td>
     <td class="num">${r.cb} → ${r.ca}</td><td class="num">${r.cl}</td><td class="num">${r.ab} → ${r.aa}</td><td class="num">${r.al}</td>
     <td class="v-${r.v}"><b>${esc(r.vt)}</b></td><td>${esc(r.note)}</td>
