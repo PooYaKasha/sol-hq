@@ -6,6 +6,8 @@
 // - /api/ask        rule-based routing of a question (the model comes in v1.5)
 // - /api/tasks      GET the tasks and hire drafts handed off from a Sol plan; POST to hand off more (data/state/tasks.json, never in git)
 // - /config.js      public settings from environment variables; no key ever lives in the repo
+// - /api/store, /api/assets, /api/ui-data, /ui-data.js   the page's shared store, uploads and data file (lib/ui.js)
+// - /admin          load the data file (company numbers stay out of git)
 'use strict';
 const http = require('http');
 const fs = require('fs');
@@ -32,6 +34,9 @@ if (problems.length) {
   process.exit(1);
 }
 const REG_JSON = JSON.stringify(registry.publish(REG));
+const ui = require('./lib/ui');
+// The page is the prototype itself (scripts/build-ui.js); its two inline scripts are allowed by hash, nothing else inline runs.
+const INLINE = ui.inlineHashes(fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8'));
 
 const CONFIG = {
   app: 'Sol HQ',
@@ -50,7 +55,7 @@ const TYPES = {
 const SECURITY = {
   'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY',
   'X-Robots-Tag': 'noindex, nofollow',
-  'Content-Security-Policy': "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'",
+  'Content-Security-Policy': `default-src 'self'; script-src 'self' ${INLINE.join(' ')}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
 };
 
 const same = (a, b) => { const x = Buffer.from(a), y = Buffer.from(b); return x.length === y.length && crypto.timingSafeEqual(x, y); };
@@ -114,6 +119,8 @@ http.createServer(async (req, res) => {
   }
   if (p === '/config.js') { res.writeHead(200, { 'Content-Type': TYPES['.js'], 'Cache-Control': 'no-store' }); return res.end(`window.SOL_CONFIG=${JSON.stringify(CONFIG)};`); }
   if (p === '/robots.txt') { res.writeHead(200, { 'Content-Type': TYPES['.txt'] }); return res.end('User-agent: *\nDisallow: /\n'); }
+  if (p === '/admin') { res.writeHead(200, { 'Content-Type': TYPES['.html'], 'Cache-Control': 'no-store' }); return fs.createReadStream(path.join(ROOT, 'admin.html')).pipe(res); }
+  try { if (await ui.handle(req, res, p)) return; } catch (e) { console.error('ui:', e.message); return json(res, 500, { error: 'server error' }); }
   if (p === '/api/registry') return json(res, 200, REG_JSON);
   if (p === '/api/data') return json(res, 200, { sets: data.list() });
   if (p.startsWith('/api/data/')) { const d = data.get(p.slice(10)); return d ? json(res, 200, d) : json(res, 404, { error: 'no such data set' }); }
@@ -150,5 +157,5 @@ http.createServer(async (req, res) => {
     res.end(buf);
   });
 }).listen(PORT, '0.0.0.0', () => {
-  console.log(`Sol HQ ${CONFIG.version} on :${PORT} · ${PASS ? 'password on' : 'NO PASSWORD (local dev only)'} · ${REG.bodies.length} bodies · data: ${data.list().map(s => `${s.set}${s.sample ? ' (sample)' : ''}`).join(', ') || 'none'}`);
+  console.log(`Sol HQ ${CONFIG.version} on :${PORT} · ${PASS ? 'password on' : 'NO PASSWORD (local dev only)'} · ${REG.bodies.length} bodies · data: ${data.list().map(s => `${s.set}${s.sample ? ' (sample)' : ''}`).join(', ') || 'none'} · page data file: ${ui.uiStatus().loaded ? 'loaded' : 'not loaded (open /admin)'}`);
 });
