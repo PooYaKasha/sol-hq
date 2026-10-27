@@ -2316,7 +2316,7 @@ function openAgent(pid,name){
     <div class="chips"><button type="button" class="btn pri" data-act="thread">Open ${esc(a.n)}’s thread</button><button type="button" class="btn" data-back>Back to ${esc(p.short)}</button></div>
     <div class="note" id="agnote"></div>`;
   $('#detail [data-back]').onclick=()=>focusPlanet(pid);
-  $('#detail [data-act]').onclick=()=>{$('#agnote').textContent='In the live build this opens the agent’s thread. Prototype only.';};
+  $('#detail [data-act]').onclick=()=>handoff(a.n,'',$('#agnote'));
 }
 function openProduct(pid,name){
   const p=byId[pid], x=p.prods.find(y=>y.n===name);
@@ -2356,6 +2356,12 @@ function focusPlanet(id, keepCrumb){
 
 /* ---------- Sol chat ---------- */
 const log=$('#log');
+// Hand-off: agents live in the Sol project chat in Claude. Copy the request there; Sol opens the agent's thread within a minute.
+function handoff(ag,text,el){
+  const note=`For ${ag}: ${text||''}`.trim();
+  const done=ok=>{ const add=text?'':', add what you need,'; el.textContent=ok?`Copied “${note}”. Paste it into the Sol project chat in Claude${add} and ${ag}’s thread starts within a minute.`:`Paste this into the Sol project chat in Claude${add} and ${ag}’s thread starts within a minute: “${note}”`; };
+  try{ navigator.clipboard.writeText(note).then(()=>done(true),()=>done(false)); }catch(e){ done(false); }
+}
 function say(html, who='sol'){
   const d=document.createElement('div'); d.className='msg '+who;
   d.innerHTML = who==='sol' ? `<span class="av" aria-hidden="true"></span><div class="tx">${html}</div>` : html;
@@ -2422,8 +2428,9 @@ function ask(text){
   node.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
     if(b.dataset.a==='flow') return openFlow();
     if(b.dataset.a==='zoom'){ setTrace(null); focusPlanet(r.p,true); renderCrumbs(r.ag); markSel(r.ag); return; }
-    const msg = b.dataset.a==='row' ? `Drafted a Parked row on ${p.short}: “${text}”, owner ${r.ag}, moves the constraint: Unsure. Nothing is saved in the prototype.` : `In the live build this opens ${r.ag}’s thread with your request attached. Prototype only.`;
-    const t=document.createElement('div'); t.className='toast'; t.textContent=msg; (b.closest('.ans')||b.closest('.route')).appendChild(t); b.disabled=true;
+    const t=document.createElement('div'); t.className='toast'; (b.closest('.ans')||b.closest('.route')).appendChild(t);
+    if(b.dataset.a!=='row') return handoff(r.ag,text,t);
+    t.textContent=`Drafted a Parked row on ${p.short}: “${text}”, owner ${r.ag}, moves the constraint: Unsure. Nothing is saved in the prototype.`; b.disabled=true;
   });
 }
 function openSolDlg(){ const d=$('#sol-dlg'); if(d.open) return;
