@@ -7,9 +7,9 @@
   "engines": { "node": ">=18" },
   "scripts": {
     "start": "node server.js",
+    "build-ui": "node scripts/build-ui.js",
     "dev": "node server.js",
     "check": "node scripts/check.js",
-    "build-ui": "node scripts/build-ui.js",
     "add": "node scripts/add-body.js",
     "sync": "node sync/run.js"
   }

@@ -37,6 +37,7 @@ const REG_JSON = JSON.stringify(registry.publish(REG));
 const ui = require('./lib/ui');
 // The page is the prototype itself (scripts/build-ui.js); its two inline scripts are allowed by hash, nothing else inline runs.
 const INLINE = ui.inlineHashes(fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8'));
+console.log(`Page data file: ${ui.uiStatus().loaded ? 'loaded' : 'not loaded yet, open /admin to load it'}`);
 
 const CONFIG = {
   app: 'Sol HQ',
@@ -157,5 +158,5 @@ http.createServer(async (req, res) => {
     res.end(buf);
   });
 }).listen(PORT, '0.0.0.0', () => {
-  console.log(`Sol HQ ${CONFIG.version} on :${PORT} · ${PASS ? 'password on' : 'NO PASSWORD (local dev only)'} · ${REG.bodies.length} bodies · data: ${data.list().map(s => `${s.set}${s.sample ? ' (sample)' : ''}`).join(', ') || 'none'} · page data file: ${ui.uiStatus().loaded ? 'loaded' : 'not loaded (open /admin)'}`);
+  console.log(`Sol HQ ${CONFIG.version} on :${PORT} · ${PASS ? 'password on' : 'NO PASSWORD (local dev only)'} · ${REG.bodies.length} bodies · data: ${data.list().map(s => `${s.set}${s.sample ? ' (sample)' : ''}`).join(', ') || 'none'}`);
 });

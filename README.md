@@ -59,7 +59,7 @@ data/
   state/              the page's store and uploads, never committed
 lib/registry.js       loads and validates the registry
 lib/data.js           serves a snapshot when one exists, else the sample
-server.js             static files, password gate, /admin, /api/registry, /api/data, /api/ask, /config.js
+server.js             static files, password gate, /api/registry, /api/data, /api/ask, /config.js
 sync/                 the nightly read-only sync (adapters per source; keys live only in secrets)
 scripts/check.js      what `npm run check` runs; run it before every push
 scripts/add-body.js   `npm run add`, puts a new body in orbit and validates
