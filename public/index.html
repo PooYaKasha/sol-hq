@@ -1467,7 +1467,7 @@ const PULSE = [
 const RULES = [
   {re:/voice|meeting bot|join .{0,20}(call|meeting)|recall|zoom|google meet/i, p:'ceo', wf:'Sol joins a call', ag:'Sol', prod:'Sol voice & meeting bot', next:'Sol joins through Recall with her ElevenLabs voice. The Google Meet test worked one way; the conversational version is being built. Zoom needs its SDK credentials in Recall before the Monday 12:00 ET founder call. Minnie files the transcript.'},
   {re:/ask the lab|audio episode|notebook ?lm|listen/i, p:'tnl', wf:'Ask the Lab episode (manual)', ag:'Indy', prod:'Ask the Lab audio', next:'Proposed: a free manual pilot Nov 2 to Dec 15. Prescreener finishers get a 10-minute episode on their question, public data only (ADR-006). The build is tested Feb 1 against 25 requests and 5 pilot calls.'},
-  {re:/pric|quote|quoted|5 ?%|percent|guarantee|one plan|annual plan|enterprise/i, p:'sales', wf:'Next-step drafts', ag:'Pip', prod:'Pilot → one plan pricing', next:'Pip checks Terms quoted first. The five legacy 5% deals keep their quoted terms (no re-quotes). New prospects get pilot, then one plan, enterprise by contact. The $750 / $5K / $10K prices are drafts, not approved. Pip quotes no guarantee until Lex’s rider (relative 5% lift) clears Ernie.'},
+  {re:/pric|quote|quoted|5 ?%|percent|guarantee|one plan|annual plan|enterprise/i, p:'sales', wf:'Next-step drafts', ag:'Pip', prod:'Pilot → one plan pricing', next:'Pip checks Terms quoted first. The five legacy 5% deals keep their quoted terms (no re-quotes). New prospects get pilot, then one plan, enterprise by contact. The site leads with $299 plus the match guarantee (terms apply), then plans at $1,999 and $3,499, enterprise by contact (settled Oct 27). Ernie reviews before any offer with the guarantee goes out.'},
   {re:/return|action sheet|cards|round 2/i, p:'ceo', wf:'Decision request', ag:'Logan', next:'Logan opens the return-actions sheet (29 cards). Defaults hold where you skip a card.'},
   {re:/runway|burn|cash|zero.?cash|forecast/i, p:'fin', wf:'Weekly runway update', ag:'Penny', next:'Penny refreshes the forward view and flags the zero-cash date and the bridge size. You asked for a live forecast model (beta, R²) here and doubted the $15K a month target, so Penny tests it. Pooya approves before anyone else sees it.'},
   {re:/invoice|collect|paid|payment|stripe|overdue|refund|credit/i, p:'fin', wf:'Invoice & collect (drafts)', ag:'Penny', next:'Penny drafts the reminder or the refund note (a double charge gets a Stripe refund, not a credit). A founder or Vibe sends it; nothing moves money from here.'},
@@ -1517,7 +1517,7 @@ const ROUTEX=[
   {x:[['cs','Kay: where the rework happened']], c:['Wave 1 SOPs: how The Good Office works','SOP sign-off packet, Mon Oct 26','Campaign labor hours and cost to serve']},
 ];
 /* systems of record. live = connected to Sol today (Oct 25 connector list). */
-const SYS={hubspot:{n:'HubSpot deals and Terms quoted (read Oct 26)',live:1,u:'https://app.hubspot.com/contacts/8883555/objects/0-3/views/all/board'},
+const SYS={hubspot:{n:'HubSpot deals and Terms quoted (14 fixes Oct 27)',live:1,u:'https://app.hubspot.com/contacts/8883555/objects/0-3/views/all/board'},
   stripe:{n:'Stripe: invoices and payments',live:1,u:'https://dashboard.stripe.com'}, qb:{n:'QuickBooks (read-only)',live:1,u:'https://qbo.intuit.com'},
   ops:{n:'Ops Board',live:1,u:'https://docs.google.com/spreadsheets/d/12iHbzDlsjPHDW4c12pPSrnwBeU3JrkC_VSuTLpyyd3w'},
   tracker:{n:'MatchNice Tracker (2026)',live:1,u:'https://docs.google.com/spreadsheets/d/11pyW5Oq4o7y_cMt9kWSZZY9w1A5eXjHD6Abh68hCMgU/edit'},
@@ -2386,6 +2386,25 @@ function swapThread(id){ const k=id||'all'; if(k===thrKey) return;
 var PM='thread';
 function setPM(m){ PM=m; $('.hq').dataset.pm=m; ['thread','info'].forEach(k=>{ const b=$('#pm-'+k); b.setAttribute('aria-selected',String(k===m)); b.tabIndex=k===m?0:-1; }); paintPanelTitle(); }
 function paintPanelTitle(){ const p=scopeP&&byId[scopeP]; const t=$('#rp-ttl'); if(t) t.textContent=p?p.name:'Sol · whole company'; const x=$('#thr-scope'); if(x) x.textContent=p?' · '+p.short:' · whole company'; }
+// A question that names a person or agent ("Dickson's top 3 tasks") answers from their open work: Ops Board rows, then customer next steps.
+function personHit(text){
+  const names=new Map(); P.forEach(q=>{ q.agents.forEach(a=>names.set(a.n,q.id)); if(q.lead&&!names.has(q.lead)) names.set(q.lead,q.id); });
+  ['Pooya','Dickson','ib'].forEach(n=>{ if(!names.has(n)) names.set(n,(P.find(q=>q.lead===n)||P[0]).id); });
+  const said=/\bibraheem\b/i.test(text)?'ib':[...names.keys()].find(n=>new RegExp(`\\b${n}(’s|'s)?\\b`,'i').test(text));
+  if(!said) return null;
+  const mine=w=>new RegExp(`(^|[ →·])${said}($|[ →·])`).test(w||'');
+  const rank={'Needs human':0,'Blocked':1,'In progress':2,'Not started':3};
+  const ops=OPS.filter(r=>r.id&&r.st!=='Done'&&mine(r.who)&&canSee(r)).sort((a,b)=>(rank[a.st]??4)-(rank[b.st]??4));
+  const cust=(role==='founder'||role==='lead')?CUSTOMERS.filter(c=>c.who===said&&c.next):[];
+  const items=[...ops.filter(r=>r.st==='Needs human').map(r=>({t:`${r.t} (${r.id}, waiting on ${(r.who.split('→')[1]||said).trim()})`,p:r.p,src:'ops'})),
+    ...cust.map(c=>({t:`${c.o}: ${c.next}`,p:(P.find(q=>q.id==='cs')||{}).id||names.get(said),src:'hubspot'})),
+    ...ops.filter(r=>r.st!=='Needs human').map(r=>({t:`${r.t} (${r.id}, ${r.st.toLowerCase()})`,p:r.p,src:'ops'}))];
+  const home=names.get(said), top=items.slice(0,3);
+  if(!top.length) return {p:home, ag:said, wf:'Their open work', next:`Nothing open for ${said} on the Ops Board or in customer next steps right now.`, c:['ops']};
+  const stars=[...new Set(top.map(i=>i.p).filter(id=>id&&id!==home&&byId[id]))];
+  return {p:home, ag:said, wf:'Their open work', next:`${said}’s top ${top.length} right now: ${top.map((i,n)=>`${n+1}) ${i.t}`).join(' ')}${items.length>3?` Plus ${items.length-3} more open.`:''}`,
+    x:stars.map(id=>[id,'holds one of these']), c:[...new Set(top.map(i=>i.src))]};
+}
 function ask(text){
   text=text.trim(); if(!text) return; logAsk(text,'ask');
   say(esc(text),'me');
@@ -2394,6 +2413,7 @@ function ask(text){
     if(inP.length) hits=inP;
     else { const ag=(sp.agents.find(a=>!a.human)||sp.agents[0]).n;
       hits=[{p:sp.id, ag, wf:sp.flows[0]||'General request', next:`Sol keeps this inside ${sp.name}: ${ag} picks it up and drafts the next step for ${sp.appr.split(' · ')[0]} to approve.`}]; } }
+  { const ph=personHit(text); if(ph && (!hits.length || /task|to.?do|working on|doing|plate|priorit|top \d|focus|waiting|owe/i.test(text))) { hits=[ph]; scoped=false; } }
   if(!hits.length){
     const node=say(`I’m not sure where that goes yet. Which is closest?${chips(['Money: runway, invoices','Revenue: deals and matchers','A nonprofit getting started','Product or a bug','Marketing or the podcast'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
     wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); return;
