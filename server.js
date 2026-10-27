@@ -5,6 +5,7 @@
 // - /api/data       the data sets and their freshness; /api/data/<set> one set
 // - /api/ask        rule-based routing of a question (the model comes in v1.5)
 // - /api/tasks      GET the tasks and hire drafts handed off from a Sol plan; POST to hand off more (data/state/tasks.json, never in git)
+// - /api/gchat      Google Chat drafts and sends (lib/gchat.js); draft-only until a webhook secret exists and GCHAT_SENDING=on
 // - /config.js      public settings from environment variables; no key ever lives in the repo
 'use strict';
 const http = require('http');
@@ -13,6 +14,8 @@ const path = require('path');
 const crypto = require('crypto');
 const registry = require('./lib/registry');
 const data = require('./lib/data');
+const gchat = require('./lib/gchat');
+const digest = require('./lib/digest');
 
 const PORT = Number(process.env.PORT) || 3000;
 const ROOT = path.join(__dirname, 'public');
@@ -85,6 +88,37 @@ function cleanTask(t) {
   return o;
 }
 
+// Google Chat. Drafts live in data/state/gchat-outbox.json; lib/gchat.js holds the send gate.
+const GCHAT = gchat.outbox(path.join(__dirname, 'data', 'state', 'gchat-outbox.json'));
+const HQ_URL = /^https:\/\/[^\s<>|]+$/.test(process.env.HQ_PUBLIC_URL || '') ? process.env.HQ_PUBLIC_URL : '';
+function draftDigest(now = new Date()) {
+  const env = process.env;
+  const d = digest.build({ data, tasks: readTasks(), kinds: REG.kinds, role: env.GCHAT_DIGEST_ROLE || 'lead', now, hqUrl: HQ_URL });
+  return GCHAT.add({ kind: 'digest', text: d.text, sample: d.sample, day: d.day, space: env.GCHAT_DIGEST_SPACE || 'main', thread: env.GCHAT_DIGEST_THREAD || 'sol-daily-digest', by: 'sol' });
+}
+// Once a day after GCHAT_DIGEST_HOUR (Eastern), draft the digest; send it only if GCHAT_DIGEST_AUTOSEND=on and the gate allows.
+// The check runs every 5 minutes while the server is up; an always-on deployment (or a cron calling POST /api/gchat/digest) keeps it daily.
+async function digestTick(now = new Date()) {
+  const env = process.env;
+  if (env.GCHAT_DIGEST === 'off') return;
+  const { day, hour } = digest.eastern(now);
+  if (hour < gchat.digestHour(env) || GCHAT.list().some(x => x.kind === 'digest' && x.day === day && x.by === 'sol' && x.status !== 'discarded')) return;
+  const d = draftDigest(now);
+  if (d && env.GCHAT_DIGEST_AUTOSEND === 'on' && !gchat.blocked(d, env)) {
+    const r = await gchat.send(GCHAT, d.id, { by: 'sol (autosend)' });
+    console.log(`gchat digest ${day}: ${r.ok ? 'sent' : 'not sent, ' + r.why}`);
+  }
+}
+setInterval(() => digestTick().catch(e => console.error('gchat digest:', e.message)), 5 * 60 * 1000).unref();
+// State-changing Chat calls must be JSON from this page: a cross-site form cannot set the type, and a foreign Origin is refused.
+function sameSite(req) {
+  if (!/^application\/json\b/i.test(req.headers['content-type'] || '')) return false;
+  const o = req.headers.origin;
+  if (!o) return true;
+  try { return new URL(o).host === req.headers.host; } catch (e) { return false; }
+}
+const who = req => { const h = req.headers.authorization || ''; return h.startsWith('Basic ') ? Buffer.from(h.slice(6), 'base64').toString().split(':')[0] : 'local'; };
+
 // Rule-based ask: first matching rule wins. Scope narrows to rules whose body is the scoped body or its descendants.
 function route(q, scope) {
   const bodies = REG.bodies, byId = new Map(bodies.map(b => [b.id, b]));
@@ -134,6 +168,23 @@ http.createServer(async (req, res) => {
       return json(res, 200, { saved: items.length, items });
     } catch (e) { return json(res, 400, { error: 'bad request' }); }
   }
+  if (p === '/api/gchat' || p.startsWith('/api/gchat/')) {
+    const sub = p.slice(11);
+    if (!sub) { if (req.method !== 'GET') return json(res, 405, { error: 'GET' }); return json(res, 200, { status: gchat.status(), drafts: GCHAT.list().slice(-50).reverse() }); }
+    if (req.method !== 'POST') return json(res, 405, { error: 'POST' });
+    if (!sameSite(req)) return json(res, 403, { error: 'send JSON from Sol HQ itself' });
+    try {
+      const b = JSON.parse(await readBody(req, 16384) || '{}');
+      if (sub === 'drafts') {
+        const d = GCHAT.add({ kind: 'update', text: b.text, space: b.space, thread: b.thread, by: who(req) });
+        return d ? json(res, 200, { draft: d, status: gchat.status() }) : json(res, 400, { error: 'text is empty' });
+      }
+      if (sub === 'digest') { const d = draftDigest(); return json(res, 200, { draft: d, status: gchat.status() }); }
+      if (sub === 'send') { const r = await gchat.send(GCHAT, String(b.id || ''), { by: who(req) }); return json(res, r.ok ? 200 : 409, r); }
+      if (sub === 'discard') { const d = GCHAT.discard(String(b.id || '')); return d ? json(res, 200, { draft: d }) : json(res, 404, { error: 'no such draft' }); }
+      return json(res, 404, { error: 'not found' });
+    } catch (e) { return json(res, 400, { error: 'bad request' }); }
+  }
   if (p.startsWith('/api/')) return json(res, 404, { error: 'not found' });
 
   let file = decodeURIComponent(p);
@@ -150,5 +201,5 @@ http.createServer(async (req, res) => {
     res.end(buf);
   });
 }).listen(PORT, '0.0.0.0', () => {
-  console.log(`Sol HQ ${CONFIG.version} on :${PORT} · ${PASS ? 'password on' : 'NO PASSWORD (local dev only)'} · ${REG.bodies.length} bodies · data: ${data.list().map(s => `${s.set}${s.sample ? ' (sample)' : ''}`).join(', ') || 'none'}`);
+  console.log(`Sol HQ ${CONFIG.version} on :${PORT} · ${PASS ? 'password on' : 'NO PASSWORD (local dev only)'} · ${REG.bodies.length} bodies · data: ${data.list().map(s => `${s.set}${s.sample ? ' (sample)' : ''}`).join(', ') || 'none'} · chat: ${gchat.status().why}`);
 });

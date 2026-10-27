@@ -27,7 +27,9 @@ data/
   snapshots/*.json    real data written by the sync, never committed (see data/snapshots/README.md)
 lib/registry.js       loads and validates the registry (ids, kinds, orbits, leads, loops)
 lib/data.js           serves a snapshot when one exists, else the sample
-server.js             static files, password gate, /api/registry, /api/data, /api/ask, /config.js
+server.js             static files, password gate, /api/registry, /api/data, /api/ask, /api/tasks, /api/gchat, /config.js
+lib/gchat.js          Google Chat webhook posts: outbox, thread keys, mentions, the send gate
+lib/digest.js         the daily digest Sol drafts for Chat, filtered by role
 sync/                 the nightly read-only sync (adapters per source; keys live only in secrets)
 scripts/check.js      what `npm run check` runs; run it before every push
 scripts/add-body.js   `npm run add`, puts a new body in orbit and validates
@@ -63,6 +65,10 @@ Each set is one file: `{ set, as_of, source, sample, meta, rows }`. The page sho
 ### Access
 
 One shared password today (HTTP Basic auth, `HQ_USER` and `HQ_PASSWORD`). Everyone with it sees everything; the "Viewing as" switch is a preview of what each role will see. Per-person logins and server-side role enforcement arrive with the Supabase step, before anyone outside the three founders gets access. Every response carries `noindex`, a strict CSP and `frame-ancestors 'none'`.
+
+### Google Chat
+
+Sol drafts a daily digest and one-off updates for a Google Chat space through an incoming webhook (`lib/gchat.js`, `lib/digest.js`, `/api/gchat`). Drafts only until `GCHAT_WEBHOOK_URL` is in Replit Secrets and `GCHAT_SENDING=on`; sample data never sends; restricted rows stay out unless the digest role is `founder`. Setup steps and the API: [docs/google-chat.md](docs/google-chat.md). Tests: `npm run test:gchat`.
 
 ### Ask Sol
 
