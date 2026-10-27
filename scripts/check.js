@@ -60,5 +60,16 @@ try {
 } catch (e) { fail('.gitignore missing'); }
 ok('no secrets, snapshots ignored');
 
+// 5. the page is a build of the prototype with its company data cut out (scripts/build-ui.js)
+try {
+  const page = fs.readFileSync(path.join(root, 'public', 'index.html'), 'utf8');
+  if (!page.includes('Built by scripts/build-ui.js')) fail('public/index.html was not made by scripts/build-ui.js');
+  const bare = page.match(/__D\('[A-Z_]+'\)/g);
+  if (bare) fail(`public/index.html has data names without an empty shape: ${bare.join(', ')}`);
+  if (/<!--@data:/.test(page)) fail('public/index.html still holds a <!--@data--> block');
+  if (/window\.SOL_DATA\s*=/.test(page)) fail('public/index.html holds the data file itself');
+  ok(`page built from the prototype, ${(page.match(/__D\('/g) || []).length} data names cut out`);
+} catch (e) { fail('public/index.html: ' + e.message); }
+
 console.log(bad ? `${bad} problem(s)` : 'all good');
 process.exit(bad ? 1 : 0);

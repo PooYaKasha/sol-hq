@@ -8,35 +8,63 @@ Private. It holds company and customer data, so the server refuses to start in p
 
 ```sh
 HQ_PASSWORD=pick-one npm start      # http://localhost:3000, user "matchnice"
-npm run check                       # registry valid, data files parse, browser code parses, no secrets
-npm run add -- --kind project --name "Nonprofit POWER 2027" --orbits sol --lead pooya --due 2027-12-01
+npm run check                       # registry valid, data files parse, browser code parses, page built right, no secrets
+npm run build-ui -- <path to sol-hq-prototype.html>   # rebuild the page from a new prototype version
 ```
 
-Node 18 or newer. No dependencies, no build step.
+Node 18 or newer. No dependencies. Then open `/admin` once and load the data file (below).
 
-## How it is put together
+## Prototype = app
+
+The page you see is the Sol HQ prototype itself, the Claude artifact Pooya reviews and comments on. `scripts/build-ui.js` turns the prototype's source file into `public/index.html`, so every screen in the app matches the artifact exactly. To change the design, change the prototype, then rebuild. Never edit `public/index.html` by hand.
+
+The build cuts the company data out of the page:
+
+- **Data constants** (money, deals, customers, the Go list, the tracker seed and the rest, listed in `DATA` at the top of `build-ui.js`) become `__D('NAME', <empty shape>)` in the page.
+- **HTML fragments** wrapped in `<!--@data:key-->` … `<!--@/data-->` in the prototype become placeholders.
+- What was cut out goes to `data/snapshots/ui-data.js`, which git ignores. The server serves it at `/ui-data.js`, behind the password.
+
+Without the data file the page still works: every panel shows its empty state and a notice links to `/admin`. Founders load the file at **`/admin`** (Sol attaches `sol-hq-ui-data.js` to each port in the project Library), or place it at `data/snapshots/ui-data.js` on the server. The server checks the file before saving it and never runs it.
+
+The data file can also carry saved answers (`npm run build-ui -- <prototype> <seed.json>`, shape `{collection: {id: document}}`), such as the founders' Go list decisions. When the file is loaded at `/admin`, the page writes each one into the store unless Sol HQ already has an answer of its own for it.
+
+The prototype uses the Claude page runtime for its shared store, file uploads and downloads. `public/shim.js` stands in for it in the app:
+
+| Prototype (artifact) | App |
+|---|---|
+| `db.collection(c).onSnapshot`, `doc(id).set/delete` | `/api/store/<c>[/<id>]`, other people's changes arrive by polling every 4 s |
+| `assets.upload/list/delete` | `/api/assets[/<id>]` (images, PDF, CSV, Markdown, text, JSON; 20 MB) |
+| `downloads.save` | a normal browser download |
+
+Store and uploads live in `data/state/` on the server and never go in git. They persist in the Replit workspace. **Before publishing**, they need a home that survives a redeploy (Supabase, the next step with ib), because a published Replit app does not keep files it writes.
+
+Each inline script in the page is allowed by its hash in the Content Security Policy, worked out when the server starts, so a rebuilt page needs a restart (Replit's Run does that).
+
+## The registry and data API (not used by the page yet)
+
+The server still carries the registry and data API the first version of the page used. The new page does not read them yet; they stay for Ask Sol, the sync and the next step.
 
 ```
+public/
+  index.html          the page, built from the prototype (do not edit)
+  shim.js             stands in for the Claude page runtime
+  admin.html/.js/.css /admin, load the data file
+lib/ui.js             the page's server side: /api/store, /api/assets, /api/ui-data, /ui-data.js
+scripts/build-ui.js   prototype -> public/index.html + data/snapshots/ui-data.js
 registry/
-  kinds.json          the kinds of body (sun, human, division, project, agent, workflow, product, tool),
-                      their glyph and default ring, the statuses, tiers and roles
-  bodies/*.json       the bodies themselves, one file per kind (any .json in the folder is loaded)
+  kinds.json          the kinds of body (sun, human, division, project, agent, workflow, product, tool)
+  bodies/*.json       the bodies themselves, one file per kind
   routes.json         how Ask Sol routes a question to a body before a model is connected
 data/
   samples/*.json      fictional data sets, committed, always marked sample
-  snapshots/*.json    real data written by the sync, never committed (see data/snapshots/README.md)
-lib/registry.js       loads and validates the registry (ids, kinds, orbits, leads, loops)
+  snapshots/          real data, never committed (see data/snapshots/README.md)
+  state/              the page's store and uploads, never committed
+lib/registry.js       loads and validates the registry
 lib/data.js           serves a snapshot when one exists, else the sample
 server.js             static files, password gate, /api/registry, /api/data, /api/ask, /config.js
 sync/                 the nightly read-only sync (adapters per source; keys live only in secrets)
 scripts/check.js      what `npm run check` runs; run it before every push
 scripts/add-body.js   `npm run add`, puts a new body in orbit and validates
-public/
-  app.js              shell: routing, tabs, ask bar, search, detail panel, role switch
-  lib/store.js        the one store views read from: bodies, data sets, role, derived numbers
-  lib/orbit.js        the orbit engine: any body with children can be the center
-  lib/search.js       grouped search across bodies and every data set
-  views/*.js          one module per tab; register it in app.js VIEWS
 ```
 
 ### A body

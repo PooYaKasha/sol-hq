@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sol HQ data file</title>
+<link rel="icon" type="image/svg+xml" href="/assets/app-icon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+<main>
+  <a class="back" href="/">← Back to Sol HQ</a>
+  <h1>Sol HQ data file</h1>
+  <p>The page in git has no company numbers. They live in one file on this server, <code>data/snapshots/ui-data.js</code>, which never goes to GitHub. Load it here once, and again whenever Sol sends a new one.</p>
+  <section class="card" aria-live="polite" id="status"><p>Checking…</p></section>
+  <section class="card">
+    <h2>Load a new data file</h2>
+    <ol>
+      <li>Download <b>sol-hq-ui-data.js</b> from the project Library (Sol attaches it with each port).</li>
+      <li>Choose it below and press Load. The current file is replaced.</li>
+    </ol>
+    <form id="up"><input type="file" id="file" accept=".js,text/javascript" required><button type="submit">Load the data file</button></form>
+    <p id="msg" role="status"></p>
+  </section>
+  <p class="small">Only people with the Sol HQ password reach this page. The file is checked before it is saved and is never run on the server.</p>
+</main>
+<script src="/admin.js"></script>
+</body>
+</html>
