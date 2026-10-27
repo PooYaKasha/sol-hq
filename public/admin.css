@@ -5,6 +5,8 @@ h1,h2{font-family:Montserrat,system-ui,sans-serif;margin:0}h1{font-size:26px}h2{
 code{font-family:"IBM Plex Mono",monospace;font-size:13px;color:#6FE3C1}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .back{color:#8CC4FF}.small{color:var(--ink-3);font-size:13px}
-form{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+form{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+label{color:var(--ink-3);font-size:13px}
+textarea{box-sizing:border-box;width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px;font:12px/1.4 "IBM Plex Mono",monospace;resize:vertical}
 button{background:var(--sun);color:#06281F;border:0;border-radius:6px;padding:8px 14px;font:600 14px Inter,sans-serif;cursor:pointer}
 .ok{color:var(--sun)}.bad{color:var(--crit)}
