@@ -1,6 +1,7 @@
 // The detail panel for any body: generic, built from the registry and from every data set that names it.
 import { h, esc, fmtDate, usd, plural, trunc } from '../lib/util.js';
 import { S, body, children, ancestors, kindOf, statusOf, colorOf, metric, rowsFor, freshness, set } from '../lib/store.js';
+import { tasksSection } from '../lib/plan.js';
 
 const pill = (text, tone = 'muted') => h(`span.pill.t-${tone}`, text);
 const who = id => body(id) ? h('button.link', { onclick: () => openBody(id) }, body(id).name) : h('span', id);
@@ -14,8 +15,7 @@ export function renderBody(root, id, ctx) {
   const k = kindOf(b), st = statusOf(b);
   const head = h('header.bhead',
     h('span.swatch', { style: `background:${colorOf(b)}` }),
-    h('div', h('div.kicker', [k.label, ...ancestors(b.id).map(a => a.name)].join(' · ')), h('h2', b.name), b.role ? h('p.role', b.role) : null),
-    h('button.ghost.small.close', { onclick: () => ctx.closePanel(), 'aria-label': 'Close' }, '✕'));
+    h('div', h('div.kicker', [k.label, ...ancestors(b.id).map(a => a.name)].join(' · ')), h('h2', b.name), b.role ? h('p.role', b.role) : null));
   root.append(head);
 
   const facts = h('dl.facts');
@@ -52,6 +52,7 @@ export function renderBody(root, id, ctx) {
   }
   if (b.links) root.append(h('h3', 'Links'), h('ul.links', ...b.links.map(l => h('li', l.url ? h('a', { href: l.url, target: '_blank', rel: 'noopener' }, l.label) : h('span', l.label), l.note ? h('small', ` · ${l.note}`) : null))));
 
+  const handed = tasksSection(b); if (handed) root.append(handed);
   // Rows from every data set that name this body or its descendants.
   const ops = rowsFor('ops', b.id).sort((x, y) => (y.status === 'Needs human') - (x.status === 'Needs human'));
   if (ops.length) root.append(section('Ops Board', 'ops', ops.slice(0, 12).map(r => h('li', pill(r.status, toneOf(r.status)), ' ', h('b', r.id), ' ', r.title, r.who ? h('small', ` · ${r.who}`) : null)), ops.length > 12 ? `${ops.length - 12} more on the Board tab` : null, () => ctx.go('board')));

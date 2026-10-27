@@ -84,9 +84,8 @@ export function mountOrbit(svg, opts) {
       const front = el('g', { class: 'disk front', transform: 'rotate(-14)' });
       front.append(el('path', { d: 'M-160 0 A160 40 0 0 0 160 0', fill: 'none', stroke: 'url(#bhG)', 'stroke-width': 3.5, 'stroke-dasharray': '40 14 8 14', class: 'diskline' }));
       at.append(front);
-      const m = el('g', { transform: 'translate(-22 -34) scale(0.0229)', opacity: 0.9 }); m.append(clover()); at.append(m);
-      const t = el('text', { y: 120, class: 'sun-name', 'text-anchor': 'middle' }); t.textContent = f.name; at.append(t);
-      const s = el('text', { y: 142, class: 'sun-sub', 'text-anchor': 'middle' }); s.textContent = 'Click to ask'; at.append(s);
+      // Only the MatchNice heart at the center; clicking it (or Enter) opens the ask bar.
+      const m = el('g', { transform: 'translate(-34 -34) scale(0.0355)', class: 'sun-heart' }); m.append(clover()); at.append(m);
     } else {
       const c = hex(f), big = bigShape(f, c);
       at.append(...big.nodes);
@@ -233,12 +232,26 @@ export function mountOrbit(svg, opts) {
     state.raf = requestAnimationFrame(step);
   }
 
+  // The person who approves this work shows at the end of the line to it (initials until a photo exists; nothing is invented).
+  function approverAvatar(it) {
+    const p = (it.b.approver || []).map(id => body(id)).find(Boolean);
+    if (!p) return null;
+    const dx = it.x - CX, dy = it.y - CY, len = Math.hypot(dx, dy) || 1, d = (it.rr || 16) + 16;
+    const g = el('g', { class: 'apv', transform: `translate(${(it.x - dx / len * d).toFixed(1)} ${(it.y - dy / len * d).toFixed(1)})` });
+    const t = el('title', {}); t.textContent = `${p.name} approves ${it.b.name}`; g.append(t);
+    g.append(el('circle', { r: 12, fill: colorOf(p) || '#6f7fb8', stroke: '#e6ecff', 'stroke-width': 1.5 }));
+    const i = el('text', { y: 4, 'text-anchor': 'middle' }); i.textContent = p.initials || p.name.slice(0, 1); g.append(i);
+    return g;
+  }
+
   function drawTrace() {
     gTrace.innerHTML = '';
     for (const id of state.trace) {
       const it = state.items.find(i => i.b.id === id);
       if (!it) continue;
       gTrace.append(el('line', { x1: CX, y1: CY, x2: it.x, y2: it.y, class: 'trace-line' }));
+      const ap = approverAvatar(it);
+      if (ap) gTrace.append(ap);
     }
   }
 

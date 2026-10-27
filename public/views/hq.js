@@ -1,9 +1,8 @@
 // HQ: the galaxy. Sol is the black hole, divisions are stars, a star opens its system, a planet shows its moons.
-// The ask bar sits inside the map on wide screens, with a "Know now" rail and an "Ask Sol" rail from live activity.
+// The ask bar sits inside the map on wide screens. What to know and what to ask now open every thread (see app.js).
 import { h, $ } from '../lib/util.js';
 import { S, body, sun, ancestors, children } from '../lib/store.js';
 import { mountOrbit, tooltipHtml } from '../lib/orbit.js';
-import { ctxData } from '../lib/context.js';
 import { kindOf, needsHuman } from '../lib/store.js';
 
 const wide = matchMedia('(min-width:1100px)');
@@ -19,16 +18,14 @@ export default {
     const focus = ctx.params.focus && body(ctx.params.focus) ? ctx.params.focus : sun().id;
     const form = $('#ask'), home = $('#ask-home');
     const inStage = wide.matches && form && home;
-    const stage = h('div.stage' + (inStage ? '.has-bar.has-rails' : ''));
+    const stage = h('div.stage' + (inStage ? '.has-bar' : ''));
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'orbit'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'Sol and the bodies in orbit');
     const crumbs = h('nav.crumbs', { 'aria-label': 'Orbit path' });
     const legend = h('div.legend');
     const tip = h('div.tip', { hidden: true });
     const hint = h('p.hint');
-    const railL = h('aside.rail.rail-know', { 'aria-label': 'Know now' });
-    const railR = h('aside.rail.rail-ask', { 'aria-label': 'Ask Sol suggestions' });
-    if (inStage) { form.classList.add('in-stage'); stage.append(railL, svg, railR, form); } else stage.append(svg);
+    if (inStage) { form.classList.add('in-stage'); stage.append(svg, form); } else stage.append(svg);
     stage.append(tip, crumbs, legend);
     root.append(stage, hint);
 
@@ -65,12 +62,6 @@ export default {
     if (n) legend.append(h('span.lg', h('i.g-badge', n), 'waiting on a human'));
 
     if (inStage) {
-      const d = ctxData(orbit.focused);
-      railL.append(h('h5', 'Know now', h('span', d.name ? ` · ${d.name}` : ' · across Sol')));
-      if (!d.know.length) railL.append(h('p.muted', 'Nothing needs attention here right now.'));
-      for (const k of d.know) railL.append(h(k.go ? 'button.kc' : 'div.kc', { style: `--kc:${k.c}`, onclick: k.go ? () => (k.go.body ? ctx.openBody(k.go.body) : ctx.go(k.go.view)) : null }, h('b', k.t), h('small', k.s), k.go ? h('span.go', 'Open →') : null));
-      railR.append(h('h5', 'Ask Sol', h('span', d.name ? ` · in ${d.name}` : ' · from today’s activity')));
-      for (const [q, why] of d.ask) railR.append(h('button.qc', { onclick: () => ctx.ask(q) }, q, h('small', why)));
       ctx.onCleanup(() => { form.classList.remove('in-stage'); home.append(form); });
     }
     wide.addEventListener('change', ctx.rerender, { once: true });

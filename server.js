@@ -4,6 +4,7 @@
 // - /api/registry   every body that orbits Sol, validated at startup
 // - /api/data       the data sets and their freshness; /api/data/<set> one set
 // - /api/ask        rule-based routing of a question (the model comes in v1.5)
+// - /api/tasks      GET the tasks and hire drafts handed off from a Sol plan; POST to hand off more (data/state/tasks.json, never in git)
 // - /config.js      public settings from environment variables; no key ever lives in the repo
 'use strict';
 const http = require('http');
@@ -70,6 +71,20 @@ function readBody(req, limit = 8192) {
   });
 }
 
+// Hand-offs: the tasks Sol plans for its agents, and hire drafts. Saved on the server only. Nothing here runs an agent or sends anything.
+const TASKS_FILE = path.join(__dirname, 'data', 'state', 'tasks.json');
+const BY_ID = new Map(REG.bodies.map(b => [b.id, b]));
+const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '').slice(0, n);
+function readTasks() { try { const v = JSON.parse(fs.readFileSync(TASKS_FILE, 'utf8')); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+function writeTasks(list) { fs.mkdirSync(path.dirname(TASKS_FILE), { recursive: true }); const tmp = TASKS_FILE + '.tmp'; fs.writeFileSync(tmp, JSON.stringify(list, null, 1)); fs.renameSync(tmp, TASKS_FILE); }
+function cleanTask(t) {
+  const kind = t.kind === 'hire' ? 'hire' : 'task';
+  const id = x => (BY_ID.has(String(x)) ? String(x) : '');
+  const o = { id: crypto.randomBytes(6).toString('hex'), kind, status: kind === 'hire' ? 'draft' : 'handed-off', at: new Date().toISOString(), ask: clip(t.ask, 500), agent: id(t.agent), body: id(t.body), what: clip(t.what, 800), approver: clip(t.approver, 80), role: clip(t.role, 20), go: !!t.go };
+  if (kind === 'task') { o.done = clip(t.done, 300); o.src = (Array.isArray(t.src) ? t.src : []).slice(0, 6).map(x => clip(x, 80)); } else { o.seat = clip(t.seat, 80); o.tools = clip(t.tools, 200); o.first = (Array.isArray(t.first) ? t.first : []).slice(0, 3).map(x => clip(x, 120)); }
+  return o;
+}
+
 // Rule-based ask: first matching rule wins. Scope narrows to rules whose body is the scoped body or its descendants.
 function route(q, scope) {
   const bodies = REG.bodies, byId = new Map(bodies.map(b => [b.id, b]));
@@ -106,6 +121,18 @@ http.createServer(async (req, res) => {
     if (req.method !== 'POST') return json(res, 405, { error: 'POST a JSON body {q, scope}' });
     try { const b = JSON.parse(await readBody(req) || '{}'); const q = String(b.q || '').slice(0, 500); if (!q.trim()) return json(res, 400, { error: 'q is empty' }); return json(res, 200, route(q, b.scope ? String(b.scope) : null)); }
     catch (e) { return json(res, 400, { error: 'bad request' }); }
+  }
+  if (p === '/api/tasks') {
+    if (req.method === 'GET') return json(res, 200, { tasks: readTasks().slice(-500) });
+    if (req.method !== 'POST') return json(res, 405, { error: 'GET or POST' });
+    try {
+      const b = JSON.parse(await readBody(req, 65536) || '{}');
+      const items = (Array.isArray(b.items) ? b.items : []).slice(0, 12).map(cleanTask).filter(t => t.what || t.seat);
+      if (!items.length) return json(res, 400, { error: 'nothing to save' });
+      const all = readTasks().concat(items).slice(-2000);
+      writeTasks(all);
+      return json(res, 200, { saved: items.length, items });
+    } catch (e) { return json(res, 400, { error: 'bad request' }); }
   }
   if (p.startsWith('/api/')) return json(res, 404, { error: 'not found' });
 

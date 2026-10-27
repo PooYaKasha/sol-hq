@@ -23,7 +23,7 @@ try {
 const skip = e => e.name === 'node_modules' || e.isSymbolicLink() || (e.isDirectory() && e.name.startsWith('.'));
 const walk = d => fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true }).flatMap(e => skip(e) ? [] : e.isDirectory() ? walk(path.join(d, e.name)) : e.isFile() ? [path.join(d, e.name)] : []) : [];
 for (const f of walk(path.join(root, 'data'))) {
-  if (!f.endsWith('.json')) continue;
+  if (!f.endsWith('.json') || f.includes(`${path.sep}state${path.sep}`)) continue; // data/state holds hand-offs the server saves; not a data set
   try {
     const v = JSON.parse(fs.readFileSync(f, 'utf8'));
     if (!v.set) fail(`${path.relative(root, f)}: missing "set"`);

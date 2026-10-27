@@ -20,6 +20,7 @@
     <nav id="tabs" class="tabs" role="tablist" aria-label="Views"></nav>
     <span class="spacer"></span>
     <label class="ctl">Viewing as <select id="role" aria-label="Viewing as"></select></label>
+    <button id="p-open" class="ghost" type="button" aria-pressed="false" title="Show or hide the Thread panel">Thread</button>
     <button id="s-open" class="ghost" type="button" title="Search (Cmd-K or /)">Search <kbd>/</kbd></button>
   </header>
 
@@ -28,13 +29,28 @@
     <span class="mark" aria-hidden="true"></span>
     <span id="scope" class="scope" hidden><b></b><button type="button" aria-label="Ask everywhere instead">✕</button></span>
     <input id="q" type="text" name="q" placeholder="Ask Sol anything, or find a deal, agent, project, file or folder" aria-label="Ask Sol">
-    <button class="cta" type="submit">Ask Sol ↵</button>
+    <button class="cta enter" type="submit" aria-label="Ask Sol" title="Ask Sol · Enter">↵</button>
   </form>
   </div>
 
   <div class="main">
     <main id="view" class="view" aria-live="polite"></main>
-    <aside id="panel" class="panel" hidden><div id="panel-body"></div></aside>
+    <div id="hdiv" role="separator" aria-orientation="vertical" aria-label="Resize the map and the panel. Arrow keys move it, double-click resets" tabindex="0" aria-valuemin="300" aria-valuemax="720" aria-valuenow="380" hidden><i></i></div>
+    <aside id="panel" class="panel" data-snap="peek" data-pm="thread" hidden aria-label="Thread and info">
+      <button type="button" class="grab" id="grab" aria-label="Panel height. Tap or drag to change it" aria-expanded="false"><i></i></button>
+      <div class="rp-head">
+        <div class="rp-sw" role="tablist" aria-label="Panel view">
+          <button type="button" role="tab" id="pm-thread" aria-selected="true" aria-controls="p-thread">Thread</button>
+          <button type="button" role="tab" id="pm-info" aria-selected="false" aria-controls="p-info" tabindex="-1">Info</button>
+        </div>
+        <span class="rp-ttl" id="rp-ttl"></span>
+        <button type="button" class="ghost small" id="panel-x" aria-label="Close the panel">✕</button>
+      </div>
+      <div class="rp-body" id="rp-body">
+        <section id="p-thread" role="tabpanel" aria-labelledby="pm-thread"><div class="kicker">Thread<span id="thr-scope"></span></div><div id="log" class="log" aria-live="polite"></div></section>
+        <section id="p-info" role="tabpanel" aria-labelledby="pm-info" hidden><div id="panel-body"></div></section>
+      </div>
+    </aside>
   </div>
 
   <footer class="foot">

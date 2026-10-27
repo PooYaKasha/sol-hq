@@ -7,3 +7,4 @@ node_modules/
 # Real company data lives only on the server. Samples (fictional) are committed; snapshots never are.
 data/snapshots/*
 !data/snapshots/README.md
+data/state/
