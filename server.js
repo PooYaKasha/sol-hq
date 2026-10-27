@@ -4,6 +4,7 @@
 // - /api/registry   every body that orbits Sol, validated at startup
 // - /api/data       the data sets and their freshness; /api/data/<set> one set
 // - /api/ask        rule-based routing of a question (the model comes in v1.5)
+// - /api/tnl        read-only search of TNL.ai's nonprofit list (lib/tnl.js); off until its two Secrets are set
 // - /api/tasks      GET the tasks and hire drafts handed off from a Sol plan; POST to hand off more (data/state/tasks.json, never in git)
 // - /config.js      public settings from environment variables; no key ever lives in the repo
 // - /api/store, /api/assets, /api/ui-data, /ui-data.js   the page's shared store, uploads and data file (lib/ui.js)
@@ -15,6 +16,7 @@ const path = require('path');
 const crypto = require('crypto');
 const registry = require('./lib/registry');
 const data = require('./lib/data');
+const tnl = require('./lib/tnl');
 
 const PORT = Number(process.env.PORT) || 3000;
 const ROOT = path.join(__dirname, 'public');
@@ -45,6 +47,7 @@ const CONFIG = {
   supabaseUrl: process.env.SUPABASE_URL || '',
   supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
   askModel: process.env.ANTHROPIC_API_KEY ? 'model' : 'rules',
+  tnl: tnl.enabled(),
   env: PROD ? 'production' : 'dev',
 };
 
@@ -129,6 +132,11 @@ http.createServer(async (req, res) => {
     if (req.method !== 'POST') return json(res, 405, { error: 'POST a JSON body {q, scope}' });
     try { const b = JSON.parse(await readBody(req) || '{}'); const q = String(b.q || '').slice(0, 500); if (!q.trim()) return json(res, 400, { error: 'q is empty' }); return json(res, 200, route(q, b.scope ? String(b.scope) : null)); }
     catch (e) { return json(res, 400, { error: 'bad request' }); }
+  }
+  if (p === '/api/tnl') {
+    if (req.method !== 'GET') return json(res, 405, { error: 'GET /api/tnl?q=...' });
+    try { return json(res, 200, await tnl.search(url.searchParams.get('q'))); }
+    catch (e) { console.error('tnl:', e.message); return json(res, 502, { error: 'TNL.ai did not answer' }); }
   }
   if (p === '/api/tasks') {
     if (req.method === 'GET') return json(res, 200, { tasks: readTasks().slice(-500) });
