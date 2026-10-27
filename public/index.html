@@ -3294,7 +3294,7 @@ let metSub='sg';
 
 /* ---------- Money this week: the home screen (audit default q01). Every figure is a dated snapshot with its source; nothing here is a sample. ---------- */
 const MONEY=__D('MONEY',{"runway":{"v":"—","sub":"—","src":"—"},"bridge":{"v":"—","sub":"—","src":"—"},"rev":{"v":"—","u":"—","sub":"—","src":"—"},"match":{"v":"—","u":"—","sub":"—","src":"—"},"ar":[],"arNote":"—","bill":{"t":"—","s":"—"},"refund":{"t":"—","s":"—"},"billAsk":"—","read":[],"sponsors":[]});
-function goLinkHtml(){ const n=GO_LIST.filter(x=>!(ST.golist[x[1]]||{}).s).length; return `<p style="margin:0 0 8px">${n} calls wait on you. Every decision lives in one place.</p><button type="button" class="btn" data-gogo>Open the Go list</button>`; }
+function goLinkHtml(){ const n=GO_LIST.filter(x=>!(ST.golist[x[1]]||{}).s).length; return `<p style="margin:0 0 8px">${n} call${n===1?' waits':'s wait'} on you. Every decision lives in one place.</p><button type="button" class="btn" data-gogo>Open the Go list</button>`; }
 function wireGoLink(el){ const b=el&&el.querySelector('[data-gogo]'); if(b) b.onclick=()=>{ if(typeof closeSolDlg==='function') closeSolDlg(); SECS.set='go'; setTab('set'); }; }
 function renderExec(){
   const fo=role==='founder', ld=fo||role==='lead', box=$('#exec'); if(!box) return;
@@ -3304,7 +3304,7 @@ function renderExec(){
   const openGo=GO_LIST.filter(x=>!(ST.golist[x[1]]||{}).s), goMoney=openGo.filter(x=>x[0]==='Money');
   box.innerHTML=`<div class="inv-hero"><div><h2 data-src="exec">Money this week</h2><p>Cash, what we are owed, and match money toward Nov 20. Every number is a dated snapshot with its source; open a star for the detail.</p></div><span class="asof">as of Oct 26–27</span></div>
     <div class="tiles">${tile('Cash runs out',MONEY.runway,!fo,true)}${tile('Bridge to Jan 31',MONEY.bridge,!fo)}${tile('Revenue run rate',MONEY.rev,!fo)}${tile('Match money for Nov 20',MONEY.match,false,true)}</div>
-    <div class="card golink"><div><div class="eyebrow">Decisions</div><b>${openGo.length} calls wait on you in the Go list</b>${goMoney.length?`, ${goMoney.length} of them about money`:''}. It is the only decision queue.</div><button type="button" class="btn pri" data-gogo>Open the Go list</button></div>
+    <div class="card golink"><div><div class="eyebrow">Decisions</div><b>${openGo.length} call${openGo.length===1?' waits':'s wait'} on you in the Go list</b>${goMoney.length?`, ${goMoney.length} of them about money`:''}. It is the only decision queue.</div><button type="button" class="btn pri" data-gogo>Open the Go list</button></div>
     ${notesCard()}<div class="card"><div class="eyebrow">Owed to us, and what we owe · Stripe and Penny, Oct 26</div><h3>Five money items, each with its next action</h3>
       ${fo?`<div class="tw"><table class="deals ix"><thead><tr><th>Who</th><th>Amount</th><th>Where it stands</th><th>Next action</th><th>Owner</th></tr></thead><tbody>${MONEY.ar.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="d">${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td><small>${esc(r[4])}</small></td></tr>`).join('')}</tbody></table></div><div class="note">${esc(MONEY.arNote||'')} Stripe is the record; nothing here changes it.</div>`:`<div class="lock">${ICON.lock}Amounts owed and owing show to founders only.</div>`}</div>
     <div class="card"><div class="eyebrow">Matcher pipeline · sponsors × the nonprofits waiting on them</div><h3>${blocked.length} nonprofits want to commit and wait on match money</h3>

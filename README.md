@@ -26,6 +26,8 @@ The build cuts the company data out of the page:
 
 Without the data file the page still works: every panel shows its empty state and a notice links to `/admin`. Founders load the file at **`/admin`** (Sol attaches `sol-hq-ui-data.js` to each port in the project Library), or place it at `data/snapshots/ui-data.js` on the server. The server checks the file before saving it and never runs it.
 
+The data file can also carry saved answers (`npm run build-ui -- <prototype> <seed.json>`, shape `{collection: {id: document}}`), such as the founders' Go list decisions. When the file is loaded at `/admin`, the page writes each one into the store unless Sol HQ already has an answer of its own for it.
+
 The prototype uses the Claude page runtime for its shared store, file uploads and downloads. `public/shim.js` stands in for it in the app:
 
 | Prototype (artifact) | App |

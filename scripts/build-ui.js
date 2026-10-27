@@ -1,6 +1,6 @@
 // Turns a Sol HQ prototype (the Claude artifact's source file) into the app's page and its data file.
 //
-//   node scripts/build-ui.js <path to sol-hq-prototype.html>
+//   node scripts/build-ui.js <path to sol-hq-prototype.html> [seed.json]
 //
 // Writes:
 //   public/index.html             the page, committed. Company data is cut out and replaced by __D('NAME', <empty shape>).
@@ -9,6 +9,8 @@
 //
 // What counts as company data: the constants in DATA below, and any HTML wrapped in <!--@data:key--> … <!--@/data--> in the prototype.
 // Everything else in the prototype is design and copy, and is committed as is, so the app matches the prototype screen for screen.
+// seed.json, optional: {collection: {id: document}} saved answers (the Go list, say) that /admin writes into the store when the file
+// is loaded, for documents the store does not have yet. It travels in the data file, so it never reaches git either.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +19,9 @@ const vm = require('vm');
 const DATA = ['TRK_SEED', 'DEALS', 'AMT', 'CSA', 'CUSTOMERS', 'CASES', 'PB', 'PBSUM', 'MONEY', 'OPS', 'OPSX', 'INBOX', 'ART', 'GO_LIST', 'JOUR_ORGS', 'SALES_NOTES'];
 const root = path.join(__dirname, '..');
 const src = process.argv[2];
-if (!src) { console.error('usage: node scripts/build-ui.js <sol-hq-prototype.html>'); process.exit(2); }
+if (!src) { console.error('usage: node scripts/build-ui.js <sol-hq-prototype.html> [seed.json]'); process.exit(2); }
+const seed = process.argv[3] ? JSON.parse(fs.readFileSync(process.argv[3], 'utf8')) : {};
+for (const [c, docs] of Object.entries(seed)) if (!/^[a-z][a-z0-9_-]{0,31}$/.test(c) || !docs || typeof docs !== 'object' || Array.isArray(docs)) throw new Error(`seed: bad collection ${c}`);
 let page = fs.readFileSync(src, 'utf8');
 
 // End of the expression that starts at i: brackets balanced, outside strings, template literals and comments.
@@ -69,9 +73,9 @@ const frag = {};
 page = page.replace(/<!--@data:([a-z0-9-]+)-->([\s\S]*?)<!--@\/data-->/g, (m, key, html) => { frag[key] = html; return `<div data-uifrag="${key}"></div>`; });
 
 // 3. the data file, checked by running it
-const meta = { built: new Date().toISOString(), source: path.basename(src), constants: DATA.length, fragments: Object.keys(frag).length };
+const meta = { built: new Date().toISOString(), source: path.basename(src), constants: DATA.length, fragments: Object.keys(frag).length, seed: Object.values(seed).reduce((n, d) => n + Object.keys(d).length, 0) };
 const dataJs = `// Sol HQ data file. Company data: never commit. Load it in Admin Settings, or place it at data/snapshots/ui-data.js.\n`
-  + `window.SOL_DATA={meta:${JSON.stringify(meta)},\nfrag:${JSON.stringify(frag)},\nv:{\n${DATA.map(n => `${n}:${cut[n]}`).join(',\n')}\n}};\n`;
+  + `window.SOL_DATA={meta:${JSON.stringify(meta)},\nfrag:${JSON.stringify(frag)},\nseed:${JSON.stringify(seed)},\nv:{\n${DATA.map(n => `${n}:${cut[n]}`).join(',\n')}\n}};\n`;
 const box = { window: {} };
 vm.runInNewContext(dataJs, box, { timeout: 2000 });
 const values = box.window.SOL_DATA.v;
@@ -106,4 +110,4 @@ ${page.trim()}
 fs.writeFileSync(path.join(root, 'public', 'index.html'), html);
 fs.mkdirSync(path.join(root, 'data', 'snapshots'), { recursive: true });
 fs.writeFileSync(path.join(root, 'data', 'snapshots', 'ui-data.js'), dataJs);
-console.log(`public/index.html ${(html.length / 1024).toFixed(0)} KB · data/snapshots/ui-data.js ${(dataJs.length / 1024).toFixed(0)} KB · ${DATA.length} constants, ${Object.keys(frag).length} fragment(s) cut out`);
+console.log(`public/index.html ${(html.length / 1024).toFixed(0)} KB · data/snapshots/ui-data.js ${(dataJs.length / 1024).toFixed(0)} KB · ${DATA.length} constants, ${Object.keys(frag).length} fragment(s) cut out, ${meta.seed} seed document(s)`);
