@@ -36,7 +36,14 @@ if (problems.length) {
 const REG_JSON = JSON.stringify(registry.publish(REG));
 const ui = require('./lib/ui');
 // The page is the prototype itself (scripts/build-ui.js); its two inline scripts are allowed by hash, nothing else inline runs.
-const INLINE = ui.inlineHashes(fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8'));
+// Hashes are worked out again whenever index.html changes, so a Pull of a rebuilt page needs no restart.
+const PAGE = path.join(__dirname, 'public', 'index.html');
+let inline = { at: -1, hashes: [] };
+function inlineHashes() {
+  try { const at = fs.statSync(PAGE).mtimeMs; if (at !== inline.at) inline = { at, hashes: ui.inlineHashes(fs.readFileSync(PAGE, 'utf8')) }; } catch (e) { /* keep the last good set */ }
+  return inline.hashes;
+}
+inlineHashes();
 console.log(`Page data file: ${ui.uiStatus().loaded ? 'loaded' : 'not loaded yet, open /admin to load it'}`);
 
 const CONFIG = {
@@ -56,7 +63,7 @@ const TYPES = {
 const SECURITY = {
   'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY',
   'X-Robots-Tag': 'noindex, nofollow',
-  'Content-Security-Policy': `default-src 'self'; script-src 'self' ${INLINE.join(' ')}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
+  get 'Content-Security-Policy'() { return `default-src 'self'; script-src 'self' ${inlineHashes().join(' ')}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`; },
 };
 
 const same = (a, b) => { const x = Buffer.from(a), y = Buffer.from(b); return x.length === y.length && crypto.timingSafeEqual(x, y); };
