@@ -2386,6 +2386,25 @@ function swapThread(id){ const k=id||'all'; if(k===thrKey) return;
 var PM='thread';
 function setPM(m){ PM=m; $('.hq').dataset.pm=m; ['thread','info'].forEach(k=>{ const b=$('#pm-'+k); b.setAttribute('aria-selected',String(k===m)); b.tabIndex=k===m?0:-1; }); paintPanelTitle(); }
 function paintPanelTitle(){ const p=scopeP&&byId[scopeP]; const t=$('#rp-ttl'); if(t) t.textContent=p?p.name:'Sol · whole company'; const x=$('#thr-scope'); if(x) x.textContent=p?' · '+p.short:' · whole company'; }
+// A question that names a person or agent ("Dickson's top 3 tasks") answers from their open work: Ops Board rows, then customer next steps.
+function personHit(text){
+  const names=new Map(); P.forEach(q=>{ q.agents.forEach(a=>names.set(a.n,q.id)); if(q.lead&&!names.has(q.lead)) names.set(q.lead,q.id); });
+  ['Pooya','Dickson','ib'].forEach(n=>{ if(!names.has(n)) names.set(n,(P.find(q=>q.lead===n)||P[0]).id); });
+  const said=/\bibraheem\b/i.test(text)?'ib':[...names.keys()].find(n=>new RegExp(`\\b${n}(’s|'s)?\\b`,'i').test(text));
+  if(!said) return null;
+  const mine=w=>new RegExp(`(^|[ →·])${said}($|[ →·])`).test(w||'');
+  const rank={'Needs human':0,'Blocked':1,'In progress':2,'Not started':3};
+  const ops=OPS.filter(r=>r.id&&r.st!=='Done'&&mine(r.who)&&canSee(r)).sort((a,b)=>(rank[a.st]??4)-(rank[b.st]??4));
+  const cust=(role==='founder'||role==='lead')?CUSTOMERS.filter(c=>c.who===said&&c.next):[];
+  const items=[...ops.filter(r=>r.st==='Needs human').map(r=>({t:`${r.t} (${r.id}, waiting on ${(r.who.split('→')[1]||said).trim()})`,p:r.p,src:'ops'})),
+    ...cust.map(c=>({t:`${c.o}: ${c.next}`,p:(P.find(q=>q.id==='cs')||{}).id||names.get(said),src:'hubspot'})),
+    ...ops.filter(r=>r.st!=='Needs human').map(r=>({t:`${r.t} (${r.id}, ${r.st.toLowerCase()})`,p:r.p,src:'ops'}))];
+  const home=names.get(said), top=items.slice(0,3);
+  if(!top.length) return {p:home, ag:said, wf:'Their open work', next:`Nothing open for ${said} on the Ops Board or in customer next steps right now.`, c:['ops']};
+  const stars=[...new Set(top.map(i=>i.p).filter(id=>id&&id!==home&&byId[id]))];
+  return {p:home, ag:said, wf:'Their open work', next:`${said}’s top ${top.length} right now: ${top.map((i,n)=>`${n+1}) ${i.t}`).join(' ')}${items.length>3?` Plus ${items.length-3} more open.`:''}`,
+    x:stars.map(id=>[id,'holds one of these']), c:[...new Set(top.map(i=>i.src))]};
+}
 function ask(text){
   text=text.trim(); if(!text) return; logAsk(text,'ask');
   say(esc(text),'me');
@@ -2394,6 +2413,7 @@ function ask(text){
     if(inP.length) hits=inP;
     else { const ag=(sp.agents.find(a=>!a.human)||sp.agents[0]).n;
       hits=[{p:sp.id, ag, wf:sp.flows[0]||'General request', next:`Sol keeps this inside ${sp.name}: ${ag} picks it up and drafts the next step for ${sp.appr.split(' · ')[0]} to approve.`}]; } }
+  { const ph=personHit(text); if(ph && (!hits.length || /task|to.?do|working on|doing|plate|priorit|top \d|focus|waiting|owe/i.test(text))) { hits=[ph]; scoped=false; } }
   if(!hits.length){
     const node=say(`I’m not sure where that goes yet. Which is closest?${chips(['Money: runway, invoices','Revenue: deals and matchers','A nonprofit getting started','Product or a bug','Marketing or the podcast'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
     wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); return;
