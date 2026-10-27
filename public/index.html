@@ -8,6 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="/assets/app-icon.svg">
 <link rel="apple-touch-icon" href="/assets/app-icon.svg">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script src="/config.js"></script>
 <script src="/shim.js"></script>
 <script src="/ui-data.js"></script>
 </head>
@@ -348,9 +349,10 @@ a.tool:hover{border-color:var(--line-2)}
 .ans details{margin-top:8px;font-size:12px;color:var(--ink-3)}.ans details summary{cursor:pointer}
 .ans details ol{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
 .ans .af{margin:8px 0 2px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.45;color:var(--ink)}
-.af-s{font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.af-s{font-size:11.5px;color:var(--ink-3);overflow-wrap:anywhere}
 .ans details.more{margin-top:10px;color:var(--ink-2)}.ans details.more>summary{font-size:12.5px;font-weight:600;color:var(--ink-2)}.ans details.more ol.tks{padding-left:0}
 .ans.old{opacity:.82;border-color:var(--line-2);background:none}.msg.me.old{opacity:.75}
+.ans .tnl,.msg .tnl{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.msg .tnl h4{margin:4px 0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600}.msg .tnl .af{margin:6px 0 2px;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:13px}
 .chat-sep{align-self:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:6px 0}
 #links path{fill:none;stroke:#6FE3C1;stroke-width:2;stroke-dasharray:4 6;opacity:.9;animation:dash 1.4s linear infinite}
 #links .apv text{font-size:10px;font-weight:700;fill:#fff;stroke:none}
@@ -2400,7 +2402,7 @@ function paintPanelTitle(){ const p=scopeP&&byId[scopeP]; const t=$('#rp-ttl'); 
 /* Ask Sol answers first: every fact in today's snapshot is searchable, each with its star and its source. Routing to an owner comes after the answer. */
 const SRCX={pb:{n:'Playbook · Logan’s week of Oct 26 report',live:1},money:{n:'Money this week · Penny’s runway v2.9 and Stripe',live:1},golist:{n:'Go list · decisions on record',live:1}};
 function srcCite(k){ if(SYS[k]) return {...SYS[k],sys:1}; if(SRCX[k]) return SRCX[k]; if(k.startsWith('art:')){ const a=ART.find(x=>x.n===k.slice(4)); return a&&artSee(a)?{n:a.n,u:a.u,f:a.f,live:1,who:a.who}:null; } return null; }
-const ASK_STOP=new Set('a an the and or of to in on for with is are was were be been what whats who whom which how when where why do does did our we us you your i me my mine it its this that these those there their them they top give show tell list right now today week please can could should would will any all about from by at as than then just get got have has need needs much many working work things items status update latest open'.split(' '));
+const ASK_STOP=new Set('a an the and or of to in on for with is are was were be been what whats who whom which how when where why do does did our we us you your i me my mine it its this that these those there their them they top give show tell list right now today week please can could should would will any all about from by at as than then just get got have has need needs much many working work things items status update latest open find search look nonprofit nonprofits charity charities organization organizations org orgs'.split(' '));
 const askToks=s=>[...new Set((s.toLowerCase().match(/[a-z0-9$%][a-z0-9$%.&-]*/g)||[]).map(w=>w.replace(/[.'’-]+$/,'').replace(/['’]s$/,'')).filter(w=>w.length>1&&!ASK_STOP.has(w)))];
 const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const askTopN=(text,d)=>{ const m=text.match(/\btop\s*(\d{1,2})\b|\b(\d{1,2})\s+(?:things|priorit|tasks|items|deals|facts)/i); return Math.min(10,Math.max(1,m?+(m[1]||m[2]):d)); };
@@ -2418,7 +2420,7 @@ function galaxyFacts(){ const F=[], add=(t,p,src,tags)=>{ if(t&&byId[p]) F.push(
   ART.filter(artSee).forEach(a=>add(`${a.n} (${a.k||'file'}, ${a.who||'team'})`,a.p,'art:'+a.n,'file report doc link'));
   return F; }
 function searchAnswer(text){ const tk=askToks(text); if(!tk.length) return null;
-  const sc=GF().map(f=>{ let s=0; tk.forEach(w=>{ const st=w.length>5?w.slice(0,w.length-2):w; if(new RegExp('(^|[^a-z0-9])'+reEsc(st)).test(f.h)) s+=w.length>=6?2:1; }); return {...f,s}; }).filter(f=>f.s>0).sort((a,b)=>b.s-a.s);
+  const need=Math.ceil(tk.length/2); const sc=GF().map(f=>{ let s=0, m=0; tk.forEach(w=>{ const st=w.length>5?w.slice(0,w.length-2):w; if(new RegExp('(^|[^a-z0-9])'+reEsc(st)+(w.length<=3?'($|[^a-z0-9])':'')).test(f.h)){ s+=w.length>=6?2:1; m++; } }); return {...f,s:m>=need?s:0}; }).filter(f=>f.s>0).sort((a,b)=>b.s-a.s);
   if(!sc.length) return null; const best=sc[0].s, keep=sc.filter(f=>f.s>=Math.max(1,best-1)), n=askTopN(text,5), items=keep.slice(0,n);
   const stars=[...new Set(items.map(i=>i.p))];
   return {lead:`Here’s what today’s snapshot holds on that: ${items.length} fact${items.length>1?'s':''}${stars.length>1?` across ${stars.length} stars`:` from ${byId[stars[0]].name}`}${keep.length>n?` (${keep.length-n} more match)`:''}.`,items,home:items[0].p}; }
@@ -2446,6 +2448,17 @@ function moneyAnswer(text){ if(!/runway|burn|cash|bridge|break.?even|zero.?cash|
   if(role!=='founder') return {lead:'Cash and runway show to founders only. Ask Pooya, or Penny drafts a summary for him to share.',items:[],home:'fin'};
   const m=MONEY, it=[['Runway',m.runway],['Bridge',m.bridge],['Revenue',m.rev],['Match money',m.match]].filter(([,x])=>x).map(([l,x])=>({t:`${l}: ${x.v}${x.u?' '+x.u:''}. ${x.sub} (${x.src})`,p:'fin',src:'money'}));
   return {lead:`Cash runs out ${m.runway.v.replace('≈','around')}. ${m.bridge.v.replace('≈','About')} reaches Jan 31.`,items:it,home:'fin'}; }
+// TNL.ai search (app only): the server asks TheNonprofitLab's public list of the largest US nonprofits, read-only. In this prototype it stays hidden.
+const TNL_RE=/\b(nonprofits?|charit(y|ies)|organi[sz]ations?|orgs?|tnl(\.ai)?|foundations?|funders?|ein)\b/i;
+function tnlBlock(text,node,force,done){ if(!(window.SOL_CONFIG&&SOL_CONFIG.tnl)||!(force||TNL_RE.test(text))) return;
+  const box=document.createElement('div'); box.className='tnl'; box.innerHTML='<h4>From TNL.ai</h4><div class="note">Searching TNL.ai’s nonprofit list…</div>';
+  const at=node.querySelector('.ans .rt'); if(at) at.insertAdjacentElement('beforebegin',box); else node.querySelector('.tx').appendChild(box);
+  fetch('/api/tnl?q='+encodeURIComponent(text)).then(r=>r.json()).then(d=>{
+    if(!d.enabled){ box.remove(); return; }
+    if(!d.rows||!d.rows.length){ box.innerHTML=`<h4>From TNL.ai</h4><div class="note">${esc(d.note||'No match in TNL.ai’s list of the largest US nonprofits. Smaller organizations may be missing.')}</div>`; return; }
+    box.innerHTML=`<h4>From TNL.ai · ${d.total>d.rows.length?`${d.rows.length} of ${Number(d.total).toLocaleString()}`:d.rows.length} match${d.rows.length>1?'es':''}${d.loose?' (any of the words)':''}</h4><ol class="af">${d.rows.map(o=>`<li><span>${o.url?`<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.name)} ↗</a>`:`<b>${esc(o.name)}</b>`}</span> <small class="af-s">${esc([o.city&&o.state?o.city+', '+o.state:o.state,o.cause,'EIN '+o.ein].filter(Boolean).join(' · '))}</small></li>`).join('')}</ol><div class="note">Source: TNL.ai, read-only (IRS Business Master File). Being listed is not an endorsement.</div>`;
+    if(done) done(d.rows);
+  }).catch(()=>{ box.innerHTML='<h4>From TNL.ai</h4><div class="note">TNL.ai did not answer. Try again in a minute.</div>'; }); }
 function ask(text){
   text=text.trim(); if(!text) return;
   say(esc(text),'me');
@@ -2453,9 +2466,10 @@ function ask(text){
   const pa=personAnswer(text), personQ=pa&&(!hits.length||/task|to.?do|working on|doing|plate|priorit|top \d|focus|waiting|owe|should/i.test(text));
   let A=(personQ&&pa)||moneyAnswer(text)||searchAnswer(text);
   if(A&&sp&&!personQ){ const inP=A.items.filter(i=>i.p===sp.id); if(inP.length) A={...A,items:inP,home:sp.id,lead:`In ${sp.name}: ${inP.length} fact${inP.length>1?'s':''} on that.`}; }
+  if(!A&&!hits.length&&TNL_RE.test(text)&&window.SOL_CONFIG&&SOL_CONFIG.tnl){ setTrace(null); const node=say('Nothing in Sol HQ’s own snapshot matches, so here is TNL.ai’s list.'); setPM('thread'); tnlBlock(text,node,true,rows=>logAsk(text,'ask',{a:['From TNL.ai:',...rows.map((o,n)=>`${n+1}. ${o.name} (${[o.city,o.state].filter(Boolean).join(', ')}, EIN ${o.ein})`)].join('\n'),s:['TNL.ai'],p:''})); return; }
   if(!A&&!hits.length){
     const node=say(`I couldn’t find that in today’s snapshot, and no agent’s seat clearly owns it. Try naming a person, an organization or a topic, or pick one:${chips(['What is blocked?','Check runway','What are my top 5 priorities?','Where is BGCA?','Charity Navigator'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
-    setTrace(null); wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); logAsk(text,'ask',{a:'Not found in today’s snapshot.',p:sp?sp.id:''}); return;
+    setTrace(null); wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); tnlBlock(text,node,true); logAsk(text,'ask',{a:'Not found in today’s snapshot.',p:sp?sp.id:''}); return;
   }
   const h0=hits.find(h=>sp?h.p===sp.id:A?h.p===A.home:true)||hits[0];
   let r;
@@ -2488,6 +2502,7 @@ function ask(text){
     <details class="more"><summary>Ask agents to dig deeper</summary></details>
     <details><summary>How Sol answers</summary><ol>${SOL_RULES.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></details>
     </div><div class="note" style="margin-top:6px">Answered from today’s snapshot (data file${built}). The live build reads each system directly.</div>`);
+  tnlBlock(text,node,!items.length);
   { const rb=$('#rp-body'); rb.scrollTop=Math.max(0,node.offsetTop-6); }
   node.querySelector('details.more').appendChild(planCard(text,{...r,next:r.next||`Answer “${text}” in more depth and check the facts above`},p,appr,xs,cites));
   setPM('thread');
