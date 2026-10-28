@@ -38,7 +38,7 @@ The prototype uses the Claude page runtime for its shared store, file uploads an
 
 Store and uploads live in `data/state/` on the server and never go in git. They persist in the Replit workspace. **Before publishing**, they need a home that survives a redeploy (Supabase, the next step with ib), because a published Replit app does not keep files it writes.
 
-Each inline script in the page is allowed by its hash in the Content Security Policy, worked out when the server starts, so a rebuilt page needs a restart (Replit's Run does that).
+Each inline script in the page is allowed by its hash in the Content Security Policy, worked out again whenever `public/index.html` changes, so a Pull of a rebuilt page needs no restart.
 
 ## The registry and data API (not used by the page yet)
 
