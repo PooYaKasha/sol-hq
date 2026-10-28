@@ -95,17 +95,26 @@
     document.body.appendChild(n);
   });
 
-  // App only: MVP mode (SOL_MVP=1) hides the investor view and the customer journey (proposed cut and park on the Oct 28
-  // keep-or-cut list), so the menu shows Galaxy, Money this week, Playbook (with Ask Sol and the Go list), the Stars and Admin.
-  // Nothing is removed from the page; unset SOL_MVP to bring them back.
+  // App only: MVP mode (SOL_MVP=1) hides the customer journey, which Pooya parked on the Oct 28 keep-or-cut list.
+  // Nothing is removed from the page; unset SOL_MVP to bring it back.
   if (window.SOL_CONFIG && window.SOL_CONFIG.mvp) {
     var hide = document.createElement('style');
-    hide.textContent = '#t-jour,#sg-inv,#t-inv{display:none!important}';
+    hide.textContent = '#t-jour{display:none!important}';
     document.head.appendChild(hide);
     document.addEventListener('DOMContentLoaded', function () {
-      if (/^#(investor|journey)$/.test(location.hash)) { var g = document.getElementById('t-hq'); if (g) g.click(); }
+      if (location.hash === '#journey') { var g = document.getElementById('t-hq'); if (g) g.click(); }
     });
   }
+
+  // App only: the Playbook links to Soph's SOP library, the one copy of the SOPs (Pooya + Dickson, Oct 28: "Link from Playbook").
+  var SOP_URL = 'https://claude.ai/artifact/1zNwKNRKZK7nfVQVobk9T3';
+  document.addEventListener('DOMContentLoaded', function () {
+    var hero = document.querySelector('#tab-pb .inv-hero');
+    if (!hero || document.getElementById('sop-link')) return;
+    var c = document.createElement('div'); c.className = 'card'; c.id = 'sop-link';
+    c.innerHTML = '<div class="eyebrow">How we work · SOP library</div><p style="margin:4px 0 8px">SOP-01 to SOP-10: search them, read one page per SOP, see what happens when, and suggest an edit. Soph keeps them; this is a link, not a copy.</p><a class="btn" target="_blank" rel="noopener" href="' + SOP_URL + '">Open the SOP library ↗</a>';
+    hero.insertAdjacentElement('afterend', c);
+  });
 
   var caps = { db: db, assets: assets, downloads: downloads };
   window.claude = { use: function (name) { return Promise.resolve(caps[name] || null); } };
