@@ -91,6 +91,8 @@ Each set is one file: `{ set, as_of, source, sample, meta, rows }`. The page sho
 
 ### Access
 
+Set `SOL_MVP=1` (Replit Secrets) for the MVP menu: Galaxy, Money this week, Playbook (with Ask Sol and the Go list), the Stars and Admin. It hides the investor view and the customer journey; nothing is deleted, and removing the secret brings them back.
+
 One shared password today (HTTP Basic auth, `HQ_USER` and `HQ_PASSWORD`). Everyone with it sees everything; the "Viewing as" switch is a preview of what each role will see. Per-person logins and server-side role enforcement arrive with the Supabase step, before anyone outside the three founders gets access. Every response carries `noindex`, a strict CSP and `frame-ancestors 'none'`.
 
 ### Ask Sol

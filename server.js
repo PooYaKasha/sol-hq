@@ -49,6 +49,7 @@ const CONFIG = {
   askModel: process.env.ANTHROPIC_API_KEY ? 'model' : 'rules',
   tnl: tnl.enabled(),
   env: PROD ? 'production' : 'dev',
+  mvp: process.env.SOL_MVP === '1',
 };
 
 const TYPES = {

@@ -95,6 +95,18 @@
     document.body.appendChild(n);
   });
 
+  // App only: MVP mode (SOL_MVP=1) hides the investor view and the customer journey (proposed cut and park on the Oct 28
+  // keep-or-cut list), so the menu shows Galaxy, Money this week, Playbook (with Ask Sol and the Go list), the Stars and Admin.
+  // Nothing is removed from the page; unset SOL_MVP to bring them back.
+  if (window.SOL_CONFIG && window.SOL_CONFIG.mvp) {
+    var hide = document.createElement('style');
+    hide.textContent = '#t-jour,#sg-inv,#t-inv{display:none!important}';
+    document.head.appendChild(hide);
+    document.addEventListener('DOMContentLoaded', function () {
+      if (/^#(investor|journey)$/.test(location.hash)) { var g = document.getElementById('t-hq'); if (g) g.click(); }
+    });
+  }
+
   var caps = { db: db, assets: assets, downloads: downloads };
   window.claude = { use: function (name) { return Promise.resolve(caps[name] || null); } };
 })();
