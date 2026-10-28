@@ -98,6 +98,7 @@ ${title}
 <link rel="icon" type="image/svg+xml" href="/assets/app-icon.svg">
 <link rel="apple-touch-icon" href="/assets/app-icon.svg">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script src="/config.js"></script>
 <script src="/shim.js"></script>
 <script src="/ui-data.js"></script>
 </head>

@@ -61,6 +61,7 @@ data/
   state/              the page's store and uploads, never committed
 lib/registry.js       loads and validates the registry
 lib/data.js           serves a snapshot when one exists, else the sample
+lib/tnl.js            read-only TNL.ai nonprofit search for Ask Sol (/api/tnl)
 server.js             static files, password gate, /api/registry, /api/data, /api/ask, /config.js
 sync/                 the nightly read-only sync (adapters per source; keys live only in secrets)
 scripts/check.js      what `npm run check` runs; run it before every push
@@ -95,6 +96,8 @@ One shared password today (HTTP Basic auth, `HQ_USER` and `HQ_PASSWORD`). Everyo
 ### Ask Sol
 
 `/api/ask` routes a question to the body that owns it using `registry/routes.json`, and names the checks other bodies make and who approves. With `ANTHROPIC_API_KEY` set the model answers from the same registry and snapshots (v1.5).
+
+`/api/tnl?q=` searches TNL.ai's list of the largest US nonprofits, read-only, through TNL.ai's public `org_search` view. Ask Sol shows the results under "From TNL.ai" when a question is about nonprofits, or when nothing in Sol HQ's own snapshot matches. It stays off until `TNL_SUPABASE_URL` and `TNL_SUPABASE_ANON_KEY` are in Replit Secrets (copied from the TheNonprofitLab app's own Secrets; only an anon / publishable key is accepted).
 
 ## Rules
 

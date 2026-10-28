@@ -8,6 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="/assets/app-icon.svg">
 <link rel="apple-touch-icon" href="/assets/app-icon.svg">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script src="/config.js"></script>
 <script src="/shim.js"></script>
 <script src="/ui-data.js"></script>
 </head>
@@ -347,6 +348,12 @@ a.tool:hover{border-color:var(--line-2)}
 .ans .acts{margin-top:8px}
 .ans details{margin-top:8px;font-size:12px;color:var(--ink-3)}.ans details summary{cursor:pointer}
 .ans details ol{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.ans .af{margin:8px 0 2px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.af-s{font-size:11.5px;color:var(--ink-3);overflow-wrap:anywhere}
+.ans details.more{margin-top:10px;color:var(--ink-2)}.ans details.more>summary{font-size:12.5px;font-weight:600;color:var(--ink-2)}.ans details.more ol.tks{padding-left:0}
+.ans.old{opacity:.82;border-color:var(--line-2);background:none}.msg.me.old{opacity:.75}
+.ans .tnl,.msg .tnl{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.msg .tnl h4{margin:4px 0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600}.msg .tnl .af{margin:6px 0 2px;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:13px}
+.chat-sep{align-self:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:6px 0}
 #links path{fill:none;stroke:#6FE3C1;stroke-width:2;stroke-dasharray:4 6;opacity:.9;animation:dash 1.4s linear infinite}
 #links .apv text{font-size:10px;font-weight:700;fill:#fff;stroke:none}
 #links text{font-size:13px;fill:#cdf6f1;paint-order:stroke;stroke:#020611;stroke-width:4px;stroke-linejoin:round;text-anchor:middle}
@@ -360,6 +367,7 @@ a.tool:hover{border-color:var(--line-2)}
 .route .next{padding:9px 10px;font-size:13px;background:var(--bg-2)}
 .route .acts{display:flex;gap:6px;padding:8px 10px;flex-wrap:wrap;background:var(--bg-2);border-top:1px solid var(--line)}
 .btn{background:var(--panel-2);border:1px solid var(--line-2);border-radius:7px;padding:5px 10px;font-size:12.5px}
+.btn.sm{padding:2px 8px;font-size:11.5px}
 .btn.pri{background:var(--sun);border-color:var(--sun);color:var(--sun-ink);font-weight:600}
 .btn:hover{filter:brightness(1.12)}
 .toast{font-size:12px;color:var(--ink-2);padding:6px 10px;border-top:1px dashed var(--line-2);background:var(--bg-2)}
@@ -1035,7 +1043,7 @@ body.dragging .stage{pointer-events:none}
 <aside class="side" id="side" aria-label="Main menu">
   <div class="side-top"><span class="bmark" aria-hidden="true"></span><div class="side-brand"><b>Sol HQ</b><small>MatchNice, PBC</small></div><button type="button" class="side-col" id="side-col" aria-label="Collapse menu" aria-expanded="true" title="Collapse menu"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
   <nav class="side-nav" id="side-main" aria-label="Sol HQ views">
-    <div class="sg" id="sg-home"><button type="button" class="nv" id="t-exec" data-tab="exec" title="Money this week"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.5h6l3 3v8h-9zM9.5 2.5v3h3M5.5 8.5h5M5.5 11h5"/></svg><span class="lb">Money this week</span></button><button type="button" class="nv" id="t-hq" data-tab="hq" title="The galaxy: every star, agent and piece of work"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 9.6a1.6 1.6 0 1 0 0-3.2a1.6 1.6 0 1 0 0 3.2zM1.8 8c0-1.9 2.8-3.4 6.2-3.4s6.2 1.5 6.2 3.4-2.8 3.4-6.2 3.4S1.8 9.9 1.8 8z"/></svg><span class="lb">Galaxy</span></button><button type="button" class="nv grp" data-grp="brief" aria-expanded="false" title="Briefing: playbook and customer journey"><svg class="ic chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 6l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lb">Briefing</span></button><div class="grpb" data-grpb="brief" hidden><button type="button" class="nv" id="t-pb" data-tab="pb" title="Playbook"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4l1.2 1.2L6 3M2.5 8.5l1.2 1.2L6 7.5M8.5 4.3h5M8.5 8.8h5M2.5 13h11"/></svg><span class="lb">Playbook</span></button><button type="button" class="nv" id="t-jour" data-tab="jour" title="Customer journey"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 14a1.5 1.5 0 1 0 0-3a1.5 1.5 0 1 0 0 3zM12 5a1.5 1.5 0 1 0 0-3a1.5 1.5 0 1 0 0 3zM5.5 12.5h4.3a2.3 2.3 0 0 0 0-4.6H6.2a2.3 2.3 0 0 1 0-4.6h4.3"/></svg><span class="lb">Customer journey</span></button></div></div>
+    <div class="sg" id="sg-home"><button type="button" class="nv" id="t-hq" data-tab="hq" title="The galaxy: every star, agent and piece of work"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 9.6a1.6 1.6 0 1 0 0-3.2a1.6 1.6 0 1 0 0 3.2zM1.8 8c0-1.9 2.8-3.4 6.2-3.4s6.2 1.5 6.2 3.4-2.8 3.4-6.2 3.4S1.8 9.9 1.8 8z"/></svg><span class="lb">Galaxy</span></button><button type="button" class="nv" id="t-exec" data-tab="exec" title="Money this week"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.5h6l3 3v8h-9zM9.5 2.5v3h3M5.5 8.5h5M5.5 11h5"/></svg><span class="lb">Money this week</span></button><button type="button" class="nv grp" data-grp="brief" aria-expanded="false" title="Briefing: playbook and customer journey"><svg class="ic chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 6l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lb">Briefing</span></button><div class="grpb" data-grpb="brief" hidden><button type="button" class="nv" id="t-pb" data-tab="pb" title="Playbook"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4l1.2 1.2L6 3M2.5 8.5l1.2 1.2L6 7.5M8.5 4.3h5M8.5 8.8h5M2.5 13h11"/></svg><span class="lb">Playbook</span></button><button type="button" class="nv" id="t-jour" data-tab="jour" title="Customer journey"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 14a1.5 1.5 0 1 0 0-3a1.5 1.5 0 1 0 0 3zM12 5a1.5 1.5 0 1 0 0-3a1.5 1.5 0 1 0 0 3zM5.5 12.5h4.3a2.3 2.3 0 0 0 0-4.6H6.2a2.3 2.3 0 0 1 0-4.6h4.3"/></svg><span class="lb">Customer journey</span></button></div></div>
     <div class="sg" id="sg-cust" hidden></div>
     <div class="sg" id="sg-dept"><div class="sh">Stars</div><div id="deptbar" class="sg" style="gap:1px"></div></div>
     <div class="sg" id="sg-inv"><div class="sh">Investors</div><button type="button" class="nv" id="t-inv" data-tab="inv" title="Investor view"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 5.5h11v8h-11zM6 5.5V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M2.5 9.2h11"/></svg><span class="lb">Investor view</span></button></div>
@@ -1364,7 +1372,7 @@ body.dragging .stage{pointer-events:none}
 
   <footer>
     <span>Design spec: <a href="https://claude.ai/artifact/7Xy3ttwhaJREApzQZPJkVo" style="color:var(--ink-2)">Sol HQ product brief and build spec</a>.</span>
-    <span>Anything marked <span class="sample" style="font-size:10px;padding:1px 6px">Sample</span> or in red is made up for the design. The investor view and the funnel charts are samples; money, deals and the Ops Board are dated snapshots with their source.</span>
+    <span id="smp-legend">Anything marked <span class="sample" style="font-size:10px;padding:1px 6px">Sample</span> or in red is made up for the design. The investor view and the funnel charts are samples; money, deals and the Ops Board are dated snapshots with their source.</span>
     <span>The freeze is lifted (Oct 27). Sol HQ now runs as a real app on Replit; this page is its design source.</span>
   </footer>
 </div>
@@ -1387,7 +1395,7 @@ const P = [
    agents:[{n:'Pip', seat:'Pipeline & next steps', w:1, appr:'Dickson'},{n:'Dylan', seat:'HubSpot data, sales support (human)', w:0, human:true, appr:'Dickson'},{n:'Max', seat:'Matcher prospect researcher (draft hire)', w:2, hire:true, st:'Live: drafts only (Pooya’s go 02:57Z)', appr:'Dickson'}],
    flows:['Next-step drafts','Matcher sprint','Pipeline hygiene'],
    prods:[{n:'Matcher finding package', s:'service'},{n:'EOY match guarantee', s:'pilot'},{n:'Pilot → one plan pricing', s:'pilot'}],
-   mini:[['Pipeline, weighted','$22K'],['Waiting on a matcher','6 deals'],['Legacy 5% deals','5 · honor']], need:3},
+   mini:[['Pipeline, weighted','$22K'],['Waiting on a matcher','6 deals','Customer journey'],['Legacy 5% deals','5 · honor','Terms quoted']], need:3},
   {id:'fin', gm:'Penny', name:'Finance & Legal', short:'Finance', color:'--c4', ring:0, a:290, lead:'Pooya', appr:'Pooya, Dickson or ib (Round 2 lanes) · Vibe Financials · Ernie',
    mission:'Funding-ready and revenue-solid. Nothing here moves money.', tier:'Restricted',
    agents:[{n:'Penny', seat:'AI CPA / CFO, read-only books', w:1, appr:'Pooya, Vibe Financials'},{n:'Lex', seat:'Legal coordinator', w:1, appr:'Pooya, Ernie reviews'},{n:'Billie', seat:'Billing and reconciliation analyst (draft hire)', w:2, hire:true, st:'Live: drafts only (Pooya’s go 02:57Z)', appr:'Pooya'},{n:'Reggie', seat:'Compliance and registration clerk (draft hire)', w:2, hire:true, st:'Parked · trigger: Ernie’s answer', appr:'Pooya'}],
@@ -1417,7 +1425,7 @@ const P = [
    agents:[{n:'Marcie', seat:'Marketing', w:2, appr:'Pooya'},{n:'Vera', seat:'Claims verifier (draft hire)', w:2, hire:true, st:'Parked · trigger: weekly posting starts', appr:'Pooya'}],
    flows:['Webinar run','GivingTuesday push','Case study'],
    prods:[{n:'Communications builder', s:'building'},{n:'Audience finder', s:'building'},{n:'Webinars', s:'live'},{n:'Case studies', s:'live'}],
-   mini:[['Webinar sign-ups','sample'],['Case studies live','2']], need:0},
+   mini:[['Webinar sign-ups','sample'],['Case studies live','2','Case studies']], need:0},
   {id:'tnl', gm:'Mike', name:'The Nonprofit Lab', short:'TNL', color:'--c6', ring:1, a:65, lead:'Pooya', appr:'Pooya',
    mission:'Discovery, community and the nonprofit data engine.',
    agents:[{n:'Mike', seat:'TNL producer', w:2, appr:'Pooya'}],
@@ -1467,7 +1475,7 @@ const PULSE = [
 const RULES = [
   {re:/voice|meeting bot|join .{0,20}(call|meeting)|recall|zoom|google meet/i, p:'ceo', wf:'Sol joins a call', ag:'Sol', prod:'Sol voice & meeting bot', next:'Sol joins through Recall with her ElevenLabs voice. The Google Meet test worked one way; the conversational version is being built. Zoom needs its SDK credentials in Recall before the Monday 12:00 ET founder call. Minnie files the transcript.'},
   {re:/ask the lab|audio episode|notebook ?lm|listen/i, p:'tnl', wf:'Ask the Lab episode (manual)', ag:'Indy', prod:'Ask the Lab audio', next:'Proposed: a free manual pilot Nov 2 to Dec 15. Prescreener finishers get a 10-minute episode on their question, public data only (ADR-006). The build is tested Feb 1 against 25 requests and 5 pilot calls.'},
-  {re:/pric|quote|quoted|5 ?%|percent|guarantee|one plan|annual plan|enterprise/i, p:'sales', wf:'Next-step drafts', ag:'Pip', prod:'Pilot → one plan pricing', next:'Pip checks Terms quoted first. The five legacy 5% deals keep their quoted terms (no re-quotes). New prospects get pilot, then one plan, enterprise by contact. The $750 / $5K / $10K prices are drafts, not approved. Pip quotes no guarantee until Lex’s rider (relative 5% lift) clears Ernie.'},
+  {re:/pric|quote|quoted|5 ?%|percent|guarantee|one plan|annual plan|enterprise/i, p:'sales', wf:'Next-step drafts', ag:'Pip', prod:'Pilot → one plan pricing', next:'Pip checks Terms quoted first. The five legacy 5% deals keep their quoted terms (no re-quotes). New prospects get pilot, then one plan, enterprise by contact. The site leads with $299 plus the match guarantee (terms apply), then plans at $1,999 and $3,499, enterprise by contact (settled Oct 27). Ernie reviews before any offer with the guarantee goes out.'},
   {re:/return|action sheet|cards|round 2/i, p:'ceo', wf:'Decision request', ag:'Logan', next:'Logan opens the return-actions sheet (29 cards). Defaults hold where you skip a card.'},
   {re:/runway|burn|cash|zero.?cash|forecast/i, p:'fin', wf:'Weekly runway update', ag:'Penny', next:'Penny refreshes the forward view and flags the zero-cash date and the bridge size. You asked for a live forecast model (beta, R²) here and doubted the $15K a month target, so Penny tests it. Pooya approves before anyone else sees it.'},
   {re:/invoice|collect|paid|payment|stripe|overdue|refund|credit/i, p:'fin', wf:'Invoice & collect (drafts)', ag:'Penny', next:'Penny drafts the reminder or the refund note (a double charge gets a Stripe refund, not a credit). A founder or Vibe sends it; nothing moves money from here.'},
@@ -1517,7 +1525,7 @@ const ROUTEX=[
   {x:[['cs','Kay: where the rework happened']], c:['Wave 1 SOPs: how The Good Office works','SOP sign-off packet, Mon Oct 26','Campaign labor hours and cost to serve']},
 ];
 /* systems of record. live = connected to Sol today (Oct 25 connector list). */
-const SYS={hubspot:{n:'HubSpot deals and Terms quoted (read Oct 26)',live:1,u:'https://app.hubspot.com/contacts/8883555/objects/0-3/views/all/board'},
+const SYS={hubspot:{n:'HubSpot deals and Terms quoted (14 fixes Oct 27)',live:1,u:'https://app.hubspot.com/contacts/8883555/objects/0-3/views/all/board'},
   stripe:{n:'Stripe: invoices and payments',live:1,u:'https://dashboard.stripe.com'}, qb:{n:'QuickBooks (read-only)',live:1,u:'https://qbo.intuit.com'},
   ops:{n:'Ops Board',live:1,u:'https://docs.google.com/spreadsheets/d/12iHbzDlsjPHDW4c12pPSrnwBeU3JrkC_VSuTLpyyd3w'},
   tracker:{n:'MatchNice Tracker (2026)',live:1,u:'https://docs.google.com/spreadsheets/d/11pyW5Oq4o7y_cMt9kWSZZY9w1A5eXjHD6Abh68hCMgU/edit'},
@@ -2211,7 +2219,7 @@ function gaCard(){ return `<div class="card"><div class="eyebrow">Awareness · t
     <ul class="rules"><li>This is the new top of the funnel: visits, then the prescreener, then a signed account, then a launched campaign.</li><li>Visitors are tracked by Google’s anonymous visitor ID. Google Analytics 4 does not hand over raw IP addresses, and Sol will not store them, so “unique IPs” becomes unique visitors.</li><li>Needs from you: the Google Analytics 4 property for matchnice.org, and a Google account that can add the connector.</li></ul>
     <div class="chips"><a class="btn pri" href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">Connect Google Analytics ↗</a></div>
     <div class="note">Sol has asked for this in the project chat. Connectors are added in Claude; a thread only sees one that was connected before it started.</div></div>`; }
-function capCard(){ return `<div class="card"><div class="eyebrow">Investors and cap table · founders only</div><h3>One dashboard per investor, tied to the cap table</h3>
+function capCard(){ if(LIVE) return `<div class="card"><div class="eyebrow">Investors and cap table · founders only</div><h3>${NC}</h3><div class="note">The investor list and SAFE totals come from the cap table once its file is connected. Sol does not invent holders.</div></div>`; return `<div class="card"><div class="eyebrow">Investors and cap table · founders only</div><h3>One dashboard per investor, tied to the cap table</h3>
     <div class="dk" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:8px 0"><div class="mt"><div class="lbl">Cap table source</div><div class="val sm" style="font-size:15px">Not connected</div><div class="foot"><span class="src">add the Drive file link</span></div></div><div class="mt"><div class="lbl">SAFE total in the scenarios</div><div class="val sm" style="font-size:15px">$400K</div><div class="foot"><span class="src">sample · Investor view inputs</span></div></div><div class="mt"><div class="lbl">Raise in the scenarios</div><div class="val sm" style="font-size:15px">$1.5M</div><div class="foot"><span class="src">sample · Investor view inputs</span></div></div></div>
     <div class="tw"><table class="deals"><thead><tr><th>Investor</th><th>Holding</th><th>Their view</th></tr></thead><tbody><tr><td><b>Jordan Rivera</b><br><small style="color:var(--ink-3)">sample SAFE holder</small></td><td>Sample, $50K SAFE</td><td><button type="button" class="btn" data-invview>Open this investor’s view</button></td></tr></tbody></table></div>
     <div class="note">The rows come from the cap table once its file is connected; Sol does not invent holders. Opening a view switches “Viewing as” to Investor so you see exactly what they see, with no cash, pipeline names, contract values, Ops Board or agents. Switch back with “Viewing as”.</div></div>`; }
@@ -2221,7 +2229,7 @@ function renderDept(){
   const tasks=ITEMS.filter(r=>r.p===p.id&&r.type==='Task').filter(canSee);
   const needs=tasks.filter(r=>r.st==='Needs human'), late=tasks.filter(r=>r.due<TODAYISO);
   const lock=p.tier==='Restricted'&&role!=='founder';
-  const kt=[...p.mini.map(([k,v])=>[k,lock?'—':v,'sample']),['Open tasks',tasks.filter(r=>r.st!=='Done').length,'Ops Board'],['Needs a human',needs.length,'Ops Board'],['Overdue',late.length,'Ops Board'],['Oldest decision',needs.length?Math.max(...needs.map(r=>ageD(r.a)))+' d':'—','Ops Board']].filter((x,i,a)=>x[2]==='sample'||!a.some(y=>y[2]==='sample'&&y[0]===x[0]));
+  const kt=[...p.mini.map(([k,v,src])=>[k,lock?'—':v,src||'sample']),['Open tasks',tasks.filter(r=>r.st!=='Done').length,'Ops Board'],['Needs a human',needs.length,'Ops Board'],['Overdue',late.length,'Ops Board'],['Oldest decision',needs.length?Math.max(...needs.map(r=>ageD(r.a)))+' d':'—','Ops Board']].filter((x,i,a)=>x[2]==='sample'||!a.some(y=>y[2]==='sample'&&y[0]===x[0]));
   const rel=(REL[p.id]||[]).map(([l,u])=>u.startsWith('http')||u==='hs'?`<a class="btn" href="${u==='hs'?hsBoard:u}" target="_blank" rel="noopener">${esc(l)} ↗</a>`:`<button type="button" class="btn" data-rel="${u}">${esc(l)}</button>`).join('');
   const extra=p.id==='sales'?'deals, ':p.id==='cs'?'customers, ':'';
   const ctxOk=p.id!=='fin'||role==='founder';
@@ -2313,10 +2321,10 @@ function openAgent(pid,name){
     ${p.gm===a.n?`<div class="lock" style="color:var(--sun)">${ICON.lock}General Manager of ${esc(p.name)} · ${esc(GM_PENDING)}</div>`:''}${REPORTS[a.n]?`<div class="note" style="margin:4px 0">Reports to ${esc(REPORTS[a.n])}. Approval goes to ${esc(a.appr||p.appr)}, never to another agent.</div>`:''}
     ${a.hire?`<div class="lock">${ICON.lock}Proposed hire, a draft: ${esc(a.st)}. Nothing is created until Pooya approves.</div>`:a.w===2?`<div class="lock">${ICON.lock}Wave 2 seat: draft-only until Nonprofit POWER</div>`:''}
     <h4><span>Their Ops Board rows</span><span>${rows.length}</span></h4>${rows.length?opsRows(rows):'<div class="note">No open rows.</div>'}${agentTasksHtml(name)}
-    <div class="chips"><button type="button" class="btn pri" data-act="thread">Open ${esc(a.n)}’s thread</button><button type="button" class="btn" data-back>Back to ${esc(p.short)}</button></div>
+    <div class="chips"><button type="button" class="btn pri" data-act="ask">What is ${esc(a.n)} working on?</button><button type="button" class="btn" data-back>Back to ${esc(p.short)}</button></div>
     <div class="note" id="agnote"></div>`;
   $('#detail [data-back]').onclick=()=>focusPlanet(pid);
-  $('#detail [data-act]').onclick=()=>handoff(a.n,'',$('#agnote'));
+  $('#detail [data-act]').onclick=()=>{ setPM('thread'); ask(`What is ${a.n} working on?`); };
 }
 function openProduct(pid,name){
   const p=byId[pid], x=p.prods.find(y=>y.n===name);
@@ -2370,12 +2378,17 @@ function say(html, who='sol'){
 const SUGG=['Check runway','Offer matcher sourcing to blocked deals','What did we quote these deals?','Join my Monday call','Onboard a new nonprofit','Follow up on open deals','Plan the Nov 12 webinar','Prep my meetings tomorrow','What should I decide this week?'];
 function chips(list){ return `<div class="chips">${list.map(s=>`<button type="button" data-say="${esc(s)}">${esc(s)}</button>`).join('')}</div>`; }
 function wireChips(node){ node.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>ask(b.dataset.say)); }
+// One running chat per person: earlier asks and Sol's answers come back when the thread opens.
+function chatHistory(pid){ return (ST.asklog||[]).filter(x=>x.who===ME()&&x.k==='ask'&&x.a&&(!pid||x.p===pid)).sort((a,b)=>a.t-b.t).slice(-8); }
 function greet(pid){
   log.innerHTML='';
-  const p=pid&&byId[pid], d=ctxData(pid||null), facts=d.know.slice(0,2).map(k=>k.t).join('; ');
-  wireChips(say(`${p?`You’re in ${esc(p.name)}. `:'Morning, Pooya. '}${facts?esc(facts)+'. ':''}<b>What do you want to do${p?' here':''}?</b>${chips(d.ask.map(x=>x[0]))}`));
-  const mine=(ST.asklog||[]).filter(x=>x.who===ME()&&x.k==='ask').sort((a,b)=>b.t-a.t).slice(0,3);
-  if(mine.length) wireChips(say(`<small>Your recent asks</small>${chips([...new Set(mine.map(x=>x.q))])}`));
+  const p=pid&&byId[pid], d=ctxData(pid||null), facts=d.know.slice(0,2).map(k=>k.t).join('; '), past=chatHistory(pid);
+  if(past.length){ const h=document.createElement('div'); h.className='chat-sep'; h.textContent=`Your chat${p?' in '+p.short:''} · ${past.length} earlier question${past.length>1?'s':''}`; log.appendChild(h);
+    past.forEach(x=>{ say(esc(x.q),'me').classList.add('old'); const [l,...rest]=String(x.a).split('\n');
+      say(`<div class="ans old"><div class="at">${esc(l)}</div>${rest.length?`<ol class="af">${rest.map(t=>`<li>${esc(t.replace(/^\d+\.\s*/,''))}</li>`).join('')}</ol>`:''}<small class="af-s">${esc(fmtTs(x.t))}${x.s&&x.s.length?' · sources: '+esc(x.s.join('; ')):''}</small> <button type="button" class="btn sm" data-say="${esc(x.q)}">Ask again</button></div>`).querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>ask(b.dataset.say)); });
+    const s2=document.createElement('div'); s2.className='chat-sep'; s2.textContent='Now'; log.appendChild(s2); }
+  wireChips(say(`${p?`You’re in ${esc(p.name)}. `:`${past.length?'Welcome back':'Morning'}, ${esc(ME())}. `}${facts?esc(facts)+'. ':''}<b>Ask me anything${p?' here':''}. I answer from everything in the galaxy, with sources.</b>${chips(d.ask.map(x=>x[0]))}`));
+  { const rb=$('#rp-body'); if(rb) rb.scrollTop=rb.scrollHeight; }
 }
 /* one thread per level: the galaxy has Sol's, each star its own */
 var THR={}, thrKey='all';
@@ -2386,52 +2399,117 @@ function swapThread(id){ const k=id||'all'; if(k===thrKey) return;
 var PM='thread';
 function setPM(m){ PM=m; $('.hq').dataset.pm=m; ['thread','info'].forEach(k=>{ const b=$('#pm-'+k); b.setAttribute('aria-selected',String(k===m)); b.tabIndex=k===m?0:-1; }); paintPanelTitle(); }
 function paintPanelTitle(){ const p=scopeP&&byId[scopeP]; const t=$('#rp-ttl'); if(t) t.textContent=p?p.name:'Sol · whole company'; const x=$('#thr-scope'); if(x) x.textContent=p?' · '+p.short:' · whole company'; }
+/* Ask Sol answers first: every fact in today's snapshot is searchable, each with its star and its source. Routing to an owner comes after the answer. */
+const SRCX={pb:{n:'Playbook · Logan’s week of Oct 26 report',live:1},money:{n:'Money this week · Penny’s runway v2.9 and Stripe',live:1},golist:{n:'Go list · decisions on record',live:1}};
+function srcCite(k){ if(SYS[k]) return {...SYS[k],sys:1}; if(SRCX[k]) return SRCX[k]; if(k.startsWith('art:')){ const a=ART.find(x=>x.n===k.slice(4)); return a&&artSee(a)?{n:a.n,u:a.u,f:a.f,live:1,who:a.who}:null; } return null; }
+const ASK_STOP=new Set('a an the and or of to in on for with is are was were be been what whats who whom which how when where why do does did our we us you your i me my mine it its this that these those there their them they top give show tell list right now today week please can could should would will any all about from by at as than then just get got have has need needs much many working work things items status update latest open find search look nonprofit nonprofits charity charities organization organizations org orgs'.split(' '));
+const askToks=s=>[...new Set((s.toLowerCase().match(/[a-z0-9$%][a-z0-9$%.&-]*/g)||[]).map(w=>w.replace(/[.'’-]+$/,'').replace(/['’]s$/,'')).filter(w=>w.length>1&&!ASK_STOP.has(w)))];
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const askTopN=(text,d)=>{ const m=text.match(/\btop\s*(\d{1,2})\b|\b(\d{1,2})\s+(?:things|priorit|tasks|items|deals|facts)/i); return Math.min(10,Math.max(1,m?+(m[1]||m[2]):d)); };
+function galaxyFacts(){ const F=[], add=(t,p,src,tags)=>{ if(t&&byId[p]) F.push({t,p,src,h:(t+' '+(tags||'')+' '+byId[p].name).toLowerCase()}); };
+  const sales=role==='founder'||role==='lead';
+  OPS.filter(r=>r.id&&canSee(r)).forEach(r=>{ const x=OPSX[r.id]||[]; add(`${r.t} (${r.id}, ${r.st.toLowerCase()}, ${r.who})${x[3]?`. Next: ${x[3]}`:''}`,r.p,'ops',r.who+' ops board task'); });
+  P.forEach(q=>{ const d=PB[q.id]; if(!d||(q.tier==='Restricted'&&role!=='founder')) return; d.t.forEach(([w,o,due])=>add(`${w} (owner ${o}; due ${due})`,q.id,'pb','priority playbook '+o)); });
+  if(sales){ DEALS.forEach(d=>add(`${d.o}: ${d.next}${d.tq?` (terms quoted: ${d.tq})`:''}`,'sales','hubspot',`deal pipeline ${d.who} ${d.st}`));
+    CUSTOMERS.forEach(c=>add(`${c.o}: ${c.stage}. ${c.next}`,'cs','hubspot',`customer account ${c.who} ${c.rel} ${c.bill}`));
+    INBOX.forEach(i=>add(`${i.t}: waiting on ${i.who} for ${i.age}`,'sales','gmail',`inbox email reply ${i.who}`));
+    SALES_NOTES.forEach(([,h])=>add(String(h).replace(/<[^>]+>/g,''),'sales','hubspot','sales note')); }
+  if(role==='founder'){ (MONEY.ar||[]).forEach(([o,amt,s,nx,who])=>add(`${o}: ${amt}. ${s}. Next: ${nx} (${who})`,'fin','stripe','invoice owed receivable money billing refund '+who));
+    (MONEY.sponsors||[]).forEach(([o,amt,s,who])=>add(`${o}: ${amt}. ${s} (${who})`,'fin','money','match money sponsor matcher pool '+who));
+    PBSUM.forEach(s=>add(s,'ceo','pb','summary runway pricing')); GO_LIST.forEach(([area,,q,d])=>add(`${q} On record: ${d}`,P.find(x=>x.short===area||x.name===area)?.id||'ceo','golist','decision '+area)); }
+  ART.filter(artSee).forEach(a=>add(`${a.n} (${a.k||'file'}, ${a.who||'team'})`,a.p,'art:'+a.n,'file report doc link'));
+  return F; }
+function searchAnswer(text){ const tk=askToks(text); if(!tk.length) return null;
+  const need=Math.ceil(tk.length/2); const sc=GF().map(f=>{ let s=0, m=0; tk.forEach(w=>{ const st=w.length>5?w.slice(0,w.length-2):w; if(new RegExp('(^|[^a-z0-9])'+reEsc(st)+(w.length<=3?'($|[^a-z0-9])':'')).test(f.h)){ s+=w.length>=6?2:1; m++; } }); return {...f,s:m>=need?s:0}; }).filter(f=>f.s>0).sort((a,b)=>b.s-a.s);
+  if(!sc.length) return null; const best=sc[0].s, keep=sc.filter(f=>f.s>=Math.max(1,best-1)), n=askTopN(text,5), items=keep.slice(0,n);
+  const stars=[...new Set(items.map(i=>i.p))];
+  return {lead:`Here’s what today’s snapshot holds on that: ${items.length} fact${items.length>1?'s':''}${stars.length>1?` across ${stars.length} stars`:` from ${byId[stars[0]].name}`}${keep.length>n?` (${keep.length-n} more match)`:''}.`,items,home:items[0].p}; }
+let GF_=null, GF_K=''; function GF(){ const k=role; if(GF_K!==k){ GF_=galaxyFacts(); GF_K=k; } return GF_; }
+// A question that names a person or agent, or says "my", answers from their open work: Ops Board, Playbook, inbox, customer next steps.
+function personAnswer(text){
+  const names=new Map(); P.forEach(q=>{ q.agents.forEach(a=>names.set(a.n,q.id)); if(q.lead&&!names.has(q.lead)) names.set(q.lead,q.id); });
+  ['Pooya','Dickson','ib'].forEach(n=>{ if(!names.has(n)) names.set(n,(P.find(q=>q.lead===n)||P[0]).id); });
+  const said=/\bibraheem\b/i.test(text)?'ib':[...names.keys()].find(n=>new RegExp(`\\b${n}(’s|'s)?\\b`,'i').test(text))||(/\b(my|me|mine|i)\b/i.test(text)?ME():null);
+  if(!said) return null;
+  const mine=w=>new RegExp(`(^|[^A-Za-z])${said}($|[^A-Za-z])`).test(w||'');
+  const rank={'Needs human':0,'Blocked':1,'In progress':2,'Not started':3};
+  const ops=OPS.filter(r=>r.id&&r.st!=='Done'&&mine(r.who)&&canSee(r)).sort((a,b)=>(rank[a.st]??4)-(rank[b.st]??4));
+  const sales=role==='founder'||role==='lead';
+  const pb=[]; P.forEach(q=>{ const d=PB[q.id]; if(!d||(q.tier==='Restricted'&&role!=='founder')) return; d.t.forEach(([w,o,due])=>{ if(mine(o)) pb.push({t:`${w} (due ${due})`,p:q.id,src:'pb'}); }); });
+  const inbox=sales?INBOX.filter(i=>i.who===said).map(i=>({t:`Reply owed: ${i.t} (${i.age} old)`,p:'sales',src:'gmail'})):[];
+  const cust=sales?CUSTOMERS.filter(c=>c.who===said&&c.next).map(c=>({t:`${c.o}: ${c.next}`,p:'cs',src:'hubspot'})):[];
+  const need=ops.filter(r=>r.st==='Needs human').map(r=>({t:`${r.t} (${r.id}, waiting on ${(r.who.split('→')[1]||said).trim()})${(OPSX[r.id]||[])[3]?`. Next: ${OPSX[r.id][3]}`:''}`,p:r.p,src:'ops'}));
+  const rest=ops.filter(r=>r.st!=='Needs human').map(r=>({t:`${r.t} (${r.id}, ${r.st.toLowerCase()})`,p:r.p,src:'ops'}));
+  const items=(/priorit|focus|should/i.test(text)?[...pb,...need,...inbox,...cust,...rest]:[...need,...pb,...inbox,...cust,...rest]);
+  const home=names.get(said)||(byId.ceo?'ceo':P[0].id), n=askTopN(text,3), top=items.slice(0,n), who=said===ME()&&/\b(my|me|mine|i)\b/i.test(text)?'Your':`${said}’s`;
+  if(!top.length) return {lead:`Nothing open for ${said} on the Ops Board, the Playbook or customer next steps right now.`,items:[],home,ag:said};
+  return {lead:`${who} top ${top.length} right now${items.length>n?`, out of ${items.length} open`:''}:`,items:top,home,ag:said}; }
+function moneyAnswer(text){ if(!/runway|burn|cash|bridge|break.?even|zero.?cash|how long .*last|money left/i.test(text)) return null;
+  if(role!=='founder') return {lead:'Cash and runway show to founders only. Ask Pooya, or Penny drafts a summary for him to share.',items:[],home:'fin'};
+  const m=MONEY, it=[['Runway',m.runway],['Bridge',m.bridge],['Revenue',m.rev],['Match money',m.match]].filter(([,x])=>x).map(([l,x])=>({t:`${l}: ${x.v}${x.u?' '+x.u:''}. ${x.sub} (${x.src})`,p:'fin',src:'money'}));
+  return {lead:`Cash runs out ${m.runway.v.replace('≈','around')}. ${m.bridge.v.replace('≈','About')} reaches Jan 31.`,items:it,home:'fin'}; }
+// TNL.ai search (app only): the server asks TheNonprofitLab's public list of the largest US nonprofits, read-only. In this prototype it stays hidden.
+const TNL_RE=/\b(nonprofits?|charit(y|ies)|organi[sz]ations?|orgs?|tnl(\.ai)?|foundations?|funders?|ein)\b/i;
+function tnlBlock(text,node,force,done){ if(!(window.SOL_CONFIG&&SOL_CONFIG.tnl)||!(force||TNL_RE.test(text))) return;
+  const box=document.createElement('div'); box.className='tnl'; box.innerHTML='<h4>From TNL.ai</h4><div class="note">Searching TNL.ai’s nonprofit list…</div>';
+  const at=node.querySelector('.ans .rt'); if(at) at.insertAdjacentElement('beforebegin',box); else node.querySelector('.tx').appendChild(box);
+  fetch('/api/tnl?q='+encodeURIComponent(text)).then(r=>r.json()).then(d=>{
+    if(!d.enabled){ box.remove(); return; }
+    if(!d.rows||!d.rows.length){ box.innerHTML=`<h4>From TNL.ai</h4><div class="note">${esc(d.note||'No match in TNL.ai’s list of the largest US nonprofits. Smaller organizations may be missing.')}</div>`; return; }
+    box.innerHTML=`<h4>From TNL.ai · ${d.total>d.rows.length?`${d.rows.length} of ${Number(d.total).toLocaleString()}`:d.rows.length} match${d.rows.length>1?'es':''}${d.loose?' (any of the words)':''}</h4><ol class="af">${d.rows.map(o=>`<li><span>${o.url?`<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.name)} ↗</a>`:`<b>${esc(o.name)}</b>`}</span> <small class="af-s">${esc([o.city&&o.state?o.city+', '+o.state:o.state,o.cause,'EIN '+o.ein].filter(Boolean).join(' · '))}</small></li>`).join('')}</ol><div class="note">Source: TNL.ai, read-only (IRS Business Master File). Being listed is not an endorsement.</div>`;
+    if(done) done(d.rows);
+  }).catch(()=>{ box.innerHTML='<h4>From TNL.ai</h4><div class="note">TNL.ai did not answer. Try again in a minute.</div>'; }); }
 function ask(text){
-  text=text.trim(); if(!text) return; logAsk(text,'ask');
+  text=text.trim(); if(!text) return;
   say(esc(text),'me');
-  let hits=RULES.filter(r=>r.re.test(text)); const sp=scopeP&&byId[scopeP]; let scoped=false;
-  if(sp){ const inP=hits.filter(r=>r.p===sp.id); scoped=true;
-    if(inP.length) hits=inP;
-    else { const ag=(sp.agents.find(a=>!a.human)||sp.agents[0]).n;
-      hits=[{p:sp.id, ag, wf:sp.flows[0]||'General request', next:`Sol keeps this inside ${sp.name}: ${ag} picks it up and drafts the next step for ${sp.appr.split(' · ')[0]} to approve.`}]; } }
-  if(!hits.length){
-    const node=say(`I’m not sure where that goes yet. Which is closest?${chips(['Money: runway, invoices','Revenue: deals and matchers','A nonprofit getting started','Product or a bug','Marketing or the podcast'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
-    wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); return;
+  let hits=RULES.filter(r=>r.re.test(text)); const sp=scopeP&&byId[scopeP];
+  const pa=personAnswer(text), personQ=pa&&(!hits.length||/task|to.?do|working on|doing|plate|priorit|top \d|focus|waiting|owe|should/i.test(text));
+  let A=(personQ&&pa)||moneyAnswer(text)||searchAnswer(text);
+  if(A&&sp&&!personQ){ const inP=A.items.filter(i=>i.p===sp.id); if(inP.length) A={...A,items:inP,home:sp.id,lead:`In ${sp.name}: ${inP.length} fact${inP.length>1?'s':''} on that.`}; }
+  if(!A&&!hits.length&&TNL_RE.test(text)&&window.SOL_CONFIG&&SOL_CONFIG.tnl){ setTrace(null); const node=say('Nothing in Sol HQ’s own snapshot matches, so here is TNL.ai’s list.'); setPM('thread'); tnlBlock(text,node,true,rows=>logAsk(text,'ask',{a:['From TNL.ai:',...rows.map((o,n)=>`${n+1}. ${o.name} (${[o.city,o.state].filter(Boolean).join(', ')}, EIN ${o.ein})`)].join('\n'),s:['TNL.ai'],p:''})); return; }
+  if(!A&&!hits.length){
+    const node=say(`I couldn’t find that in today’s snapshot, and no agent’s seat clearly owns it. Try naming a person, an organization or a topic, or pick one:${chips(['What is blocked?','Check runway','What are my top 5 priorities?','Where is BGCA?','Charity Navigator'])}<div class="hire">No agent’s seat fits? <button type="button" class="btn" data-hire>Draft a hire</button></div>`);
+    setTrace(null); wireChips(node); node.querySelector('[data-hire]').onclick=()=>hireDraft(text,node); setPM('thread'); tnlBlock(text,node,true); logAsk(text,'ask',{a:'Not found in today’s snapshot.',p:sp?sp.id:''}); return;
   }
-  const r=hits[0], p=byId[r.p];
-  if(scoped){ focusPlanet(r.p); } else { if(focus) focusPlanet(null); setTrace(r); P.forEach(q=>q._g.classList.toggle('on',q.id===r.p||(r.x||[]).some(z=>z[0]===q.id))); }
+  const h0=hits.find(h=>sp?h.p===sp.id:A?h.p===A.home:true)||hits[0];
+  let r;
+  if(A&&personQ){ const q=byId[A.home]; r={p:A.home,ag:A.ag,wf:'Their open work',next:''}; }
+  else if(h0&&(!A||h0.p===A.home||!A.items.length)) r=h0;
+  else { const q=byId[A.home]; r={p:A.home,ag:(q.agents.find(a=>!a.human&&a.w!==2)||q.agents[0]).n,wf:'Answer from the snapshot',next:''}; }
+  const p=byId[r.p], items=A?A.items:[];
+  const stars=[...new Set(items.map(i=>i.p))].filter(id=>id!==r.p&&byId[id]);
+  r={...r,x:[...(r.x||[]).filter(([id])=>!stars.includes(id)),...stars.map(id=>[id,'holds part of the answer'])]};
+  if(focus) focusPlanet(null); setTrace(r);
   renderCrumbs(r.ag); markSel(r.ag);
-  const conf = scoped ? `Scoped to ${p.name} because you asked from that star. Clear the chip in the ask bar to route across the whole company.` : hits.length>1 && hits[1].p!==r.p ? 'Rules matched two stars; Claude would break the tie in the live build.' : 'Matched by the rules table.';
   const appr=p.agents.find(a=>a.n===r.ag)?.appr||p.appr;
-  const cites=(r.c&&r.c.length?r.c:ART.filter(a=>a.p===r.p).slice(0,2).map(a=>a.n)).map(k=>{ if(SYS[k]) return {...SYS[k],sys:1}; const a=ART.find(x=>x.n===k); return a&&artSee(a)?{n:a.n,u:a.u,f:a.f,live:1,who:a.who}:null; }).filter(Boolean);
-  if(!(p.id==='fin'&&role!=='founder')) ctxFor(r.p).slice(0,3).forEach(c=>cites.push({n:'Context added: '+c.t,u:c.u||'',live:1,who:(c.kind==='file'?'file':c.kind)+' · '+fmtCtxD(c.at),ctx:1}));
+  const keys=[...new Set(items.map(i=>i.src))], cites=keys.map(srcCite).filter(Boolean);
+  if(!cites.length&&!A) (r.c&&r.c.length?r.c:[]).forEach(k=>{ const c=srcCite(k); if(c) cites.push(c); });
+  if(!(p.id==='fin'&&role!=='founder')) ctxFor(r.p).slice(0,2).forEach(c=>cites.push({n:'Context added: '+c.t,u:c.u||'',live:1,who:(c.kind==='file'?'file':c.kind)+' · '+fmtCtxD(c.at),ctx:1}));
+  const cn=k=>{ const c=srcCite(k); return c?cites.findIndex(x=>x.n===c.n)+1:0; };
   const ansKey=siReg('ans-'+(++ANSN),{t:'Answer: '+text,p:r.p,s:[],cites});
-  const gaps=cites.filter(c=>!c.live);
-  const xs=(r.x||[]).filter(([id])=>byId[id]&&id!==r.p);
-  const confHtml=gaps.length?`<span class="conf part">Partly verified</span>`:`<span class="conf ok">Checked against ${cites.length} source${cites.length>1?'s':''}</span>`;
+  const gaps=cites.filter(c=>!c.live), xs=r.x.filter(([id])=>byId[id]&&id!==r.p);
+  const lead=A?A.lead:`I don’t have a stored answer for that yet. ${r.next}`;
+  const built=(window.SOL_DATA&&SOL_DATA.meta&&SOL_DATA.meta.built)?` built ${fmtCtxD(SOL_DATA.meta.built)}`:'';
+  const confHtml=!items.length?`<span class="conf part">No stored answer</span>`:gaps.length?`<span class="conf part">Partly verified</span>`:`<span class="conf ok">${cites.length} source${cites.length>1?'s':''}</span>`;
   const node=say(`<div class="ans" role="region" aria-label="Sol's answer">
     <div class="ah" data-src="${ansKey}">Answer ${confHtml}</div>
-    <div class="at">${esc(r.next)}</div>
-    <h4>Checks and balances</h4>
-    <ul class="ck">${xs.map(([id,l])=>`<li><i>✓</i><span><b>${esc(byId[id].short)}</b> · ${esc(l)}</span></li>`).join('')}
-      <li><i>✓</i><span><b>Human gate</b> · ${esc(appr)} approves before anything goes out</span></li>
-      ${gaps.map(c=>`<li class="gap"><i>!</i><span><b>Not verified</b> · ${esc(c.n)}: ${esc(c.why||'not connected')}</span></li>`).join('')}</ul>
+    <div class="at">${esc(lead)}</div>
+    ${items.length?`<ol class="af">${items.map(i=>`<li><span>${esc(i.t)}</span> <small class="af-s"><b style="color:${col(byId[i.p])}">${esc(byId[i.p].short)}</b>${cn(i.src)?` · [${cn(i.src)}]`:''}</small></li>`).join('')}</ol>`:''}
     <h4>Sources</h4>
-    <ol class="src" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px">${cites.map((c,i)=>`<li><em>[${i+1}]</em><span>${c.u?`<a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.n)} ↗</a>`:esc(c.n)}${c.f?` <small style="color:var(--ink-3)">project file ${esc(c.f)}</small>`:''}${c.who?` <small style="color:var(--ink-3)">· ${esc(c.who)}</small>`:''}${c.live?'':' <span class="off">· not connected</span>'}</span></li>`).join('')}</ol>
-    <div class="rt">Route: <b>${esc(p.name)}</b> › ${esc(r.wf)}${r.prod?` › ${esc(r.prod)}`:''} › ${esc(r.ag)} · approver ${esc(appr)}${xs.length?` · cross-checked with ${xs.map(([id])=>esc(byId[id].short)).join(', ')}`:''}</div>
-    <div class="acts">${r.flow?'<button type="button" class="btn pri" data-a="flow">Open the prescreener</button>':`<button type="button" class="btn pri" data-a="thread">Open ${esc(r.ag)}’s thread</button>`}<button type="button" class="btn" data-a="row">Draft an Ops Board row</button>${scoped?'':`<button type="button" class="btn" data-a="zoom">Zoom into ${esc(p.short)}</button>`}</div>
+    <ol class="src" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:12.5px">${cites.map((c,i)=>`<li><em>[${i+1}]</em><span>${c.u?`<a href="${esc(c.u)}" target="_blank" rel="noopener">${esc(c.n)} ↗</a>`:esc(c.n)}${c.f?` <small style="color:var(--ink-3)">project file ${esc(c.f)}</small>`:''}${c.who?` <small style="color:var(--ink-3)">· ${esc(c.who)}</small>`:''}${c.live?'':' <span class="off">· not connected</span>'}</span></li>`).join('')||'<li>No source holds this yet.</li>'}</ol>
+    <div class="rt">Owner: <b>${esc(p.name)}</b> › ${esc(r.wf)} › ${esc(r.ag)} · approver ${esc(appr)}${xs.length?` · also lit: ${xs.map(([id])=>esc(byId[id].short)).join(', ')}`:''}${gaps.length?` · not verified: ${gaps.map(c=>esc(c.n)).join(', ')}`:''}</div>
+    <div class="acts">${r.flow?'<button type="button" class="btn pri" data-a="flow">Open the prescreener</button>':''}<button type="button" class="btn" data-a="zoom">Zoom into ${esc(p.short)}</button></div>
+    <details class="more"><summary>Ask agents to dig deeper</summary></details>
     <details><summary>How Sol answers</summary><ol>${SOL_RULES.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></details>
-    </div><div class="note" style="margin-top:6px">${conf} Prototype: answers come from decisions already on record; the live build writes them from these sources.</div>`);
+    </div><div class="note" style="margin-top:6px">Answered from today’s snapshot (data file${built}). The live build reads each system directly.</div>`);
+  tnlBlock(text,node,!items.length);
   { const rb=$('#rp-body'); rb.scrollTop=Math.max(0,node.offsetTop-6); }
-  node.querySelector('.acts').insertAdjacentElement('beforebegin',planCard(text,r,p,appr,xs,cites));
+  node.querySelector('details.more').appendChild(planCard(text,{...r,next:r.next||`Answer “${text}” in more depth and check the facts above`},p,appr,xs,cites));
   setPM('thread');
   node.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
     if(b.dataset.a==='flow') return openFlow();
-    if(b.dataset.a==='zoom'){ setTrace(null); focusPlanet(r.p,true); renderCrumbs(r.ag); markSel(r.ag); return; }
-    const t=document.createElement('div'); t.className='toast'; (b.closest('.ans')||b.closest('.route')).appendChild(t);
-    if(b.dataset.a!=='row') return handoff(r.ag,text,t);
-    t.textContent=`Drafted a Parked row on ${p.short}: “${text}”, owner ${r.ag}, moves the constraint: Unsure. Nothing is saved in the prototype.`; b.disabled=true;
-  });
+    setTrace(null); focusPlanet(r.p,true); renderCrumbs(r.ag); markSel(r.ag); });
+  logAsk(text,'ask',{a:[lead,...items.map((i,n)=>`${n+1}. ${i.t}`)].join('\n').slice(0,1800),s:cites.map(c=>c.n).slice(0,6),p:r.p});
 }
 function openSolDlg(){ const d=$('#sol-dlg'); if(d.open) return;
   const plays=(typeof ctxData==='function'?ctxData(scopeP).ask.map(x=>x[0]):SUGG);
@@ -2939,6 +3017,7 @@ function renderE2E(){
     return `${i?`<div class="cv${leak?' leak':''}">↓ ${conv}%${leak?' · the rest wait on a matcher (matcher finding package)':''}</div>`:''}<div class="fr"><span>${n}</span><span><i style="width:${Math.max(Math.sqrt(v/F[0][1])*100,2)}%"></i></span><em>${v.toLocaleString()}</em></div>`; }).join('')
     +`<div class="note">Bars use a square-root scale so the small stages stay visible; read the numbers. The live build counts HubSpot contacts, onboarding sessions, deals and campaigns.</div>`;
   $('#ret').innerHTML=RET.map(mtile).join('');
+  if(LIVE) $('#fun').innerHTML=`<div class="note">${NC}. These counts come from HubSpot contacts, prescreener sessions, deals and campaigns once the sync runs.</div>`;
 }
 
 /* ---------- investor view (placeholder model shared with the Investor Desk) ---------- */
@@ -3160,6 +3239,7 @@ function renderSettings(){
       const gb=e.target.closest&&e.target.closest('[data-go]'); if(gb&&isSuper()){ const [id,v]=gb.dataset.go.split(':'); if(v) stPut('golist',id,{s:v,by:ME(),t:Date.now()}); else stDel('golist',id); return; } const b=e.target.closest&&e.target.closest('[data-connreq]'); if(b&&isSuper()) stPut('connreq',null,{app:b.dataset.connreq,by:ME(),t:Date.now()}); }); }
 }
 function renderInvestor(){
+  if(LIVE){ const t=$('#tab-inv'); if(!t.querySelector('.nc-card')){ [...t.children].forEach(c=>{ if(c.id!=='inv-admin') c.hidden=true; }); t.insertAdjacentHTML('afterbegin',`<div class="card nc-card"><div class="eyebrow">Investor view</div><h3>${NC}</h3><p class="note">Each investor sees the approved monthly update, word for word, and their own holding from the cap table. Nothing shows here until Penny publishes an approved update and the cap table is connected. The prototype shows the design with made-up values.</p></div>`); } return; }
   const fd=10e6, safeTotal=400e3, raise=1.5e6, amt=50e3, disc=.2;
   const scn=[['Conservative',6e6],['Base',9e6],['Upside',14e6]];
   $('#inv-scn').innerHTML=scn.map(([n,pre])=>{const price=pre/fd, mine=amt/(price*(1-disc)), post=fd+safeTotal/(price*(1-disc))+raise/price; return `<div><span>${n} · $${pre/1e6}M pre</span><b>${(mine/post*100).toFixed(2)}%</b></div>`;}).join('');
@@ -3294,12 +3374,21 @@ const LEAN=[
   {l:'Agent send-ready rate', v:'—', d:'Drafts sent as is or lightly edited; target 70% by Nov 15', st:'warn', w:'Not measured', src:'SOP-08 Friday review'},
   {l:'Oldest open decision', v:'4 d', d:'Age of the oldest needs-a-human row; target under 7 days', st:'good', w:'On track', src:'Ops Board · 3 min'},
 ];
-function mtile(m){ return `<div class="mt"><div class="lbl">${esc(m.l)}</div><div class="val">${esc(m.v)}</div><div class="def">${esc(m.d)}</div><div class="foot"><span class="chip ${m.st}">${ICON[m.st]}${esc(m.w)}</span><span class="src">${esc(m.src)}</span></div></div>`; }
+/* In the app (it loads /config.js) placeholder numbers never show: each becomes "Not connected yet". The prototype keeps them so the design reads. */
+const LIVE=!!window.SOL_CONFIG, NC='Not connected yet';
+[IMPACT,CONV,RET].forEach(a=>a.forEach(m=>{ m.smp=1; })); LEAN[1].smp=LEAN[3].smp=1;
+if(LIVE){ document.documentElement.classList.add('live-app');
+  const relabel=root=>{ (root.querySelectorAll?root:document).querySelectorAll('.sample,.smp,.src.is-sample').forEach(el=>{ if(/^\s*(sample|includes samples)\s*$/i.test(el.textContent)) el.textContent=NC; });
+    (root.querySelectorAll?root:document).querySelectorAll('.is-sample').forEach(el=>{ if(!el.classList.contains('src')&&/^\S/.test(el.textContent)&&!/not connected/i.test(el.textContent)) { el.textContent='—'; el.classList.remove('is-sample'); } }); };
+  let q=0; new MutationObserver(()=>{ if(!q) q=requestAnimationFrame(()=>{ q=0; relabel(document); }); }).observe(document.documentElement,{childList:true,subtree:true});
+  addEventListener('DOMContentLoaded',()=>{ const lg=document.getElementById('smp-legend'); if(lg) lg.textContent='Anything marked “Not connected yet” has no live source yet and shows no number. Money, deals and the Ops Board are dated snapshots with their source.'; relabel(document); }); }
+function mtile(m){ if(LIVE&&m.smp) m={...m,v:'—',st:'warn',w:NC};
+  return `<div class="mt"><div class="lbl">${esc(m.l)}</div><div class="val">${esc(m.v)}</div><div class="def">${esc(m.d)}</div><div class="foot"><span class="chip ${m.st}">${ICON[m.st]}${esc(m.w)}</span><span class="src">${esc(m.src)}</span></div></div>`; }
 
 /* ---------- metrics sub-tabs and exec summary ---------- */
 let metSub='sg';
 
-/* ---------- Money this week: the home screen (audit default q01). Every figure is a dated snapshot with its source; nothing here is a sample. ---------- */
+/* ---------- Money this week: second in the menu after the Galaxy (Pooya Oct 27; was the home screen, audit default q01). Every figure is a dated snapshot with its source; nothing here is a sample. ---------- */
 const MONEY=__D('MONEY',{"runway":{"v":"—","sub":"—","src":"—"},"bridge":{"v":"—","sub":"—","src":"—"},"rev":{"v":"—","u":"—","sub":"—","src":"—"},"match":{"v":"—","u":"—","sub":"—","src":"—"},"ar":[],"arNote":"—","bill":{"t":"—","s":"—"},"refund":{"t":"—","s":"—"},"billAsk":"—","read":[],"sponsors":[]});
 function goLinkHtml(){ const n=GO_LIST.filter(x=>!(ST.golist[x[1]]||{}).s).length; return `<p style="margin:0 0 8px">${n} call${n===1?' waits':'s wait'} on you. Every decision lives in one place.</p><button type="button" class="btn" data-gogo>Open the Go list</button>`; }
 function wireGoLink(el){ const b=el&&el.querySelector('[data-gogo]'); if(b) b.onclick=()=>{ if(typeof closeSolDlg==='function') closeSolDlg(); SECS.set='go'; setTab('set'); }; }
@@ -3357,7 +3446,7 @@ function renderCaseAvg(){ const box=$('#cavg'); if(!box) return;
     const smp=vals.some(r=>!r.real);
     return `<div class="cav"><div class="lbl">${esc(m.n)}</div><div class="val">${cavFmt(v,m.u)}</div><small>${agg==='med'?'Median':agg==='tot'?'Total':CAV.agg==='tot'?'Average (lifts don’t add up)':'Average'} of ${xs.length} of ${rows.length} campaign${rows.length===1?'':'s'}${xs.length>1?` · range ${cavFmt(Math.min(...xs),m.u)} to ${cavFmt(Math.max(...xs),m.u)}`:` · ${esc(vals[0].c)}`}${smp?' · <span class="smp">includes samples</span>':''}</small><small>${esc(m.why)}</small></div>`; }).join('');
   box.innerHTML=`<div class="eyebrow" data-src="case-avg">Across campaigns · recalculates as each campaign concludes</div>
-    <div class="cav-ctl"><div class="seg" role="group" aria-label="Which results">${[['real','Real results only'],['smp','Include samples']].map(([k,l])=>`<button type="button" data-cs="${k}" aria-pressed="${(k==='smp')===CAV.smp}">${l}</button>`).join('')}</div>
+    <div class="cav-ctl"><div class="seg" role="group" aria-label="Which results">${[['real','Real results only'],...(LIVE?[]:[['smp','Include samples']])].map(([k,l])=>`<button type="button" data-cs="${k}" aria-pressed="${(k==='smp')===CAV.smp}">${l}</button>`).join('')}</div>
       <div class="seg" role="group" aria-label="Which campaigns">${[['all','All campaigns'],['eoy','Year-end promo'],['pilot','Pilots and past']].map(([k,l])=>`<button type="button" data-cset="${k}" aria-pressed="${CAV.set===k}">${l}</button>`).join('')}</div>
       <div class="seg" role="group" aria-label="Calculate">${[['avg','Average'],['med','Median'],['tot','Total']].map(([k,l])=>`<button type="button" data-cagg="${k}" aria-pressed="${CAV.agg===k}">${l}</button>`).join('')}</div></div>
     <div class="cav-grid">${tiles}</div>
@@ -3372,7 +3461,7 @@ function renderCases(){
   renderCaseAvg();
   $('#ccards').innerHTML=CASES.map(c=>`<div class="cc"><div class="meta2">${esc(c.type)}</div><h3>${esc(c.o)}</h3><div class="big">${esc(c.big)}</div><p>${esc(c.what)}</p><div class="meta2">${esc(c.meta)}</div></div>`).join('');
   const yn=(v,l)=>`<span class="pill ${v?'live':'blocked'}">${v?'✓':'✗'} ${l}</span>`;
-  $('#lift').innerHTML=`<thead><tr><th>Campaign</th><th>Covered if</th><th>Conversion: benchmark → actual</th><th>Lift</th><th>Donor acquisition: benchmark → actual</th><th>Lift</th><th>Verdict</th><th>Next</th><th></th></tr></thead><tbody>${LIFT.map((r,i)=>`<tr>
+  $('#lift').innerHTML=`<thead><tr><th>Campaign</th><th>Covered if</th><th>Conversion: benchmark → actual</th><th>Lift</th><th>Donor acquisition: benchmark → actual</th><th>Lift</th><th>Verdict</th><th>Next</th><th></th></tr></thead><tbody>${LIFT.filter(r=>!(LIVE&&/\(sample\)/.test(r.c))).map((r,i)=>`<tr>
     <td><b${/\(sample\)/.test(r.c)?' class="is-sample"':''}>${esc(r.c)}</b></td><td>${r.pre?'<span class="pill">Pilot, before the promo</span>':`<div style="display:flex;flex-direction:column;gap:3px;align-items:flex-start">${yn(r.integ,'Integration')}${yn(r.agree,'Benchmark agreed')}</div>`}</td>
     <td class="num">${r.cb} → ${r.ca}</td><td class="num">${r.cl}</td><td class="num">${r.ab} → ${r.aa}</td><td class="num">${r.al}</td>
     <td class="v-${r.v}"><b>${esc(r.vt)}</b></td><td>${esc(r.note)}</td>
@@ -3563,7 +3652,7 @@ function sourcesFor(k){ const o=siFor(k); if(!o) return []; const L=[];
 /* ---------- who is viewing, shared collections, section tabs, parked pages ---------- */
 
 /* ---------- item thread, decision trail, message center, ask log ---------- */
-function logAsk(q,k){ try{ stPut('asklog',null,{who:ME(),q:String(q).slice(0,300),k:k||'ask',t:Date.now()}); }catch(e){} }
+function logAsk(q,k,x){ try{ stPut('asklog',null,{who:ME(),q:String(q).slice(0,300),k:k||'ask',t:Date.now(),...(x||{})}); }catch(e){} }
 function itemGaps(r){ const x=OPSX[r.id]||[], g=[];
   if(!x[3]) g.push({q:'What is the very next step on "'+r.t+'"?',o:['Draft it for me to review','Someone needs to decide first','It is waiting on an outside person','Nothing: park it']});
   if(x[2]==null||x[2]>14||x[2]<0) g.push({q:'When does this need to be done?',o:['This week','Before Nov 20','By Jan 31','No date, it can wait']});
@@ -3606,6 +3695,7 @@ async function stPut(k,id,obj){ id=id||stId();
 async function stDel(k,id){ try{ if(SX.db) await SX.db.collection(k).doc(id).delete(); else { if(ST_ARR.includes(k)) ST[k]=ST[k].filter(x=>x.id!==id); else delete ST[k][id]; stSaveLocal(); stChanged(k); } return true; }catch(e){ return false; } }
 let stQ={};
 function stChanged(k){ cancelAnimationFrame(stQ[k]||0); stQ[k]=requestAnimationFrame(()=>{
+  if(k==='asklog'&&!log.querySelector('.msg.me:not(.old)')){ THR={}; greet(scopeP); }
   if(k==='ideas'||k==='ideaout') document.querySelectorAll('[data-ideas]').forEach(el=>{ if(!el.contains(document.activeElement)||!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) el.innerHTML=ideasHtml(); wireIdeas(el); });
   if(k==='ideas'||k==='ideaout'||k==='sprint') document.querySelectorAll('[data-rdtiles]').forEach(el=>{ el.outerHTML=rdTiles(); });
   if(k==='sprint'||k==='ideas'||k==='ideaout') document.querySelectorAll('[data-sprint]').forEach(el=>{ if(!el.contains(document.activeElement)||!/INPUT|SELECT/.test(document.activeElement.tagName)) el.innerHTML=sprintHtml(); });
@@ -3760,7 +3850,7 @@ autoSide();
 addEventListener('resize',()=>{ if(innerWidth>900) closeSide(); if(sidePref()===null) autoSide(); });
 
 document.querySelector('footer').hidden=true; initPark(); renderSub(); buildStars(); buildArms(); requestAnimationFrame(fitStage); buildPlanets(); renderList(); renderCrumbs(); renderHome(); greet(); renderSales(); renderCustomers(); renderJourney(); renderInvestor(); initInvAdmin(); renderE2E(); renderDeptbar(); renderExec(); renderCases(); renderCtx(); sxInit();
-const h0=location.hash.slice(1); const hmap={playbook:'pb',priorities:'pb',exec:'exec',summary:'exec',cases:'case',metrics:'exec',money:'exec',sales:'sales',journey:'jour',investor:'inv',settings:'set',list:'hq'}; if(hmap[h0]) setTab(hmap[h0]); else if(!h0||h0==='nointro') setTab(role==='investor'?'inv':'exec'); if(h0==='list') setView('list'); if(h0.startsWith('dept-')&&byId[h0.slice(5)]) openDept(h0.slice(5));
+const h0=location.hash.slice(1); const hmap={playbook:'pb',priorities:'pb',exec:'exec',summary:'exec',cases:'case',metrics:'exec',money:'exec',sales:'sales',journey:'jour',investor:'inv',settings:'set',list:'hq'}; if(hmap[h0]) setTab(hmap[h0]); else if(!h0||h0==='nointro') setTab(role==='investor'?'inv':'hq'); if(h0==='list') setView('list'); if(h0.startsWith('dept-')&&byId[h0.slice(5)]) openDept(h0.slice(5));
 initPanel(); requestAnimationFrame(frame);
 })();
 </script>
