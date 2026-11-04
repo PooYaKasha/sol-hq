@@ -1,0 +1,32 @@
+<!doctype html>
+<!-- MatchNice Home embed: MatchID sample plan card. Version 1.0.0 (2026-11-04).
+     Visual only, sample output. The MatchID headline, line and button live in Wix text next to this embed.
+     Paste the whole file into Wix: Add Elements > Embed Code > Embed HTML > Code. -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:transparent;font-family:Manrope,system-ui,sans-serif;color:#24344D}
+.card{background:#fff;border:1px solid #E3E9EF;border-radius:16px;padding:20px;max-width:520px;margin:6px auto 24px;box-shadow:0 12px 30px rgba(10,23,48,.08)}
+.vh{font-weight:800;font-size:15px;color:#0A1730;margin-bottom:4px}
+.sub{font-size:12px;color:#4F6378;margin-bottom:14px}
+.aud{display:grid;grid-template-columns:1fr 1.25fr;gap:12px;align-items:center;padding:12px;border-radius:10px;background:#F2F7F9;margin-bottom:8px}
+.n{font-weight:700;color:#0A1730;font-size:15px}.n small{display:block;font-weight:600;font-size:12px;color:#4F6378;margin-top:2px}
+.p{color:#075C47;font-weight:700;font-size:14px}
+.foot{margin-top:10px;font-size:11px;color:#6B7F94}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+.go .aud{animation:rise .5s ease both}.go .aud:nth-of-type(2){animation-delay:.35s}.go .aud:nth-of-type(3){animation-delay:.7s}
+@media (max-width:420px){.card{padding:14px}.aud{grid-template-columns:1fr;gap:4px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+<div class="card" id="c">
+  <div class="vh">Your MatchID plan</div>
+  <div class="sub">One donor file in. A match for each audience out.</div>
+  <div class="aud"><div class="n">Likely Matchers<small>Can fund the match</small></div><div class="p">Ask them to fund the match</div></div>
+  <div class="aud"><div class="n">Second-gift donors<small>Gave once, ready for more</small></div><div class="p">“Make your second gift count twice”</div></div>
+  <div class="aud"><div class="n">Lapsed donors<small>Haven't given in a while</small></div><div class="p">“Come back while every gift is doubled”</div></div>
+  <div class="foot">Sample output</div>
+</div>
+<script>
+(function(){var c=document.getElementById('c');function run(){c.classList.remove('go');void c.offsetWidth;c.classList.add('go')}
+if('IntersectionObserver' in window){new IntersectionObserver(function(e){if(e[0].isIntersecting)run()},{threshold:.4}).observe(c)}else run()})();
+</script></body></html>
